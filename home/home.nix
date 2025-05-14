@@ -4,6 +4,8 @@
 	imports = [
 		./zsh.nix
 		./nvim/nvim.nix
+    ./steam.nix
+    ./alacritty.nix
 	];
 
 	home = {
@@ -13,8 +15,7 @@
 	};
 
 
-	nixpkgs.config.allowUnfree = true;
-	home.packages =  with pkgs; [
+	home.packages = with pkgs; [
 		# General
 		blender
     jupyter
@@ -23,17 +24,13 @@
 		brave
 		libreoffice-qt
 		spotify
-		steam
 		whatsapp-for-linux
     marimo
-    kdePackages.dolphin
 		spotdl
-		rofi
 		unigine-superposition
 
 
 		# Support
-		mako  # Notification daemon
     nurl
     nix-init
 		# Misc
