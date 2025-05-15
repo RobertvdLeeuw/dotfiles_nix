@@ -34,4 +34,5 @@ in
   environment = {
     # pathsToLink = [ "" ];
     systemPackages = rocmpkgs;
+  };
 }

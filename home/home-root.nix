@@ -2,8 +2,9 @@
 
 {
 	imports = [
-		./zsh.nix
-		./nvim/nvim.nix
+    ../shells/zsh/zsh.nix
+
+		../modules/nvim/nvim.nix
 	];
 
 	home = {

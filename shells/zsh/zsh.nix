@@ -1,18 +1,10 @@
 { config, pkgs, ... }:
 
 {
-  environment = {
-    pathsToLink = [ "/share/zsh" ];
-    systemPackages = with pkgs; [
-      zplug
-    ];
-  };
-
 	programs = {
-    # steam.enable = true;
     zsh = {
       enable = true;
-      shellAliases = {
+      shellAliases = {  # TODO: To separate file, share accross shells?
         rebuild = "nixos-rebuild build --use-remote-sudo";
         update = "nixos-rebuild switch --use-remote-sudo";
 
@@ -24,12 +16,45 @@
         todo = "nvim ~/Documents/todo.md";
         books = "nvim ~/Documents/books.txt";
       };
-      shellInit = builtins.readFile ../shells/zsh/init.sh;  # Split hotkeys into separate file?
-      promptInit = builtins.readFile ../shells/zsh/prompt.sh;
-    };
-    sway = {
-      enable = true;
-      wrapperFeatures.gtk = true;
+
+      shellGlobalAliases = {
+        nano = "nvim";
+      };
+      
+      initContent = ''
+        eval "$(zoxide init --cmd cd zsh)"
+        eval "$(fzf --zsh)"
+        
+        ${builtins.readFile ./init.sh}
+        ${builtins.readFile ./prompt.sh}
+      '';
+
+        # builtins.readFile ../shells/zsh/init.sh;  # Split hotkeys into separate file?
+      # plugins = [{}];
+
+      defaultKeymap = "viins";
+      history = {
+        
+      };
+    
+      syntaxHighlighting = {
+        enable = true;
+        highlighters = [
+          "main"
+          "brackets"
+          "regexp"
+        ];
+      };
+
+      zplug = {
+        enable = true;
+        # plugins = [];
+      };
+      
+      autosuggestion = {
+        enable = true;
+        # highlight = "";
+      };
     };
 	};
 }

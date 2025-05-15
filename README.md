@@ -1,0 +1,33 @@
+# TODO
+ - [ ] SWITCH SHELL.NIX TO FLAKE BEFORE ANYTHING ELSE!!
+ - [ ] ROCm module
+ - [ ] Shells
+     - [ ] ZSH
+         - [ ] Fix git in prompt
+     - [ ] ZSH prompt and hotkeys on extra shells
+         - [ ] Bash
+         - [ ] Nix
+ - [ ] Git set credentials 
+     - [ ] Declarative SSH key stuff too?
+ - [ ] 
+ - [ ] 
+ - [ ] 
+ - [ ] 
+ - [ ] 
+ - [ ] 
+ - [ ] 
+ - [ ] 
+ - [ ] 
+ - [ ] 
+ - [ ] 
+ - [ ] 
+ - [ ] 
+ - [ ] 
+ - [ ] 
+ - [ ] 
+ - [ ] 
+ - [ ] 
+ - [ ] 
+ - [ ] 
+ - [ ] 
+

@@ -2,10 +2,11 @@
 
 {
 	imports = [
-		./zsh.nix
-		./nvim/nvim.nix
-    ./steam.nix
-    ./alacritty.nix
+    ../shells/zsh/zsh.nix
+
+		../modules/nvim/nvim.nix
+    ../modules/steam.nix
+    ../modules/alacritty.nix
 	];
 
 	home = {

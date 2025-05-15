@@ -1,5 +1,5 @@
-eval "$(zoxide init --cmd cd zsh)"
-eval "$(fzf --zsh)"
+# eval "$(zoxide init --cmd cd zsh)"
+# eval "$(fzf --zsh)"
 
   # Autocomplete
 autoload -U compinit

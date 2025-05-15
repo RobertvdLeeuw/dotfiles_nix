@@ -9,10 +9,10 @@ in
 {
   imports = [
     ./hardware-configuration.nix
-    ./rocm.nix
-    ./sway.nix
+    # ./modules/rocm.nix
+    ./modules/sway.nix
 
-    ../shells/zsh/zsh.nix
+    # ../shells/zsh/zsh.nix
 
     <home-manager/nixos>
   ];
@@ -20,8 +20,9 @@ in
   home-manager = {
 		useGlobalPkgs = true;
 		useUserPackages = true;
-		users.${user} = import /home/${user}/.config/home-manager/home.nix;
-		users.root = import /home/${user}/.config/home-manager/home-root.nix;
+
+		users.${user} = import ./home/home.nix;
+		users.root = import ./home/home-root.nix;
 	};
 
   boot = {
@@ -114,14 +115,15 @@ in
 
   users = {
     defaultUserShell = pkgs.zsh;
-    users.robert = {
+    users.${user} = {
       isNormalUser = true;
-      description = "robert";
+      description = "${user}";
       extraGroups = [ "networkmanager" "wheel" "docker" "video" ];  # Added video group for GPU access
     };
   };
 
   environment = {
+    pathsToLink = [ "/share/zsh" ];
     systemPackages = with pkgs; [
       # WM/DE
       sway
@@ -141,7 +143,7 @@ in
   };
 
 	programs = {
-    # steam.enable = true;
+    zsh.enable = true;
     sway = {
       enable = true;
       wrapperFeatures.gtk = true;
