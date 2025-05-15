@@ -2,7 +2,7 @@
 
 {
 	imports = [
-    ../shells/zsh/zsh.nix
+    ../shells/zsh.nix
 
 		../modules/nvim/nvim.nix
     ../modules/steam.nix

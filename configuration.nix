@@ -9,8 +9,9 @@ in
 {
   imports = [
     ./hardware-configuration.nix
-    # ./modules/rocm.nix
     ./modules/sway.nix
+
+    ./modules/prompt.nix
 
     # ../shells/zsh/zsh.nix
 
@@ -84,7 +85,9 @@ in
   };
 
 	services = {
-    pulseaudio.enable = false;
+    printing.enable = true;  # CUPS
+
+		desktopManager.plasma6.enable = true;
 		displayManager = {
       autoLogin = {
         enable = true;
@@ -93,7 +96,6 @@ in
 			sddm.enable = true;
 			defaultSession = "sway";
 		};
-		desktopManager.plasma6.enable = true;
 
     xserver = {
       enable = true;
@@ -102,12 +104,15 @@ in
         variant = "";
       };
     };
-    printing.enable = true;  # CUPS
+
     pipewire = {
       enable = true;
-      alsa.enable = true;
-      alsa.support32Bit = true;
       pulse.enable = true;
+
+      alsa = {
+        enable = true;
+        support32Bit = true;
+      };
     };
 	};
 
@@ -140,13 +145,13 @@ in
       gcc
       ninja
     ];
+
+    variables = {
+      SHELL = "${pkgs.zsh}/bin/zsh";
+    };
   };
 
 	programs = {
     zsh.enable = true;
-    sway = {
-      enable = true;
-      wrapperFeatures.gtk = true;
-    };
 	};
 }
