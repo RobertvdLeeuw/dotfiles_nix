@@ -7,11 +7,11 @@
     settings = {
       format = "┌$username$directory$git_branch$nix_shell$shell\n$character";
       line_break = true;
-      add_newline = true;
+      add_newline = false;
 
       character = {
-        success_symbol = "└─ ";
-        error_symbol = "└─ ";
+        success_symbol = "└─";
+        error_symbol = "└─";
       };
 
       username = {
@@ -24,9 +24,9 @@
 
       directory = {
         format = "──\\[[$path](bold purple)\\]";
-        # truncation_length = 25;
-        # truncate_to_repo = true;
-        # truncation_symbol = "…/";
+        truncation_length = 4;
+        truncate_to_repo = false;
+        truncation_symbol = "…/";
       };
 
       git_branch = {

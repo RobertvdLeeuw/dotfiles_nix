@@ -4,95 +4,14 @@ vim.keymap.set({ "n", "v" }, "<C-c>", ":CommentToggle<CR>", { noremap = true, si
 -- Yanking
 vim.keymap.set({ "n", "v" }, "<C-y>", [["+y]])
 
--- Cursor movements
--- vim.keymap.set({ "n", "v", "t" }, "<C-Left>", "b", { noremap = true, silent = true })
--- vim.keymap.set({ "n", "v", "t" }, "<C-Right>", "e", { noremap = true, silent = true })
-
--- vim.keymap.set("i", "<C-Left>", "<C-o>b", { noremap = true, silent = true })
--- vim.keymap.set("i", "<C-Right>", "<C-o>e<C-o>l", { noremap = true, silent = true })
-
--- Normal and visual mode - Ctrl+Backspace with improved handling for single character "words"
--- vim.keymap.set({ "n", "v", "t" }, "<C-BS>", function()
--- 	local col = vim.fn.col(".")
--- 	local line = vim.fn.getline(".")
--- 	local char_before = line:sub(col - 1, col - 1)
-
--- 	if col > 1 and char_before:match("[%s%p]") then
--- 		-- If character before cursor is whitespace or punctuation, just delete it and the character under cursor
--- 		return "hxx"
--- 	else
--- 		return "dbx"
--- 	end
--- end, { noremap = true, silent = true, expr = true })
-
--- vim.keymap.set({ "n", "v", "t" }, "<C-Del>", "dw", { noremap = true, silent = true })
-
--- vim.keymap.set("i", "<C-BS>", "<C-w>", { noremap = true, silent = true })
--- vim.keymap.set("i", "<C-Del>", "<C-o>dw", { noremap = true, silent = true })
 
 vim.keymap.set({ "n", "v", "i", "t" }, "<S-Left>", "<Nop>", { noremap = true, silent = true })
 vim.keymap.set({ "n", "v", "i", "t" }, "<S-Right>", "<Nop>", { noremap = true, silent = true })
 
 
-
--- Venvs
-local venv_cache = {}
-
-local function find_project_root(start_path)
-	local current_path = start_path or vim.fn.getcwd()
-
-	while current_path ~= "" do
-		-- Check for common project root indicators
-		if
-			vim.fn.isdirectory(current_path .. "/.git") == 1
-			or vim.fn.filereadable(current_path .. "/shell.nix") == 1
-			or vim.fn.isdirectory(current_path .. "/.venv") == 1
-			or vim.fn.isdirectory(current_path .. "/src") == 1
-		then
-			return current_path
-		end
-
-		-- Go up one directory
-		local parent_path = vim.fn.fnamemodify(current_path, ":h")
-		if parent_path == current_path then
-			break
-		end
-		current_path = parent_path
-	end
-
-	return nil
-end
-
-local function find_nix_shell(start_path)
-	-- Check cache first
-	local project_root = find_project_root(start_path)
-	if not project_root then
-		return nil
-	end
-  
-  if not vim.fn.filereadable(project_root .. "/shell.nix") == 1 then
-    return nil
-  end
-
-  return project_root
-end
-
-local function get_activate_path()
-	local shell = find_nix_shell()
-	if not shell then
-		return ""
-	end
-
-	return 'cd "' .. shell_loc .. '" && nix-shell && cd -; clear;'
-end
-
-local function setup_terminal(term)
-  term:send(get_activate_path())
-end
-
 require("toggleterm").setup({
-  shell = "/nix/store/kp4g2a8w1mh7ybvlkis23d029zq0bm8x-system-path/bin/zsh",
-	on_create = setup_terminal,
+  shell = vim.o.shell,
+	-- on_create = setup_terminal,
 })
 
 -- Terminal functions for running scripts
@@ -145,7 +64,7 @@ local function run_current_file()
 		end
 
 		local run_current = Terminal:new({
-			cmd = get_activate_path() .. cmd,
+			cmd = cmd,
 			direction = "horizontal",
 			close_on_exit = false,
 			on_open = function(term)
@@ -203,7 +122,7 @@ local function run_project_main()
 				end
 
 				local run_main = Terminal:new({
-					cmd = get_activate_path() .. cmd,
+					cmd = cmd,
 					direction = "horizontal",
 					close_on_exit = false,
 					on_open = function(term)

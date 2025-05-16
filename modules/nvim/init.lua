@@ -10,10 +10,6 @@ vim.api.nvim_set_hl(0, "NormalFloat", { bg = "#2E3440" })
 --  Error opening terminal
 
 --  TODO:
---  Tab merging and auto close 'empty' tabs
---  Markdown + Nabla
---  Autosession
---  Harpoon
 --  If opening file that needs sudo -> some type of warning.
 --  EZ (short for 'easy') pane resizing
 --  3rd/image.nvim

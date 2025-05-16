@@ -1,4 +1,4 @@
-# Edit this configuration file to define what should be installed on
+# Edit this configuration file to define what should be installed onconf
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running 'nixos-help').
 
@@ -13,7 +13,10 @@ in
 
     ./modules/prompt.nix
 
-    # ../shells/zsh/zsh.nix
+    ./modules/python.nix
+    ./modules/rust.nix
+
+    ./shells/bash.nix
 
     <home-manager/nixos>
   ];
@@ -133,6 +136,9 @@ in
       # WM/DE
       sway
       waybar
+
+      time
+      xorg.libX11
 
       # Support  TODO: Recategorize.
       ffmpeg_6

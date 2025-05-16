@@ -7,6 +7,11 @@ cmp.setup({
       vim.snippet.expand(args.body)
     end,
   },
+
+  completion = {
+    keyword_length = 3,
+  },
+
   window = {
     completion = {
       max_width = 50,
@@ -53,3 +58,4 @@ cmp.setup.cmdline(':', {
   }),
   matching = { disallow_symbol_nonprefix_matching = false }
 })
+

@@ -5,7 +5,7 @@
     systemPackages = with pkgs; [
       python313
       jupyter
-
+      uv
       #  TODO: UV2Nix
     ];
   };

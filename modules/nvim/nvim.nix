@@ -1,102 +1,155 @@
 { config, pkgs, inputs, ... }:
 {
-  # nixpkgs.overlays = [
-  #   (final: prev: {
-  #     vimPlugins = prev.vimPlugins // {
-  #       mellow-theme = prev.vimUtils.buildVimPlugin {
-  #         name = "mellow";
-  #         src = inputs.plugin-mellow;
-  #       };
-  #     };
-  #   })
-  # ];
-
   programs.neovim =
-  let
-    toLua = str: "lua << EOF\n${str}\nEOF\n";
-    toLuaFile = file: "lua << EOF\n${builtins.readFile file}\nEOF\n";
-  in
-  {
-    enable = true;
-    defaultEditor = true;
-    extraLuaConfig = ''
-    ${builtins.readFile ./init.lua}
+    let
+      toLua = str: "lua << EOF\n${str}\nEOF\n";
+      toLuaFile = file: "lua << EOF\n${builtins.readFile file}\nEOF\n";
+
+      neocodeium = pkgs.vimUtils.buildVimPlugin {
+        name = "neocodeium";
+        src = pkgs.fetchFromGitHub {
+          owner = "monkoose";
+          repo = "neocodeium";
+          rev = "09267a754f4133b1e06e83da5d58ba455fac3b93";
+          hash = "sha256-p7JH7SxRE/VYINJvU0b0u5H0HPlWH/lE6mLgiqQTMzM=";
+        };
+        
+        doCheck = false;
+      };
+    in
+      {
+      enable = true;
+      defaultEditor = true;
+      extraLuaConfig = ''
+        ${builtins.readFile ./init.lua}
 
 
     -- Style
-    ${builtins.readFile ./style/general.lua}
+        ${builtins.readFile ./style/general.lua}
 
     -- Keymaps
-    ${builtins.readFile ./keymaps/general.lua}
-    ${builtins.readFile ./keymaps/tabs.lua}
-    ${builtins.readFile ./keymaps/editor.lua}
-    ${builtins.readFile ./keymaps/file_explorer.lua}
-    '';
+        ${builtins.readFile ./keymaps/general.lua}
+        ${builtins.readFile ./keymaps/tabs.lua}
+        ${builtins.readFile ./keymaps/editor.lua}
+        ${builtins.readFile ./keymaps/file_explorer.lua}
+      '';
 
-    extraPackages = with pkgs; [
-      basedpyright
-      ruff
+      extraPackages = with pkgs; [
+        basedpyright
+        ruff
 
-      rust-analyzer
-      rustfmt
+        rust-analyzer
+        rustfmt
 
-      nil  # Nix
-      vscode-langservers-extracted  # Jsonls
-      lua-language-server
+        nil  # Nix
+        vscode-langservers-extracted  # Jsonls
+        lua-language-server
 
-      ripgrep  # For Telescope
-      nnn  # File Explorer
-    ];
+        ripgrep  # For Telescope
+        nnn  # File Explorer
+      ];
 
-    plugins = with pkgs.vimPlugins; [
-    # TODO
+      plugins = with pkgs.vimPlugins; [
+        # TODO
         # Editor stuff
-      # null-ls-nvim
-      {
-        plugin = astrotheme;
-        config = toLua ''
+        # null-ls-nvim
+        {
+          plugin = astrotheme;
+          config = toLua ''
         require("astrotheme").setup()
         vim.cmd([[colorscheme astrodark]])
-        '';
-      }
-      # {
-      #   plugin = mellow-theme;
-      #   config = toLua ''
-      #   vim.cmd([[colorscheme mellow]])
-      #   '';
-      # }
-      {
-        plugin = nnn-vim;
-        config = toLua ''
+          '';
+        }
+        # {
+        #   plugin = mellow-theme;
+        #   config = toLua ''
+        #   vim.cmd([[colorscheme mellow]])
+        #   '';
+        # }
+        {
+          plugin = nnn-vim;
+          config = toLua ''
         require('nnn').setup({
           replace_netrw = true,
           command = "nnn -H"
         })
 
-        '';
-      }
-      {
-        plugin = toggleterm-nvim;
-        config = toLuaFile ./plugin/toggleterm.lua;
-      }
-      {
-        plugin = nvim-comment;
-        config = toLua ''
+          '';
+        }
+        {
+          plugin = toggleterm-nvim;
+          config = toLuaFile ./plugin/toggleterm.lua;
+        }
+        {
+          plugin = nvim-comment;
+          config = toLua ''
           require("nvim_comment").setup({
             create_mappings = false,
             comment_empty = false
           })
-        '';
-      }
+          '';
+        }
 
-      # Semantic highlighting
-      {
-        plugin = todo-comments-nvim;
-        config = toLua "require('todo-comments').setup({ signs = false })";
-      }
-      {
-        plugin = rainbow-delimiters-nvim;
-        config = toLua ''
+        # {
+        #   plugin = neocodeium;
+        #   config = toLua ''
+        #     local neocodeium = require('neocodeium')
+        #     neocodeium.setup({manual = false})
+        #   -- vim.keymap.set("i", "<A-Tab>", function() neocodeium.accept() end)
+
+        #     vim.api.nvim_create_autocmd("User", {
+        #       pattern = "NeoCodeiumCompletionDisplayed",
+        #       callback = function() require("cmp").abort() end
+        #     })
+
+        #   -- set up some sort of keymap to cycle and complete to trigger completion
+        #     vim.keymap.set("i", "<A-e>", function() neocodeium.cycle_or_complete() end)
+        #   -- make sure to have a mapping to accept a completion
+        #     vim.keymap.set("i", "<A-f>", function() neocodeium.accept() end)
+
+
+        #   -- Function to determine if we should use cmp or neocodeium
+        #     local function should_use_cmp()
+        #     local col = vim.fn.col('.') - 1
+        #     local line = vim.fn.getline('.')
+        #     local char_before = line:sub(col, col)
+            
+        #     -- If we're at the beginning of a line or after whitespace/punctuation,
+        #     -- prefer neocodeium
+        #     if col == 0 or char_before:match('%s') or char_before:match('[%.,%(%)%:%;%=%+%-%*%/%[%]%{%}]') then
+        #       return false
+        #     end
+            
+        #     -- Otherwise (in the middle of a word), prefer cmp
+        #     return true
+        #   end
+
+        #   -- Set up autocommands to toggle between the two systems
+        #   vim.api.nvim_create_autocmd({"InsertCharPre", "TextChangedI"}, {
+        #     callback = function()
+        #       if should_use_cmp() then
+        #         neocodeium.disable()
+        #         -- You might need a way to "enable" cmp if you've set autocomplete = false
+        #         -- This might be through a global variable that your mappings check
+        #         vim.g.cmp_active = true
+        #       else
+        #         neocodeium.enable()
+        #         vim.g.cmp_active = false
+        #       end
+        #     end
+        #   })
+
+        #   '';
+        # }
+
+        # Semantic highlighting
+        {
+          plugin = todo-comments-nvim;
+          config = toLua "require('todo-comments').setup({ signs = false })";
+        }
+        {
+          plugin = rainbow-delimiters-nvim;
+          config = toLua ''
           require('rainbow-delimiters.setup').setup{
             highlight = {
                 'RainbowDelimiterRed',
@@ -108,9 +161,9 @@
                 'RainbowDelimiterCyan',
             },
           }
-        '';
-      }
-      { plugin = (nvim-treesitter.withPlugins (p: [
+          '';
+        }
+        { plugin = (nvim-treesitter.withPlugins (p: [
           p.tree-sitter-nix
           p.tree-sitter-vim
           p.tree-sitter-bash
@@ -119,48 +172,48 @@
           p.tree-sitter-markdown
           p.tree-sitter-rust
         ]));
-        config = toLuaFile ./plugin/treesitter.lua;
-      }
-      {
-        plugin = lualine-nvim;
-        config = toLua "require('lualine').setup()";
-      }
-      # TODO: Nabla and MD render
+          config = toLuaFile ./plugin/treesitter.lua;
+        }
+        {
+          plugin = lualine-nvim;
+          config = toLua "require('lualine').setup()";
+        }
+        # TODO: Nabla and MD render
 
-      # File explorer
-      {
-        plugin = telescope-nvim;
-        config = toLuaFile ./plugin/telescope.lua;
-      }
-      telescope-fzf-native-nvim
+        # File explorer
+        {
+          plugin = telescope-nvim;
+          config = toLuaFile ./plugin/telescope.lua;
+        }
+        telescope-fzf-native-nvim
 
-      # Autocomplete
+        # Autocomplete
         luasnip
-      {
-        plugin = nvim-cmp;
-        config = toLuaFile ./plugin/cmp.lua;
-      }
-      cmp-nvim-lsp
-      {
-        plugin = nvim-lspconfig;
-        # ${builtins.readFile ./plugin/lsp/general.lua}
-        config = toLua ''
-          ${builtins.readFile ./plugin/lsp/lua.lua}
-          ${builtins.readFile ./plugin/lsp/python.lua}
-          ${builtins.readFile ./plugin/lsp/nix.lua}
-          ${builtins.readFile ./plugin/lsp/json.lua}
-          ${builtins.readFile ./plugin/lsp/rust.lua}
-          ${builtins.readFile ./plugin/lsp/text.lua}
-        '';
-      }
-      cmp-buffer
-      cmp-path
-      cmp-cmdline
+        {
+          plugin = nvim-cmp;
+          config = toLuaFile ./plugin/cmp.lua;
+        }
+        cmp-nvim-lsp
+        {
+          plugin = nvim-lspconfig;
+          # ${builtins.readFile ./plugin/lsp/general.lua}
+          config = toLua ''
+            ${builtins.readFile ./plugin/lsp/lua.lua}
+            ${builtins.readFile ./plugin/lsp/python.lua}
+            ${builtins.readFile ./plugin/lsp/nix.lua}
+            ${builtins.readFile ./plugin/lsp/json.lua}
+            ${builtins.readFile ./plugin/lsp/rust.lua}
+            ${builtins.readFile ./plugin/lsp/text.lua}
+          '';
+        }
+        cmp-buffer
+        cmp-path
+        cmp-cmdline
 
-      # Other
-      {
-        plugin = nvim-autopairs;
-        config = toLua ''
+        # Other
+        {
+          plugin = nvim-autopairs;
+          config = toLua ''
           require('nvim-autopairs').setup({
             enable_check_bracket_line = false
           })
@@ -171,19 +224,19 @@
             'confirm_done',
             cmp_autopairs.on_confirm_done()
           )
-        '';
-      }
+          '';
+        }
 
-      # {
-      #       plugin = auto-session;
-      #       config = toLua ''
-      #         require(\"auto-session\").setup({
-      #           log_level = "error",
-      # 		  auto_session_suppress_dirs = { "~/", "~/Downloads" },
-      # 	  })
-      #       '';
-      #     }
-    ];
+        # {
+        #       plugin = auto-session;
+        #       config = toLua ''
+        #         require(\"auto-session\").setup({
+        #           log_level = "error",
+        # 		  auto_session_suppress_dirs = { "~/", "~/Downloads" },
+        # 	  })
+        #       '';
+        #     }
+      ];
 
-  };
+    };
 }

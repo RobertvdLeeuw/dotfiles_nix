@@ -1,27 +1,85 @@
 # TODO
- - [ ] SWITCH SHELL.NIX TO FLAKE BEFORE ANYTHING ELSE!!
+ - [x] Modularization
  - [ ] ROCm module
- - [ ] Shells
-     - [ ] ZSH
-         - [ ] Fix git in prompt
-     - [ ] ZSH prompt and hotkeys on extra shells
-         - [ ] Bash
-         - [ ] Nix
+ - [x] Shells
+     - [x] ZSH
+         - [x] Fix git in prompt
+     - [x] ZSH prompt and hotkeys on extra shells
+         - [x] Bash
+         - [x] Nix
  - [ ] Git set credentials 
      - [ ] Declarative SSH key stuff too?
- - [ ] 
- - [ ] 
- - [ ] 
- - [ ] 
- - [ ] 
- - [ ] 
- - [ ] 
- - [ ] 
- - [ ] 
- - [ ] 
- - [ ] 
- - [ ] 
- - [ ] 
+ - [ ] Devenv
+     - [ ] Figure out UV
+         - [ ] Figure out UV2Nix
+     - [ ] Figure out Cargo2Nix
+     - [ ] Create file structure
+         - [ ] Py: just run uv and custom commands after
+         - [ ] Rs: cargo init
+     - [ ] Flake.nix link
+         - [ ] Py: Uv2nix
+         - [ ] Rs: Cargo2Nix
+         - [ ] On flake/cargo/uv change, rerun?
+     - [ ] Actual flake.nix
+         - [ ] Nurl at this step.
+     - [ ] Direnv
+     - [ ] 
+     - [ ] 
+     - [ ] 
+        - [ ] template shell.nix
+            - [ ] Py lib modules (requests/selenium/bs4/pywright/markdownify, llm/agent, rocm torch, num/pan/polars/matplot/seaborn/pickle, etc.)
+            - [ ] .env init
+            - [ ] .gitignore init
+                - [ ] Just put everything py, rs, etc in one general ignore, split it up once I'm dealing with over 6 languages.
+                - [ ] Eventually: harpoon set 'hotkey 1' to main file
+            - [ ] Nix-init or nurl wrapped somehow
+            - [ ] Something git in there?
+            - [ ] nix-direnv
+            - [ ] Make this entire thing runnable on already existing projects (with or without uv, shell.nix, etc)
+ - [ ] NeoVIM
+    - [ ] LSP
+        - [ ] Ruff
+    - [ ] Nvim surround
+    - [x] Fix terminal
+        - [x] Fix F5
+        - [ ] Fix F6 once UV is figured out
+     - [ ] Figure out UV
+     - [ ] Figure out UV
+     - [ ] Figure out UV
+     - [ ] Figure out UV
+     - [ ] Figure out UV
+     - [ ] Figure out UV
+     - [ ] Figure out UV
+     - [ ] Figure out UV
+     - [ ] Figure out UV
+     - [ ] Figure out UV
+     - [ ] Figure out UV
+     - [ ] Figure out UV
+     - [ ] Figure out UV
+     - [ ] Figure out UV
+     - [ ] Figure out UV
+     - [ ] Figure out UV
+     - [ ] Figure out UV
+     - [ ] Figure out UV
+     - [ ] Figure out UV
+     - [ ] Figure out UV
+     - [ ] Figure out UV
+     - [ ] Figure out UV
+     - [ ] Figure out UV
+     - [ ] Figure out UV
+     - [ ] Figure out UV
+     - [ ] Figure out UV
+     - [ ] Figure out UV
+     - [ ] Figure out UV
+     - [ ] Figure out UV
+     - [ ] Figure out UV
+     - [ ] Figure out UV
+    - [ ] Try harpoon
+    - [ ] Tab completion
+        - [ ] NeoCodium
+    - [ ] MD render
+        - [ ] with Nabla
+ - [x] Replace ls with tree with lots of filters.
  - [ ] 
  - [ ] 
  - [ ] 
