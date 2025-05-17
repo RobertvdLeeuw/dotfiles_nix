@@ -14,15 +14,15 @@ let
     ];
     "custom/workspaces" = {
       # exec = "$HOME/.config/waybar/waybar_modules/workspaces DP-1";
-      exec = "cd modules/workspaces; nix run .# -- DP-1";
+      exec = "cd /etc/nixos/modules/waybar/modules/workspaces; nix run .# -- DP-1";
       return-type = "json";
       format = "{}";
       tooltip = false;
       escape = false;
     };
     "bluetooth" = {
-      format = "\uf294";
-      format-off = "\udb80\udcb2";
+      format = "󰂯";
+      format-off = "󰂲";
       format-connected = "{count} 󰂰";
       tooltip = false;
     };
@@ -68,7 +68,7 @@ let
     "custom/power" = {
       format = "󰤆";
       menu = "on-click";
-      menu-file = "./modules/power_menu.xml"; # Menu file in resources folder
+      menu-file = "/etc/nixos/modules/waybar/modules/power_menu.xml"; # Menu file in resources folder
       "menu-actions" = {
         shutdown = "shutdown";
         reboot = "reboot";
@@ -79,13 +79,13 @@ let
     };
   };
 
-    extraAttrs = [
+    screens = [
     { bar_id = "1"; ipc = true; output = "DP-1";}  # UW
     { bar_id = "2"; ipc = true; output = "HDMI-A-1";}  # Top
     { bar_id = "3"; output = "DP-3";}  # Ver
   ];
   
-  configs = map (extra: base_config // extra) extraAttrs;
+  configs = map (extra: base_config // extra) screens;
 in
 {
   programs.waybar = {
