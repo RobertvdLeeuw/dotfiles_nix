@@ -23,9 +23,6 @@
      - [ ] Actual flake.nix
          - [ ] Nurl at this step, maybe nix-init too.
      - [ ] Direnv
-     - [ ] 
-     - [ ] 
-     - [ ] 
         - [ ] template shell.nix
             - [ ] Py lib modules (requests/selenium/bs4/pywright/markdownify, llm/agent, rocm torch, num/pan/polars/matplot/seaborn/pickle, etc.)
             - [ ] .env init
@@ -46,7 +43,7 @@
     - [ ] Try harpoon
     - [ ] Tab completion
         - [ ] NeoCodium
-    - [ ] MD render
+    - [x] MD render
         - [ ] with Nabla
  - [x] Replace ls with tree with lots of filters.
  - [ ] Waybar

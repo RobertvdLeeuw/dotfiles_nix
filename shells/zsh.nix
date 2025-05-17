@@ -7,6 +7,7 @@
         rebuild = "nixos-rebuild build --use-remote-sudo && clear";
         update = "nixos-rebuild switch --use-remote-sudo && clear";
         cnfnix = "cd /etc/nixos && nvim configuration.nix && cd -";
+        cnfnixr = "cd /etc/nixos && nvim README.md && cd -";
 
         todo = "nvim ~/Documents/todo.md";
         books = "nvim ~/Documents/books.txt";

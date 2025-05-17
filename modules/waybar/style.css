@@ -31,7 +31,8 @@
 }
 
 window#waybar {
-  background-color: #1e1e2e;
+  /* background-color: #1e1e2e; */
+  background-color: alpha(#1e1e2e, 0.99);
   color: @text;
   border-radius: 0;
 }

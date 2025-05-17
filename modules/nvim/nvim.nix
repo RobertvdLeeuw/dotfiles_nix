@@ -226,6 +226,18 @@
           )
           '';
         }
+        {
+          plugin = render-markdown-nvim;
+          config = toLua ''
+            require('render-markdown').setup({
+              completions = { lsp = { enabled = true } },
+            })
+          '';
+        }
+        # {
+        #   plugin = ;
+        #   config = toLua '''';
+        # }
 
         # {
         #       plugin = auto-session;
