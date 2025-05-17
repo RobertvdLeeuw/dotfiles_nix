@@ -26,6 +26,8 @@
           always = true; }
         { command = "swaymsg 'output DP-3 bg /etc/nixos/modules/sway/backgrounds/busy-people/Right.png fill'"; 
           always = true; }
+        { command = "copyq"; 
+          always = true; }
         # { command = ""; 
         #   always = true; }
       ];

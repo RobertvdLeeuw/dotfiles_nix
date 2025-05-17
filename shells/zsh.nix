@@ -13,10 +13,10 @@
 
         tr = "tree --gitignore -L 3";
 
-        gadd = "git add .";
+        gadd = "git add . && clear";
         gstat = "git status";
         gcom = "git commit -m ";
-        gpush = "git push";
+        gpush = "git push && clear";
       };
       shellGlobalAliases = {
         nano = "nvim";

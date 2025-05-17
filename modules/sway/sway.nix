@@ -17,11 +17,14 @@
         wofi
 
         # Clipboard
-        clipman
-        grim
         wl-clipboard
+        copyq  # History
 
-        kdePackages.dolphin
+        # Screenshots
+        grim
+        slurp
+
+        # kdePackages.dolphin
       ];
     };
 	};

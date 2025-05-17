@@ -1,6 +1,5 @@
 # TODO
  - [x] Modularization
- - [ ] ROCm module
  - [x] Shells
      - [x] ZSH
          - [x] Fix git in prompt
@@ -9,7 +8,7 @@
          - [x] Nix
  - [ ] Git set credentials 
      - [ ] Declarative SSH key stuff too?
- - [ ] Devenv
+ - [ ] dv
      - [ ] Figure out UV
          - [ ] Figure out UV2Nix
      - [ ] Figure out Cargo2Nix
@@ -20,8 +19,9 @@
          - [ ] Py: Uv2nix
          - [ ] Rs: Cargo2Nix
          - [ ] On flake/cargo/uv change, rerun?
+             - [ ] Watchexec?
      - [ ] Actual flake.nix
-         - [ ] Nurl at this step.
+         - [ ] Nurl at this step, maybe nix-init too.
      - [ ] Direnv
      - [ ] 
      - [ ] 
@@ -53,8 +53,7 @@
     - [ ] Audio menu
     - [ ] Bluetooth menu
     - [ ] Rethink modules
- - [ ] 
- - [ ] 
+ - [ ] Eza
  - [ ] 
  - [ ] 
  - [ ] 

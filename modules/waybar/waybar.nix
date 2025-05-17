@@ -81,11 +81,11 @@ let
 
   screens = map (screen: screen // 
     {"custom/workspaces" = {
-      exec = "cd /etc/nixos/modules/waybar/modules/workspaces; nix run .# -- ${screen.output}";
-      return-type = "json";
-      format = "{}";
-      tooltip = false;
-      escape = false;
+      # exec = "cd /etc/nixos/modules/waybar/modules/workspaces; nix run .# -- ${screen.output}";
+      # return-type = "json";
+      # format = "{}";
+      # tooltip = false;
+      # escape = false;
     };}) 
     [
       { bar_id = "1"; ipc = true; output = "DP-1"; }  # UW

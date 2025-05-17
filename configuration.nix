@@ -87,8 +87,12 @@ in
     };
   };
 
+  location.provider = "geoclue2";  # For redshift.
+
 	services = {
     printing.enable = true;  # CUPS
+
+    redshift.enable = true;
 
 		desktopManager.plasma6.enable = true;
 		displayManager = {
@@ -138,6 +142,8 @@ in
       # waybar
       # playerctl
 
+      dust
+      ladybird
       time
       xorg.libX11
       xorg.xhost
@@ -154,6 +160,20 @@ in
       git
       gcc
       ninja
+
+    ];
+
+    plasma6.excludePackages = with pkgs.kdePackages; [
+      kwallet
+      kwalletmanager
+      # kwrite
+      elisa
+      kate
+      konsole
+      gwenview
+      okular
+      ark
+      spectacle
     ];
 
     variables = {
@@ -163,5 +183,9 @@ in
 
 	programs = {
     zsh.enable = true;
+    # git = {
+    #   userName = "RobertVDLeeuw";
+    #   userEmail = "robert.van.der.leeuw@gmail.com";
+    # };
 	};
 }
