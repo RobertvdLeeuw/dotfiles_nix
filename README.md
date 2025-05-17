@@ -43,44 +43,16 @@
     - [x] Fix terminal
         - [x] Fix F5
         - [ ] Fix F6 once UV is figured out
-     - [ ] Figure out UV
-     - [ ] Figure out UV
-     - [ ] Figure out UV
-     - [ ] Figure out UV
-     - [ ] Figure out UV
-     - [ ] Figure out UV
-     - [ ] Figure out UV
-     - [ ] Figure out UV
-     - [ ] Figure out UV
-     - [ ] Figure out UV
-     - [ ] Figure out UV
-     - [ ] Figure out UV
-     - [ ] Figure out UV
-     - [ ] Figure out UV
-     - [ ] Figure out UV
-     - [ ] Figure out UV
-     - [ ] Figure out UV
-     - [ ] Figure out UV
-     - [ ] Figure out UV
-     - [ ] Figure out UV
-     - [ ] Figure out UV
-     - [ ] Figure out UV
-     - [ ] Figure out UV
-     - [ ] Figure out UV
-     - [ ] Figure out UV
-     - [ ] Figure out UV
-     - [ ] Figure out UV
-     - [ ] Figure out UV
-     - [ ] Figure out UV
-     - [ ] Figure out UV
-     - [ ] Figure out UV
     - [ ] Try harpoon
     - [ ] Tab completion
         - [ ] NeoCodium
     - [ ] MD render
         - [ ] with Nabla
  - [x] Replace ls with tree with lots of filters.
- - [ ] 
+ - [ ] Waybar
+    - [ ] Audio menu
+    - [ ] Bluetooth menu
+    - [ ] Rethink modules
  - [ ] 
  - [ ] 
  - [ ] 

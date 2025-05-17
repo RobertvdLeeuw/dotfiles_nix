@@ -7,6 +7,9 @@
 		../modules/nvim/nvim.nix
     ../modules/steam.nix
     ../modules/alacritty.nix
+
+		../modules/sway/sway-home.nix
+		../modules/waybar/waybar.nix
 	];
 
 	home = {

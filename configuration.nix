@@ -9,7 +9,7 @@ in
 {
   imports = [
     ./hardware-configuration.nix
-    ./modules/sway.nix
+    ./modules/sway/sway.nix
 
     ./modules/prompt.nix
 
@@ -134,11 +134,15 @@ in
     pathsToLink = [ "/share/zsh" ];
     systemPackages = with pkgs; [
       # WM/DE
-      sway
-      waybar
+      # sway
+      # waybar
+      # playerctl
 
       time
       xorg.libX11
+      xorg.xhost
+      pciutils
+      usbutils
 
       # Support  TODO: Recategorize.
       ffmpeg_6
