@@ -14,7 +14,7 @@ let
     ];
     "custom/workspaces" = {
       # exec = "$HOME/.config/waybar/waybar_modules/workspaces DP-1";
-      exec = "cd /etc/nixos/modules/waybar/modules/workspaces; nix run .# -- DP-1";
+      # exec = "cd /etc/nixos/modules/waybar/modules/workspaces; nix run .# -- ${output}";
       return-type = "json";
       format = "{}";
       tooltip = false;
@@ -79,12 +79,20 @@ let
     };
   };
 
-    screens = [
-    { bar_id = "1"; ipc = true; output = "DP-1";}  # UW
-    { bar_id = "2"; ipc = true; output = "HDMI-A-1";}  # Top
-    { bar_id = "3"; output = "DP-3";}  # Ver
-  ];
-  
+  screens = map (screen: screen // 
+    {"custom/workspaces" = {
+      exec = "cd /etc/nixos/modules/waybar/modules/workspaces; nix run .# -- ${screen.output}";
+      return-type = "json";
+      format = "{}";
+      tooltip = false;
+      escape = false;
+    };}) 
+    [
+      { bar_id = "1"; ipc = true; output = "DP-1"; }  # UW
+      { bar_id = "2"; ipc = true; output = "HDMI-A-1"; }  # Top
+      { bar_id = "3"; output = "DP-3"; }  # Ver
+    ];
+
   configs = map (extra: base_config // extra) screens;
 in
 {

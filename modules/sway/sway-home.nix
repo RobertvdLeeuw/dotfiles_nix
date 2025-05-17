@@ -18,13 +18,13 @@
         }
       ];
       startup = [
-        { command = "swaymsg 'output DP-1 bg ./backgrounds/busy-people/Bottom.png fill'
+        { command = "swaymsg 'output DP-1 bg ./modules/backgrounds/busy-people/Bottom.png fill'
 ";
           always = true; }
-        { command = "swaymsg 'output HDMI-A-1 bg ./sway/backgrounds/busy-people/Top.png fill'
+        { command = "swaymsg 'output HDMI-A-1 bg ./modules/sway/backgrounds/busy-people/Top.png fill'
 "; 
           always = true; }
-        { command = "swaymsg 'output DP-3 bg ./backgrounds/busy-people/Right.png fill'"; 
+        { command = "swaymsg 'output DP-3 bg ./modules/sway/backgrounds/busy-people/Right.png fill'"; 
           always = true; }
         # { command = ""; 
         #   always = true; }
@@ -38,7 +38,8 @@
 
       floating.titlebar = false;
       window = {
-
+        titlebar = false;
+        border = 0;
       };
     };
 
