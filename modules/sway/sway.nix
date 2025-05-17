@@ -14,7 +14,7 @@
 
         playerctl
 
-        rofi
+        wofi
 
         # Clipboard
         clipman
