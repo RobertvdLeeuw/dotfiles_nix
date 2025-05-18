@@ -26,9 +26,13 @@
           always = true; }
         { command = "swaymsg 'output DP-3 bg /etc/nixos/modules/sway/backgrounds/busy-people/Right.png fill'"; 
           always = true; }
-        { command = "copyq"; 
+        { command = "mako"; 
+          always = true; }
+        { command = "copyq --start-server"; 
           always = true; }
         { command = "redshift"; 
+          always = true; }
+        { command = "sudo systemctl enable ydotool && sudo systemctl start ydotool"; 
           always = true; }
         # { command = ""; 
         #   always = true; }

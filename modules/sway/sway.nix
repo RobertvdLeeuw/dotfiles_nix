@@ -18,7 +18,8 @@
 
         # Clipboard
         wl-clipboard
-        copyq  # History
+        clipman
+        cliphist
 
         # Screenshots
         grim
