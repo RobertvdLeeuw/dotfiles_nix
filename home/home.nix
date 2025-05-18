@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ config, pkgs, inputs, ... }:
 
 {
 	imports = [
@@ -11,7 +11,9 @@
 		../modules/sway/sway-home.nix
 		../modules/wofi/wofi.nix
 		../modules/waybar/waybar.nix
-	];
+
+    inputs.spicetify-nix.homeManagerModules.default
+  ];
 
 	home = {
 		username = "robert";
@@ -19,6 +21,30 @@
 		stateVersion = "24.11"; # DO NOT TOUCH! Needed in case of backwards incompatible update.
 	};
 
+  programs.spicetify =  # TODO: Move.
+    let
+      spicePkgs = inputs.spicetify-nix.legacyPackages.${pkgs.system};
+    in
+      {
+      enable = true;
+      theme = spicePkgs.themes.text;
+
+      enabledExtensions = with spicePkgs.extensions; [
+        fullAppDisplay
+        shuffle
+        keyboardShortcut
+        trashbin
+        powerBar
+        autoVolume
+        history
+      ];
+
+      enabledCustomApps = with spicePkgs.apps; [
+        newReleases
+        reddit
+        marketplace
+      ];
+    };
 
 	home.packages = with pkgs; [
 		# General
@@ -28,7 +54,7 @@
     # teams
 		brave
 		libreoffice-qt
-		spotify
+		# spotify
 		whatsapp-for-linux
     marimo
 		spotdl

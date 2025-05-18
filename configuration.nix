@@ -5,9 +5,22 @@
 { config, pkgs, ... }:
 let
   user = "robert";
+
+  # spicetify-nix = builtins.fetchGit {
+  #   url = "https://github.com/Gerg-L/spicetify-nix";
+  #   ref = "master";
+  # };
+  
+  # # Import the spicetify packages
+  # spicePkgs = import spicetify-nix {
+  #   inherit pkgs;
+  # };
 in
-{
+  {
   imports = [
+    # spicetifyModule
+    # "${spicetify-nix}/modules/nixos.nix"
+
     ./hardware-configuration.nix
     ./modules/sway/sway.nix
 
@@ -18,16 +31,16 @@ in
 
     ./shells/bash.nix
 
-    <home-manager/nixos>
+    # <home-manager/nixos>
   ];
 
-  home-manager = {
-		useGlobalPkgs = true;
-		useUserPackages = true;
+  # home-manager = {
+  #   useGlobalPkgs = true;
+  #   useUserPackages = true;
 
-		users.${user} = import ./home/home.nix;
-		users.root = import ./home/home-root.nix;
-	};
+  #   users.${user} = import ./home/home.nix;
+  #   users.root = import ./home/home-root.nix;
+  # };
 
   boot = {
     loader = {
@@ -41,28 +54,28 @@ in
     networkmanager.enable = true;
   };
 
-	system = {
+  system = {
     stateVersion = "24.11";  # DO NOT TOUCH! Needed in case of backwards incompatible update.
     autoUpgrade = {
       enable = true;
       channel = "https://nixos.org/channels/nixos-VERSION";
     };
-	};
+  };
 
   nixpkgs.config.allowUnfree = true;
 
-	nix = {
-		settings = {
-			auto-optimise-store = true;
-			experimental-features = [ "nix-command" "flakes" ];
-			};
+  nix = {
+    settings = {
+      auto-optimise-store = true;
+      experimental-features = [ "nix-command" "flakes" ];
+    };
 
-		gc = {
-			automatic = true;
-			dates = "weekly";
-			options = "--delete-older-than 14d";
-		};
-	};
+    gc = {
+      automatic = true;
+      dates = "weekly";
+      options = "--delete-older-than 14d";
+    };
+  };
 
   fonts.packages = with pkgs; [
     iosevka
@@ -89,20 +102,20 @@ in
 
   location.provider = "geoclue2";  # For redshift.
 
-	services = {
+  services = {
     printing.enable = true;  # CUPS
 
     redshift.enable = true;
 
-		desktopManager.plasma6.enable = true;
-		displayManager = {
+    desktopManager.plasma6.enable = true;
+    displayManager = {
       autoLogin = {
         enable = true;
         user = "robert";
       };
-			sddm.enable = true;
-			defaultSession = "sway";
-		};
+      sddm.enable = true;
+      defaultSession = "sway";
+    };
 
     xserver = {
       enable = true;
@@ -121,7 +134,7 @@ in
         support32Bit = true;
       };
     };
-	};
+  };
 
   security.rtkit.enable = true;
 
@@ -143,6 +156,7 @@ in
       # playerctl
 
       dust
+      spicetify-cli
       ladybird
       time
       xorg.libX11
@@ -181,11 +195,16 @@ in
     };
   };
 
-	programs = {
+  programs = {
     zsh.enable = true;
+    # spicetify = {
+    #   enable = true;
+    #   # theme = spicePkgs.themes.catppuccin;
+    #   theme = {};
+    # };
     # git = {
     #   userName = "RobertVDLeeuw";
     #   userEmail = "robert.van.der.leeuw@gmail.com";
     # };
-	};
+  };
 }

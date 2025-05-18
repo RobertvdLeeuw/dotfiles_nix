@@ -28,6 +28,8 @@
           always = true; }
         { command = "copyq"; 
           always = true; }
+        { command = "redshift"; 
+          always = true; }
         # { command = ""; 
         #   always = true; }
       ];
