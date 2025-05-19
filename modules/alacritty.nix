@@ -76,21 +76,16 @@
     };
   };
 
-  home.packages = with pkgs; [
-    # environment = {
-    # systemPackages = with pkgs; [
+  home.packages = with pkgs; [  # TODO: Clean and reorgainze.
     wget
     jq
-    # wev
     which
 
-    # Terminal stuff
     neofetch
     # bat
     fd
     fzf
     # killall
-    lutris
 
     gettext
     # tealdeer

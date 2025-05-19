@@ -64,4 +64,11 @@
 
     '';
   };
+
+	home.sessionVariables = {
+	  XDG_CURRENT_DESKTOP = "sway";
+	  XDG_SESSION_TYPE = "wayland";
+
+	  DBUS_SESSION_BUS_ADDRESS = "unix:path=/run/user/1000/bus";  # This old bandaid still needed?
+	};
 }

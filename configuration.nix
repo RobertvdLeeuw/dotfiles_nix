@@ -5,22 +5,9 @@
 { config, pkgs, ... }:
 let
   user = "robert";
-
-  # spicetify-nix = builtins.fetchGit {
-  #   url = "https://github.com/Gerg-L/spicetify-nix";
-  #   ref = "master";
-  # };
-  
-  # # Import the spicetify packages
-  # spicePkgs = import spicetify-nix {
-  #   inherit pkgs;
-  # };
 in
   {
   imports = [
-    # spicetifyModule
-    # "${spicetify-nix}/modules/nixos.nix"
-
     ./hardware-configuration.nix
     ./modules/sway/sway.nix
 
@@ -30,17 +17,7 @@ in
     ./modules/rust.nix
 
     ./shells/bash.nix
-
-    # <home-manager/nixos>
   ];
-
-  # home-manager = {
-  #   useGlobalPkgs = true;
-  #   useUserPackages = true;
-
-  #   users.${user} = import ./home/home.nix;
-  #   users.root = import ./home/home-root.nix;
-  # };
 
   boot = {
     loader = {
@@ -104,7 +81,6 @@ in
 
   services = {
     printing.enable = true;  # CUPS
-
     redshift.enable = true;
 
     desktopManager.plasma6.enable = true;
@@ -150,35 +126,30 @@ in
   environment = {
     pathsToLink = [ "/share/zsh" ];
     systemPackages = with pkgs; [
-      # WM/DE
-      # sway
-      # waybar
-      # playerctl
-
       dust
       spicetify-cli
-      ladybird
       time
-      xorg.libX11
-      xorg.xhost
       pciutils
       usbutils
+      lm_sensors
 
       # Support  TODO: Recategorize.
       ffmpeg_6
 
       # Package managers
       nodejs  # npm
+      firefox
 
       # To categorize
       git
       gcc
       ninja
-
+      any-nix-shell  # for nix-shell in zsh. In don't like bash. No. Stop it.
     ];
 
     plasma6.excludePackages = with pkgs.kdePackages; [
       kwallet
+      kwallet-pam
       kwalletmanager
       # kwrite
       elisa
@@ -196,15 +167,11 @@ in
   };
 
   programs = {
-    zsh.enable = true;
-    # spicetify = {
-    #   enable = true;
-    #   # theme = spicePkgs.themes.catppuccin;
-    #   theme = {};
-    # };
-    # git = {
-    #   userName = "RobertVDLeeuw";
-    #   userEmail = "robert.van.der.leeuw@gmail.com";
-    # };
+    zsh = {
+      enable = true;
+      interactiveShellInit = ''
+        any-nix-shell zsh --info-right | source /dev/stdin
+      '';
+    };
   };
 }

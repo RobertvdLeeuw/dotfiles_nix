@@ -11,7 +11,6 @@
     
     spicetify-nix = {
       url = "github:Gerg-L/spicetify-nix";
-      # Optional: Have it follow your nixpkgs input
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };
@@ -23,8 +22,7 @@
         modules = [
           ./configuration.nix
           
-          home-manager.nixosModules.home-manager
-          {
+          home-manager.nixosModules.home-manager {
             home-manager.useGlobalPkgs = true;
             home-manager.useUserPackages = true;
             home-manager.extraSpecialArgs = { inherit inputs; };

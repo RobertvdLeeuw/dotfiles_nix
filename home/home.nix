@@ -24,6 +24,35 @@
   programs.spicetify =  # TODO: Move.
     let
       spicePkgs = inputs.spicetify-nix.legacyPackages.${pkgs.system};
+
+      spiceExtensionsRepo = pkgs.fetchFromGitHub {
+        owner = "ohitstom";
+        repo = "spicetify-extensions";
+        rev = "cd00aa6e76da4f82f9a013f1363b2a45f92b0a0b";
+        hash = "sha256-C59WBvq2fL+V/e8iUDBs77OSIPSku/FlHZ3xi4UWBBA=";
+      };
+
+      extraExtensions = {  # TODO: Fix these.
+        oneko = {
+          src = pkgs.fetchFromGitHub {
+            owner = "kyrie25";
+            repo = "spicetify-oneko";
+            rev = "master"; 
+            sha256 = "sha256-lestrf4sSwGbBqy+0J7u5IoU6xNKHh35IKZxt/phpNY=";
+          };
+          name = "oneko.js"; # Main file.
+        };
+
+        quickQueue = {
+          name = "quickQueue.js";
+          src = "${spiceExtensionsRepo}/quickQueue";
+        };
+
+        volumePercentage = {
+          name = "volumePercentage.js";
+          src = "${spiceExtensionsRepo}/volumePercentage";
+        };
+      };
     in
       {
       enable = true;
@@ -37,6 +66,9 @@
         powerBar
         autoVolume
         history
+        extraExtensions.oneko
+        extraExtensions.quickQueue
+        extraExtensions.volumePercentage
       ];
 
       enabledCustomApps = with spicePkgs.apps; [
@@ -112,26 +144,11 @@
 	#  /etc/profiles/per-user/robert/etc/profile.d/hm-session-vars.sh
 	#
 
-	  # wayland.windowManager.sway = {
-	    # enable = true;
-	    # config = rec {
-	      # modifier = "Mod4";  # Win key
-	      # terminal = "alacritty";
-	      # startup = [
-		# {command = "mako";}  # Nextcloud too
-	      # ];
-	    # };
-	  # };
-
-
-	home.sessionVariables = {
-	  XDG_CURRENT_DESKTOP = "sway";
-	  XDG_SESSION_TYPE = "wayland";
-
-	  DBUS_SESSION_BUS_ADDRESS = "unix:path=/run/user/1000/bus";
-		# EDITOR = "nvim";
-	};
-
-	# Let Home Manager install and manage itself.
-	programs.home-manager.enable = true;
+	programs = {
+    home-manager.enable = true;  # DON'T TOUCH! Bootstrap.
+    git = {
+      userName = "RobertVDLeeuw";
+      userEmail = "robert.van.der.leeuw@gmail.com";
+    };
+  };
 }

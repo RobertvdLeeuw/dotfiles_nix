@@ -6,33 +6,12 @@
      - [x] ZSH prompt and hotkeys on extra shells
          - [x] Bash
          - [x] Nix
- - [ ] Git set credentials 
-     - [ ] Declarative SSH key stuff too?
+ - [x] Git set credentials 
+     - [ ] Homeman for git ignore, sync with dv template?
+         - [ ] Declarative SSH key stuff too?
  - [ ] dv
-     - [ ] Figure out UV
-         - [ ] Figure out UV2Nix
+     - [ ] Figure out UV2Nix
      - [ ] Figure out Cargo2Nix
-     - [ ] Create file structure
-         - [ ] Py: just run uv and custom commands after
-         - [ ] Rs: cargo init
-     - [ ] Flake.nix link
-         - [ ] Py: Uv2nix
-         - [ ] Rs: Cargo2Nix
-         - [ ] On flake/cargo/uv change, rerun?
-             - [ ] Watchexec?
-     - [ ] Actual flake.nix
-         - [ ] Nurl at this step, maybe nix-init too.
-     - [ ] Direnv
-        - [ ] template shell.nix
-            - [ ] Py lib modules (requests/selenium/bs4/pywright/markdownify, llm/agent, rocm torch, num/pan/polars/matplot/seaborn/pickle, etc.)
-            - [ ] .env init
-            - [ ] .gitignore init
-                - [ ] Just put everything py, rs, etc in one general ignore, split it up once I'm dealing with over 6 languages.
-                - [ ] Eventually: harpoon set 'hotkey 1' to main file
-            - [ ] Nix-init or nurl wrapped somehow
-            - [ ] Something git in there?
-            - [ ] nix-direnv
-            - [ ] Make this entire thing runnable on already existing projects (with or without uv, shell.nix, etc)
  - [ ] NeoVIM
     - [ ] LSP
         - [ ] Ruff
@@ -47,13 +26,28 @@
         - [ ] with Nabla
  - [x] Replace ls with tree with lots of filters.
  - [ ] Waybar
-    - [ ] Audio menu
-    - [ ] Bluetooth menu
-    - [ ] Rethink modules
+    - [ ] All
+        - [ ] Server up/down
+        - [ ] Something new (actually important) email (neomutt?)
+    - [ ] Horizontals
+        - [ ] Bluetooth connect/make work
+        - [ ] Redo system stats as one module (cpu + temp, gpu + temp, ram)
+             - [ ] Figure out temp.
+        - [ ] Internet (connected/not with up down speed) 
  - [ ] Eza
- - [ ] 
- - [ ] 
- - [ ] 
- - [ ] 
- - [ ] 
+ - [ ] Fix cliphist menu
+ - [ ] Figure out ShyFox and whether to switch.
+    - [ ] OR brave windowed(?) fullscreen WITH show bar on Ctrl?
+    - [ ] Change bar hotkeys
+    - [ ] Fullscreen mode with open-on-hover bars
+    - [ ] Theme
+    - [ ] Hotkeys
+         - [ ] Vimium
+         - [ ] F6 URL, Ctrl+n tab n
+         - [ ] Side sidebar on Ctrl like like waybar
+         - [ ] Page back/forth
+    - [ ] Ad blocker
+        - [ ] Privacy stuff?
+ - [ ] Package MO2 and PR in Nixpkgs.
+ - [ ] pkgs.overrideAttrs for kde requirement kwallet
 
