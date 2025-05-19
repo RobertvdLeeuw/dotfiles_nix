@@ -1,10 +1,8 @@
-# Edit this configuration file to define what should be installed onconf
-# your system.  Help is available in the configuration.nix(5) man page
-# and in the NixOS manual (accessible by running 'nixos-help').
-
-{ config, pkgs, ... }:
+{ config, pkgs, lib, ... }:
 let
   user = "robert";
+
+  # secrets = import ./secrets.nix;
 in
   {
   imports = [
@@ -19,16 +17,27 @@ in
     ./shells/bash.nix
   ];
 
-  boot = {
-    loader = {
-      systemd-boot.enable = true;
-      efi.canTouchEfiVariables = true;
-    };
-  };
+  systemd.services.NetworkManager-wait-online.wantedBy = lib.mkForce [];
 
-  networking = {
+  networking = {  # TODO: Fix this for faster boot.
     hostName = "nixos";
     networkmanager.enable = true;
+    useDHCP = lib.mkDefault true;
+
+    nameservers = ["1.1.1.1" "8.8.8.8" ];
+    # interfaces.eno1 = {
+    #   useDHCP = false;
+    #   ipv4.addresses = [{
+    #     address = secrets.ip_address;
+    #     prefixLength = 24;
+    #   }];
+    # };
+  
+    # defaultGateway = secrets.ip_gateway;
+    # defaultGateway = [{
+    #   address = secrets.ip_gateway;
+    #   interface = "eno1";
+    # }];
   };
 
   system = {
@@ -83,6 +92,7 @@ in
     printing.enable = true;  # CUPS
     redshift.enable = true;
 
+    journald.extraConfig = "SystemMaxUse=50M";
     desktopManager.plasma6.enable = true;
     displayManager = {
       autoLogin = {
@@ -130,21 +140,19 @@ in
     pathsToLink = [ "/share/zsh" ];
     systemPackages = with pkgs; [
       nix-fast-build
-      
 
       dust
-
       zstd
 
       spicetify-cli
       time
       pciutils
       usbutils
-      # lm_sensors
+      lm_sensors
 
       # Support  TODO: Recategorize.
       ffmpeg_6
-
+      # foot
       # Package managers
       nodejs  # npm
       firefox

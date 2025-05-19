@@ -13,6 +13,11 @@
       url = "github:Gerg-L/spicetify-nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    sops-nix = {
+      url = "github:Mic92/sops-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs = { self, nixpkgs, home-manager, ... }@inputs: {
@@ -21,6 +26,7 @@
         system = "x86_64-linux";
         modules = [
           ./configuration.nix
+          inputs.sops-nix.nixosModules.sops
           
           home-manager.nixosModules.home-manager {
             home-manager.useGlobalPkgs = true;
@@ -32,6 +38,11 @@
         ];
         specialArgs = { inherit inputs; };
       };
+    };
+
+    checks.x86_64-linux = {
+      # This builds your NixOS configuration
+      nixos = self.nixosConfigurations.nixos.config.system.build.toplevel;
     };
   };
 }
