@@ -112,7 +112,10 @@ in
     };
   };
 
-  security.rtkit.enable = true;
+  security = {
+    rtkit.enable = true;
+    pam.services.sddm.kwallet.enable = false;
+  };
 
   users = {
     defaultUserShell = pkgs.zsh;
@@ -126,12 +129,18 @@ in
   environment = {
     pathsToLink = [ "/share/zsh" ];
     systemPackages = with pkgs; [
+      nix-fast-build
+      
+
       dust
+
+      zstd
+
       spicetify-cli
       time
       pciutils
       usbutils
-      lm_sensors
+      # lm_sensors
 
       # Support  TODO: Recategorize.
       ffmpeg_6
@@ -148,9 +157,6 @@ in
     ];
 
     plasma6.excludePackages = with pkgs.kdePackages; [
-      kwallet
-      kwallet-pam
-      kwalletmanager
       # kwrite
       elisa
       kate
@@ -160,6 +166,13 @@ in
       ark
       spectacle
     ];
+
+    # Plasma dun made kwallet a requirement, we can only shush it.
+    etc."skel/.config/kwalletrc".text = ''
+      [Wallet]
+      Enabled=false
+      First Use=false
+    '';
 
     variables = {
       SHELL = "${pkgs.zsh}/bin/zsh";

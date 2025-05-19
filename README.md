@@ -15,7 +15,8 @@
  - [ ] NeoVIM
     - [ ] LSP
         - [ ] Ruff
-    - [ ] Nvim surround
+    - [ ] Surround
+    - [ ] Why is Shift+K definition info?
     - [x] Fix terminal
         - [x] Fix F5
         - [ ] Fix F6 once UV is figured out
@@ -49,5 +50,15 @@
     - [ ] Ad blocker
         - [ ] Privacy stuff?
  - [ ] Package MO2 and PR in Nixpkgs.
- - [ ] pkgs.overrideAttrs for kde requirement kwallet
-
+ - [ ] https://github.com/Mic92/nix-fast-build
+ - [ ] https://www.youtube.com/watch?v=FYOKD5TCmPY
+ - [ ] Nix dependency search?
+    - nix-locate
+    - ```nix repl
+      nix-repl> :l <nixpkgs>
+      nix-repl> pkgs.tbb
+      «derivation /nix/store/...»
+      nix-repl> builtins.attrNames (builtins.filter (n: builtins.match "tbb.*" n != null) (builtins.attrNames pkgs))
+        ```
+ - [ ] Spicetify fix now playing bottom not working.
+ - [ ] Look into snowfall
