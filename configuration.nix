@@ -175,13 +175,6 @@ in
       spectacle
     ];
 
-    # Plasma dun made kwallet a requirement, we can only shush it.
-    etc."skel/.config/kwalletrc".text = ''
-      [Wallet]
-      Enabled=false
-      First Use=false
-    '';
-
     variables = {
       SHELL = "${pkgs.zsh}/bin/zsh";
     };

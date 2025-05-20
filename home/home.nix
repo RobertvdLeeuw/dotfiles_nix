@@ -7,6 +7,7 @@
 		../modules/nvim/nvim.nix
     ../modules/steam.nix
     ../modules/alacritty.nix
+    ../modules/browser.nix
 
 		../modules/sway/sway-home.nix
 		../modules/wofi/wofi.nix
@@ -115,15 +116,6 @@
 	# Home Manager is pretty good at managing dotfiles. The primary way to manage
 	# plain files is through 'home.file'.
   home.file = {
-    # ".config/kwalletrc".text = ''
-    #   [Wallet]
-    #   Enabled=false
-    #   First Use=false
-
-    #   [org.freedesktop.secrets]
-    #   apiEnable
-    # '';
-
 		# # Building this configuration will create a copy of 'dotfiles/screenrc' in
 		# # the Nix store. Activating the configuration will then make '~/.screenrc' a
 		# # symlink to the Nix store copy.
