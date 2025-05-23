@@ -4,8 +4,8 @@
     zsh = {
       enable = true;
       shellAliases = {
-        rebuild = "sudo nixos-rebuild build --use-remote-sudo && clear";
-        update = "sudo nixos-rebuild switch --use-remote-sudo && clear";
+        # rebuild = "sudo nixos-rebuild build --use-remote-sudo --impure && clear";
+        update = "sudo nixos-rebuild switch --use-remote-sudo --impure && clear";
         cnfnix = "cd /etc/nixos && nvim configuration.nix && cd -";
         cnfnixr = "cd /etc/nixos && nvim README.md && cd -";
 
@@ -21,6 +21,7 @@
       };
       shellGlobalAliases = {
         nano = "nvim";
+        surf = "GDK_BACKEND=x11 surf";  # TODO: Better fix for this, surf + xwayland = :()
       };
       
       initContent = ''
@@ -55,6 +56,8 @@
         bindkey '^[j' history-search-forward
         bindkey -M viins '^[k' history-search-backward
         bindkey -M viins '^[j' history-search-forward
+
+        eval "$(direnv hook zsh)"
       '';
       
       defaultKeymap = "viins";
@@ -76,18 +79,6 @@
         ];
       };
       
-      # plugins = [
-      #   {
-      #     name = "zsh-autosuggestions";
-      #     src = pkgs.fetchFromGitHub {
-      #       owner = "zsh-users";
-      #       repo = "zsh-autosuggestions";
-      #       rev = "v0.7.0";
-      #       sha256 = "1g3pij5qn2j7v7jjac2a63lxd97mcsgw6xq6k5p7835q9fjiid98";
-      #     };
-      #   }
-      # ];
-      
       autosuggestion = {
         enable = true;
         # highlight = "fg=8"; 
@@ -102,6 +93,15 @@
     zoxide = {
       enable = true;
       enableZshIntegration = true;
+    };
+
+    direnv = {
+      enable = true;
+      enableZshIntegration = true;
+      config = {};
+      silent = true;
+
+      nix-direnv.enable = true;
     };
   };
 }

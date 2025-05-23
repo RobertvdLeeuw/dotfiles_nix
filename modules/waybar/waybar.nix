@@ -1,4 +1,4 @@
-{ config, pkgs, inputs, ... }:
+{ config, pkgs, inputs, ... }:  
 let 
   base_config = {
     height = 30;
@@ -53,7 +53,7 @@ let
 
   screens = map (screen: screen // 
     {"custom/workspaces" = {
-      exec = "cd /etc/nixos/modules/waybar/modules/workspaces; nix run .# -- ${screen.output}";
+      exec = "workspaces ${screen.output}";  # TODO: Derivation for this tool.
       return-type = "json";
       format = "{}";
       tooltip = false;
@@ -98,4 +98,11 @@ in
     settings = configs;
     style = ./style.css;
   };
+
+  home.packages = 
+    let
+      config_dir = "/mnt/storage/nc/Personal/nixos";
+      workspaces = (builtins.getFlake "${config_dir}/modules/waybar/modules/workspaces").packages.x86_64-linux.default;
+    in [ workspaces ];
+
 }

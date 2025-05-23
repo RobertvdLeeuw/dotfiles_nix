@@ -1,17 +1,12 @@
 # TODO
- - [x] Modularization
- - [x] Shells
-     - [x] ZSH
-         - [x] Fix git in prompt
-     - [x] ZSH prompt and hotkeys on extra shells
-         - [x] Bash
-         - [x] Nix
  - [x] Git set credentials 
-     - [ ] Homeman for git ignore, sync with dv template?
-         - [ ] Declarative SSH key stuff too?
+     - [ ] Declarative SSH key stuff too?
  - [ ] dv
-     - [ ] Figure out UV2Nix
-     - [ ] Figure out Cargo2Nix
+     - [ ] Figure out 
+        - [ ] UV2Nix
+        - [x] Cargo2Nix
+            - [ ] shell stuff
+        - [x] Direnv
  - [ ] NeoVIM
     - [ ] LSP
         - [ ] Ruff
@@ -25,7 +20,6 @@
         - [ ] NeoCodium
     - [x] MD render
         - [ ] with Nabla
- - [x] Replace ls with tree with lots of filters.
  - [ ] Waybar
     - [ ] All
         - [ ] Server up/down
@@ -37,21 +31,11 @@
         - [ ] Internet (connected/not with up down speed) 
  - [ ] Eza
  - [ ] Fix cliphist menu
- - [ ] Figure out ShyFox and whether to switch.
-    - [ ] OR brave windowed(?) fullscreen WITH show bar on Ctrl?
-    - [ ] Change bar hotkeys
-    - [ ] Fullscreen mode with open-on-hover bars
-    - [ ] Theme
-    - [ ] Hotkeys
-         - [ ] Vimium
-         - [ ] F6 URL, Ctrl+n tab n
-         - [ ] Side sidebar on Ctrl like like waybar
-         - [ ] Page back/forth
-    - [ ] Ad blocker
-        - [ ] Privacy stuff?
+ - [ ] Alternative browser
  - [ ] Package MO2 and PR in Nixpkgs.
  - [ ] https://github.com/Mic92/nix-fast-build
  - [ ] https://www.youtube.com/watch?v=FYOKD5TCmPY
+    - [ ] Static IP
  - [ ] Nix dependency search?
     - nix-locate
     - ```nix repl
@@ -62,3 +46,6 @@
         ```
  - [ ] Spicetify fix now playing bottom not working.
  - [ ] Look into snowfall
+ - [ ] Base (probably not nix) for non-nix configs.
+     - [ ] Stuff like global colors file
+ - [ ] Something against those incessant ' files.

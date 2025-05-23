@@ -93,7 +93,6 @@
 		spotdl
 		unigine-superposition
 
-
 		# Support
     nurl
     nix-init

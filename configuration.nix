@@ -1,6 +1,10 @@
-{ config, pkgs, lib, ... }:
+{ config, pkgs, lib, inputs, ... }:
 let
   user = "robert";
+
+  config_dir = "/mnt/storage/nc/Personal/nixos";
+
+  # workspaces = (builtins.getFlake "${config_dir}/modules/waybar/modules/workspaces").packages.x86_64-linux.default;
 
   # secrets = import ./secrets.nix;
 in
@@ -19,7 +23,8 @@ in
 
   systemd.services.NetworkManager-wait-online.wantedBy = lib.mkForce [];
 
-  networking = {  # TODO: Fix this for faster boot.
+  networking = {
+    # TODO: secrets = builtins.fromJSON (builtins.readFile "${self}/secrets/secrets.json");
     hostName = "nixos";
     networkmanager.enable = true;
     useDHCP = lib.mkDefault true;
@@ -139,10 +144,13 @@ in
   environment = {
     pathsToLink = [ "/share/zsh" ];
     systemPackages = with pkgs; [
-      nix-fast-build
+      # nix-fast-build
+      git-crypt
+      surf
 
       dust
       zstd
+
 
       spicetify-cli
       time
@@ -156,6 +164,8 @@ in
       # Package managers
       nodejs  # npm
       firefox
+
+      # workspaces
 
       # To categorize
       git
@@ -177,6 +187,7 @@ in
 
     variables = {
       SHELL = "${pkgs.zsh}/bin/zsh";
+      # GDK_BACKEND = "x11";  # For surf.
     };
   };
 
