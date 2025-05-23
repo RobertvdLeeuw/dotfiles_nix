@@ -12,6 +12,7 @@
         - [ ] Ruff
     - [ ] Surround
     - [ ] Why is Shift+K definition info?
+        - It's better than hover, though.
     - [x] Fix terminal
         - [x] Fix F5
         - [ ] Fix F6 once UV is figured out
@@ -22,13 +23,14 @@
         - [ ] with Nabla
  - [ ] Waybar
     - [ ] All
-        - [ ] Server up/down
+        - [ ] Internet (connected/not with up down speed) 
+            - [ ] Server up/down
+        - [ ] Current and/or next event on (shared) calendar?
         - [ ] Something new (actually important) email (neomutt?)
     - [ ] Horizontals
         - [ ] Bluetooth connect/make work
         - [ ] Redo system stats as one module (cpu + temp, gpu + temp, ram)
              - [ ] Figure out temp.
-        - [ ] Internet (connected/not with up down speed) 
  - [ ] Eza
  - [ ] Fix cliphist menu
  - [ ] Alternative browser
@@ -47,5 +49,6 @@
  - [ ] Spicetify fix now playing bottom not working.
  - [ ] Look into snowfall
  - [ ] Base (probably not nix) for non-nix configs.
-     - [ ] Stuff like global colors file
+     - Stuff like global colors file
  - [ ] Something against those incessant ' files.
+ - [ ] Fix starship prompt and alacritty cursor on vi mode

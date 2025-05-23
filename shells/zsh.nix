@@ -58,7 +58,10 @@
         bindkey -M viins '^[j' history-search-forward
 
         eval "$(direnv hook zsh)"
+
+        export NIXPKGS_ALLOW_UNFREE=1
       '';
+
       
       defaultKeymap = "viins";
       

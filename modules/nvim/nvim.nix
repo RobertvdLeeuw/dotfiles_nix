@@ -46,7 +46,7 @@
         lua-language-server
 
         ripgrep  # For Telescope
-        nnn  # File Explorer
+        ranger  # File Explorer
       ];
 
       plugins = with pkgs.vimPlugins; [
@@ -67,13 +67,17 @@
         #   '';
         # }
         {
-          plugin = nnn-vim;
+          plugin = ranger-nvim;
           config = toLua ''
-        require('nnn').setup({
-          replace_netrw = true,
-          command = "nnn -H"
-        })
-
+            require("ranger-nvim").setup({ replace_netrw = true, enable_cmds = true })
+          '';
+        }
+        {
+          plugin = hardtime-nvim;
+          config = toLua ''
+            require("hardtime").setup({
+              disable_mouse = false
+            })
           '';
         }
         {
