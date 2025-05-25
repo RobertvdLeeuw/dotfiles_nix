@@ -8,6 +8,7 @@
             - [ ] shell stuff
         - [x] Direnv
  - [ ] NeoVIM
+    - [ ] Treesitter - figure out lua + bash in Nix injections.
     - [ ] LSP
         - [ ] Ruff
     - [ ] Surround
@@ -52,3 +53,8 @@
      - Stuff like global colors file
  - [ ] Something against those incessant ' files.
  - [ ] Fix starship prompt and alacritty cursor on vi mode
+ - [ ] Look into small sys snapshot that complement NixOS rollback.
+ - [ ] Improve man
+    - Wikiman?
+    - Highlighting
+    - More nix sources.

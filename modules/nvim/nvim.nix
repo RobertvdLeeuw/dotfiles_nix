@@ -16,6 +16,17 @@
         
         doCheck = false;
       };
+
+      injectme = pkgs.vimUtils.buildVimPlugin {
+        name = "injectme";
+        src = pkgs.fetchFromGitHub {
+          owner = "Dronakurl";
+          repo = "injectme.nvim";
+          rev = "2aea7ad8c4b137ff8809586ca65784e7e5651c8c";
+          hash = "sha256-XDZ1JvcsS/Of7NhGJ7Q5XiSUf/GvulZgEOwKP/Oabxg=";
+        };        
+        doCheck = false;
+      };
     in
       {
       enable = true;
@@ -177,6 +188,9 @@
           p.tree-sitter-rust
         ]));
           config = toLuaFile ./plugin/treesitter.lua;
+        }
+        {
+          plugin = injectme;
         }
         {
           plugin = lualine-nvim;
