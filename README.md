@@ -5,9 +5,12 @@
      - [ ] Figure out 
         - [ ] UV2Nix
         - [x] Cargo2Nix
+            - [ ] Figure out more maintained alternative
             - [ ] shell stuff
         - [x] Direnv
  - [ ] NeoVIM
+    - [ ] Something fullscreen terminal
+    - [ ] Shift+F5/6 to open last run output
     - [ ] Treesitter - figure out lua + bash in Nix injections.
     - [ ] LSP
         - [ ] Ruff
