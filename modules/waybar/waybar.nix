@@ -5,14 +5,10 @@ let
     spacing = 4; # Gaps between modules (4px)
     modules-left = [ "clock" "pulseaudio" "bluetooth" ];
     modules-center = ["custom/workspaces"];
-    modules-right = [
-      "cpu"
-      "memory"
-      "temperature"
-    ];
+    modules-right = [];
     clock = {
       tooltip-format = "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>";
-      format = "󰃰 {:%H:%M  <b>%d %b</b>}";
+      format = "󰃰 {:%H:%M  <b>%d %b</b>}";
       tooltip = false;
     };
 
@@ -40,20 +36,11 @@ let
       format-connected = "{count} 󰂰";
       tooltip = false;
     };
-
-    cpu = {
-      format = "{usage}% 󰒪";
-      tooltip = false;
-    };
-    memory = {
-      format = "{}% 󰆼";
-      tooltip = false;
-    };
   };
 
   screens = map (screen: screen // 
     {"custom/workspaces" = {
-      exec = "workspaces ${screen.output}";  # TODO: Derivation for this tool.
+      exec = "workspaces ${screen.output}";
       return-type = "json";
       format = "{}";
       tooltip = false;
@@ -61,25 +48,30 @@ let
     };} // (if screen.bar_id != "3" then {  # Horizontal only
       network = {
         format-wifi = "{essid} ({signalStrength}%) 󰤨 ";
-        format-ethernet = " 󰌘";
+        format-ethernet = " 󰌘 ";
         format-linked = "{ifname} (No IP) 󰤩 ";
-        format-disconnected = "󰌙";
-        format-alt = "{ifname}: {ipaddr}/{cidr}";
+        format-disconnected = " 󰌙 ";
+        # format-alt = "{ifname}: {ipaddr}/{cidr}";
         tooltip = false;
       };
-      cpu = {
-        format = "{usage}% 󰒪";
+      "custom/cpu_info" = {
+        exec = "resources CPU";
+        return-type = "json";
+        format = "{}";
         tooltip = false;
+        escape = false;
       };
-      memory = {
-        format = "{}% 󰆼";
+      "custom/gpu_info" = {
+        exec = "resources GPU";
+        return-type = "json";
+        format = "{}";
         tooltip = false;
+        escape = false;
       };
       modules-right = [
         "network"
-        "cpu"
-        "memory"
-        "temperature"
+        "custom/cpu_info"
+        "custom/gpu_info"
       ];
     } else {  # Vertical only
     })) 
@@ -103,6 +95,7 @@ in
     let
       config_dir = "/mnt/storage/nc/Personal/nixos";
       workspaces = (builtins.getFlake "${config_dir}/modules/waybar/modules/workspaces").packages.x86_64-linux.default;
-    in [ workspaces ];
+      resources = (builtins.getFlake "${config_dir}/modules/waybar/modules/resources").packages.x86_64-linux.default;
+    in [ workspaces resources ];
 
 }
