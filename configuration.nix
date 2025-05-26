@@ -144,7 +144,6 @@ in
   environment = {
     pathsToLink = [ "/share/zsh" ];
     systemPackages = with pkgs; [
-      rocmPackages.rocm-smi
       # nix-fast-build
       git-crypt
       surf

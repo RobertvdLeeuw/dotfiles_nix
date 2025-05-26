@@ -37,17 +37,17 @@ window#waybar {
   border-radius: 0;
 }
 
-/* tooltip { */
-/*   background: @black-solid; */
-/*   border: 1px solid @darkgray; */
-/*   border-radius: 0; */
-/* } */
-/* tooltip label { */
-/*   color: @text; */
-/* } */
+tooltip {
+  background: @black-solid;
+  border: 1px solid @darkgray;
+  border-radius: 0;
+}
+tooltip label {
+  color: @text;
+}
 
-/* #workspaces { */
-/* } */
+#workspaces {
+}
 
 #workspaces button {
   background-color: transparent;
@@ -79,41 +79,16 @@ window#waybar {
 /* -------------------------------------------------------------------------------- */
 
 #submap,
+#cpu
+#memory,
 #pulseaudio,
-/* #custom-audio, */
-#custom-cpu_info,
-#custom-gpu_info,
+#custom-audio,
 #network,
 #bluetooth,
+#temperature,
+#custom-power,
+#battery,
 #clock {
-  color: @text;
-  margin-top: 6px;
-  margin-bottom: 6px;
-  margin-left: 6px;
-  margin-right: 6px;
-
-  padding-left: 10px;
-  padding-right: 10px;
-
-  border-radius: 20px;
-  transition: all 0.3s ease;
-}
-
-#cpu {
-  color: @text;
-  margin-top: 6px;
-  margin-bottom: 6px;
-  margin-left: 6px;
-  margin-right: 6px;
-
-  padding-left: 10px;
-  padding-right: 0px;
-
-  border-radius: 20px;
-  transition: all 0.3s ease;
-}
-
-#temperature {
   color: @text;
   margin-top: 6px;
   margin-bottom: 6px;
@@ -131,27 +106,31 @@ window#waybar {
   background-color: #b4befe;
 }
 
-#custom-cpu_info {
-  background-color: #92cf84;
-}
-
-#custom-gpu_info {
-  background-color: #f2a297;
+#custom-power {
+  background-color: #fb6e93;
 }
 
 #network {
-  background-color: #dea364;
+  background-color: #95569b;
 }
 
 #bluetooth {
   background-color: #7777f4;
 }
 
-/* #custom-audio, */
+#custom-audio,
 #pulseaudio {
   background-color: #cba6f7;
 }
 
+#temperature {
+  background-color: #f2a297;
+}
+
+#memory,
+#cpu {
+  background-color: #6599c6;
+}
 
 #submap {
   border: 0px;

@@ -8,9 +8,9 @@ cmp.setup({
     end,
   },
 
-  -- completion = {
-  --   keyword_length = 3,
-  -- },
+  completion = {
+    keyword_length = 3,
+  },
 
   window = {
     completion = {

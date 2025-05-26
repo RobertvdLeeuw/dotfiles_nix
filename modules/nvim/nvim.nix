@@ -92,12 +92,6 @@
           '';
         }
         {
-          plugin = nvim-colorizer-lua;
-          config = toLua ''
-            require('colorizer').setup()
-          '';
-        }
-        {
           plugin = toggleterm-nvim;
           config = toLuaFile ./plugin/toggleterm.lua;
         }
