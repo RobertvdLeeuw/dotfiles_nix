@@ -84,11 +84,19 @@ let
   configs = map (extra: base_config // extra) screens;
 in
 {
-  programs.waybar = {
-    enable = true;
+  programs = {
+    waybar = {
+      enable = true;
 
-    settings = configs;
-    style = ./style.css;
+      settings = configs;
+      style = ./style.css;
+    };
+    eww = {
+      enable = true;
+      enableZshIntegration = true;
+
+      configDir = ./modules/eww;
+    };
   };
 
   home.packages = 

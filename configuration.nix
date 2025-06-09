@@ -147,7 +147,9 @@ in
       rocmPackages.rocm-smi
       # nix-fast-build
       git-crypt
-      surf
+      # surf
+
+      # wikiman
 
       dust
       zstd
@@ -190,6 +192,11 @@ in
       SHELL = "${pkgs.zsh}/bin/zsh";
       # GDK_BACKEND = "x11";  # For surf.
     };
+    etc = {
+      docs = {
+        source = /home/robert/documentation;
+      };
+    };
   };
 
   programs = {
@@ -199,5 +206,11 @@ in
         any-nix-shell zsh --info-right | source /dev/stdin
       '';
     };
+  };
+  
+  documentation = {
+    dev.enable = true;
+    man.generateCaches = true;
+    nixos.includeAllModules = true;     
   };
 }

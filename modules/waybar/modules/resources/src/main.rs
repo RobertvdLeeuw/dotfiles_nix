@@ -70,7 +70,7 @@ fn get_cpu_info(sys: &mut System) -> (i32, i32, i32) {
         .fold(0.0, |acc, cpu| acc + cpu.cpu_usage()) / sys.cpus().len() as f32;
 
     (cpu_use as i32,
-        get_device_temp(".\"kraken2-hid-3-8\".\"Coolant\".\"temp1_input\""),
+        get_device_temp("with_entries(select(.key | contains(\"kraken\"))) | .[] | .Coolant.temp1_input"),
         (100 * sys.used_memory() as i64 / sys.total_memory() as i64) as i32)
 }
 

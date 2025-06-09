@@ -9,11 +9,13 @@
             - [ ] shell stuff
         - [x] Direnv
  - [ ] NeoVIM
+    - [ ] CoC Nvim?
     - [ ] Something fullscreen terminal
     - [ ] Shift+F5/6 to open last run output
     - [ ] Treesitter - figure out lua + bash in Nix injections.
     - [ ] LSP
         - [ ] Ruff
+        - [ ] Fix rust cmp doubling
     - [ ] Surround
     - [ ] Why is Shift+K definition info?
         - It's better than hover, though.
@@ -30,11 +32,10 @@
         - [ ] Internet (connected/not with up down speed) 
             - [ ] Server up/down
         - [ ] Current and/or next event on (shared) calendar?
+            - [ ] Eww for calendar popup
         - [ ] Something new (actually important) email (neomutt?)
     - [ ] Horizontals
         - [ ] Bluetooth connect/make work
-        - [ ] Redo system stats as one module (cpu + temp, gpu + temp, ram)
-             - [ ] Figure out temp.
  - [ ] Eza
  - [ ] Fix cliphist menu
  - [ ] Alternative browser
@@ -56,8 +57,12 @@
      - Stuff like global colors file
  - [ ] Something against those incessant ' files.
  - [ ] Fix starship prompt and alacritty cursor on vi mode
+  - [ ] Something instant prompt too like power10k? Might have to PR
  - [ ] Look into small sys snapshot that complement NixOS rollback.
- - [ ] Improve man
-    - Wikiman?
-    - Highlighting
-    - More nix sources.
+ - [ ] Wikiman
+    - [ ] mkOutOfStoreSymlink?
+ - [ ] Something notify lekkerspelen live
+ - [ ] Navi?
+ - [ ] Something for easy nixpkgs and homeman CLI packages/options search
+ - [ ] Stylix
+- [ ] Yolk? Smart templathing thing for dotfiles, might lessen rebuilds.

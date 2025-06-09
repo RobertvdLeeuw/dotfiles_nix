@@ -82,17 +82,16 @@
     which
 
     neofetch
-    # bat
+    bat
     fd
     fzf
-    # killall
 
     gettext
-    # tealdeer
     tree
     unzip
     zip
     zoxide
+    file
 
     git
     gcc

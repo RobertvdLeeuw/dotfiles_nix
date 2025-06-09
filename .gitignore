@@ -1,5 +1,8 @@
 modules/waybar/modules/workspaces
 modules/waybar/modules/resources
 
+modules/docs/config/sources/
+
+
 # secrets.nix
 

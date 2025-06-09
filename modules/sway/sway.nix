@@ -12,6 +12,7 @@
 
         waybar
 
+        pick
         playerctl
 
         wofi
@@ -29,5 +30,4 @@
       ];
     };
 	};
-  
 }

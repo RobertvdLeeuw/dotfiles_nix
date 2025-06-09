@@ -8,6 +8,7 @@
         update = "sudo nixos-rebuild switch --use-remote-sudo --impure && clear";
         cnfnix = "cd /etc/nixos && nvim configuration.nix && cd -";
         cnfnixr = "cd /etc/nixos && nvim README.md && cd -";
+        try = "nix-shell -p";
 
         todo = "nvim ~/Documents/todo.md";
         books = "nvim ~/Documents/books.txt";
@@ -20,6 +21,8 @@
         gpush = "git push && clear";
       };
       shellGlobalAliases = {
+        # man = "wikiman";
+        cat = "bat";
         nano = "nvim";
         surf = "GDK_BACKEND=x11 surf";  # TODO: Better fix for this, surf + xwayland = :()
       };
@@ -40,14 +43,13 @@
         zstyle ':fzf-tab:complete:cd:*' fzf-preview 'ls --color $realpath'
 
         bindkey '^I'   complete-word       # tab
-        # bindkey '^[[Z' autosuggest-accept  # shift + tab
+        bindkey '^[[Z' forward-word  # shift + tab
         bindkey '^[^I' autosuggest-accept  # shift + tab
 
         clear-terminal() { tput reset; zle redisplay; }
         zle -N clear-terminal
         bindkey '^[l' clear-terminal
         bindkey -M viins '^[l' clear-terminal
-
 
         # bindkey '^[[1;5A' history-search-backward
         # bindkey '^[[1;5B' history-search-forward

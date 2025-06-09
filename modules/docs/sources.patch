@@ -1,0 +1,13 @@
+
+diff --git a/wikiman.sh b/wikiman.sh
+index 1234567..abcdefg 100755
+--- a/wikiman.sh
++++ b/wikiman.sh
+@@ -192,7 +192,7 @@ init() {
+ 	# Sources
+ 
+ 	sources_dir="$conf_sys_usr/share/wikiman/sources"
+-	sources_dir_usr="$config_dir/sources"
++	sources_dir_usr="/etc/docs"
+ 
+ 	# Detect source modules

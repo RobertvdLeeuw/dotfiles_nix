@@ -6,6 +6,7 @@
 
 		../modules/nvim/nvim.nix
     ../modules/steam.nix
+    ../modules/docs/docs.nix
     ../modules/alacritty.nix
     ../modules/browser.nix
 
@@ -115,6 +116,8 @@
 	# Home Manager is pretty good at managing dotfiles. The primary way to manage
 	# plain files is through 'home.file'.
   home.file = {
+    # TODO: Partial configs in here for small tweaks like in nvim or waybar?
+
 		# # Building this configuration will create a copy of 'dotfiles/screenrc' in
 		# # the Nix store. Activating the configuration will then make '~/.screenrc' a
 		# # symlink to the Nix store copy.
