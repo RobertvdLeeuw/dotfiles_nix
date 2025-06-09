@@ -1,11 +1,64 @@
-.calendar-box {
-  background: rgba(0, 0, 0, 0.8);
-  border-radius: 8px;
-  padding: 10px;
-  border: 1px solid #555;
+*{
+	all: unset;
 }
 
-.calendar {
-  color: white;
-  font-family: monospace;
+$text: #f7f3e6;
+$text_nonfocus: #8798A3;
+$bg: #23233b;
+
+// Calendar
+.cal {
+  background-color: $bg;
+  font-family: Iosevka;
+  font-size: 14px;
+  font-weight: normal;
+  border-radius: 10px;
+
+.cal-in {
+    padding: 0px 0px 0px 0px;
+    // margin: 50px;
+    // border: 50px;
+    color: $text;  // In month days
+
+.cal {
+     &.highlight {
+          padding: 0px;
+      }
+
+      padding: 5px 5px 5px 5px;  // Total block
+    }
+  }
+}
+
+calendar {
+  // vertical-align: baseline;
+  // text-align: center;
+}
+
+calendar:selected {
+  border-radius: 30px;
+  background-color: $text;
+  color: #a1bdce;
+  
+  // align-items: center;
+  // justify-content: center;
+  // text-align: center;
+}
+
+calendar.header {
+  color: #87a6cc; // Month, year
+  font-weight: bold;
+}
+
+calendar.button {
+  color: #a1bdce;
+}
+
+calendar.highlight {
+  color: #a1bdce;  // Days
+  font-weight: bold;
+}
+
+calendar:indeterminate {
+  color: $text_nonfocus;  // Out of month
 }

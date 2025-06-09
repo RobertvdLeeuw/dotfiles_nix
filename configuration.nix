@@ -192,11 +192,11 @@ in
       SHELL = "${pkgs.zsh}/bin/zsh";
       # GDK_BACKEND = "x11";  # For surf.
     };
-    etc = {
-      docs = {
-        source = /home/robert/documentation;
-      };
-    };
+    # etc = {
+    #   docs = {
+    #     source = /home/robert/documentation;
+    #   };
+    # };
   };
 
   programs = {
