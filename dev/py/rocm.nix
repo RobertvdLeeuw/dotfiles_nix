@@ -23,6 +23,7 @@ in
   # Create a compatibility symlink for tools that expect ROCm in /opt/rocm
   systemd.tmpfiles.rules = [
     "L+    /opt/rocm   -    -    -     -    ${pkgs.rocmPackages.rocminfo}"
+    "w /sys/class/drm/card1/device/power_dpm_force_performance_level - - - - high"
   ];
 
   # Adding the HIP compiler

@@ -1,7 +1,10 @@
-modules/waybar/modules/workspaces/
-modules/waybar/modules/resources/
+# modules/waybar/modules/workspaces/
+# modules/waybar/modules/resources/
 
 modules/docs/config/sources/
+
+**/target/
+**/.direnv/
 
 
 # secrets.nix

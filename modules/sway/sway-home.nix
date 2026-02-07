@@ -18,10 +18,10 @@
         }
       ];
       startup = [
-        { command = "swaymsg 'output DP-1 bg /etc/nixos/modules/sway/backgrounds/busy-people/Bottom.png fill'
+        { command = "swaymsg 'output DP-1 bg /etc/nixos/modules/sway/backgrounds/busy-people/Top.png fill'
 ";
           always = true; }
-        { command = "swaymsg 'output HDMI-A-1 bg /etc/nixos/modules/sway/backgrounds/busy-people/Top.png fill'
+        { command = "swaymsg 'output HDMI-A-1 bg /etc/nixos/modules/sway/backgrounds/busy-people/Bottom.png fill'
 "; 
           always = true; }
         { command = "swaymsg 'output DP-3 bg /etc/nixos/modules/sway/backgrounds/busy-people/Right.png fill'"; 

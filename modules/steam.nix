@@ -3,6 +3,8 @@
 {
   home.packages = with pkgs; [
     steam
+    steamtinkerlaunch
+    gamescope
   ];
 
 	# programs.steam.enable = true;

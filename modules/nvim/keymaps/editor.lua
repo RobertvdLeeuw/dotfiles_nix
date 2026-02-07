@@ -8,6 +8,17 @@ vim.keymap.set({ "n", "v" }, "<C-y>", [["+y]])
 vim.keymap.set({ "n", "v", "i", "t" }, "<S-Left>", "<Nop>", { noremap = true, silent = true })
 vim.keymap.set({ "n", "v", "i", "t" }, "<S-Right>", "<Nop>", { noremap = true, silent = true })
 
+-- Panes
+-- Split pane keymaps
+vim.keymap.set('n', '<C-s>', ':split<CR>', { desc = 'Horizontal split' })
+vim.keymap.set('n', '<C-S-s>', ':vsplit<CR>', { desc = 'Vertical split' })
+
+-- Navigate panes with Ctrl + HJKL
+vim.keymap.set('n', '<C-h>', '<C-w>h', { desc = 'Move to left pane' })
+vim.keymap.set('n', '<C-j>', '<C-w>j', { desc = 'Move to bottom pane' })
+vim.keymap.set('n', '<C-k>', '<C-w>k', { desc = 'Move to top pane' })
+vim.keymap.set('n', '<C-l>', '<C-w>l', { desc = 'Move to right pane' })
+
 
 require("toggleterm").setup({
   shell = vim.o.shell,

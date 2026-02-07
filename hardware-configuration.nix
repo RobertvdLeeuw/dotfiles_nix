@@ -15,6 +15,12 @@
     };
     kernelModules = [ "kvm-amd" ];
     kernelPackages = pkgs.linuxPackages_latest;
+    kernelParams = [
+      "amdgpu.ppfeaturemask=0xffffffff"  # Enable all power features
+      "amdgpu.gpu_recovery=1"             # Enable GPU recovery
+      # OR try limiting power state transitions:
+      # "amdgpu.dpm=0"  # Disable dynamic power management (test only)
+    ];
     # kernelParams = [ "quiet" ];
     extraModulePackages = [ ];
 
@@ -57,10 +63,14 @@
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
   hardware = {
   	cpu.amd.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
- 	graphics = {
-	  enable = true;
-	  enable32Bit = true;
-	  extraPackages = with pkgs; [ rocmPackages.clr.icd ];
-	};
+    bluetooth = {
+      enable = true;
+      powerOnBoot = true;
+    };
+    graphics = {
+      enable = true;
+      enable32Bit = true;
+      extraPackages = with pkgs; [ rocmPackages.clr.icd ];
+    };
   };
 }

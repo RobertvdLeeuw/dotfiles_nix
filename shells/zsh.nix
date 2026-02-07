@@ -5,7 +5,7 @@
       enable = true;
       shellAliases = {
         # rebuild = "sudo nixos-rebuild build --use-remote-sudo --impure && clear";
-        update = "sudo nixos-rebuild switch --use-remote-sudo --impure && clear";
+        update = "sudo nix flake update; sudo nixos-rebuild switch --use-remote-sudo --impure && clear";
         cnfnix = "cd /etc/nixos && nvim configuration.nix && cd -";
         cnfnixr = "cd /etc/nixos && nvim README.md && cd -";
         try = "nix-shell -p";
@@ -15,10 +15,10 @@
 
         tr = "tree --gitignore -L 3";
 
-        gadd = "git add . && clear";
-        gstat = "git status";
-        gcom = "git commit -m ";
-        gpush = "git push && clear";
+        ga = "git add . && clear";
+        gs = "git status";
+        gc = "git commit -m ";
+        gp = "git push && clear";
       };
       shellGlobalAliases = {
         # man = "wikiman";

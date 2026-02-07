@@ -30,6 +30,15 @@ in
     useDHCP = lib.mkDefault true;
 
     nameservers = ["1.1.1.1" "8.8.8.8" ];
+
+    firewall = {
+      enable = true;
+      allowedTCPPorts = [ 80 443 12567];
+      # allowedUDPPortRanges = [
+      #   { from = 4000; to = 4007; }
+      #   { from = 8000; to = 8010; }
+      # ];
+    };
     # interfaces.eno1 = {
     #   useDHCP = false;
     #   ipv4.addresses = [{
@@ -53,7 +62,10 @@ in
     };
   };
 
-  nixpkgs.config.allowUnfree = true;
+  nixpkgs.config = {
+    allowUnsupportedSystem = true;
+    allowUnfree = true;
+  };
 
   nix = {
     settings = {
@@ -96,6 +108,7 @@ in
   services = {
     printing.enable = true;  # CUPS
     redshift.enable = true;
+    blueman.enable = true;
 
     journald.extraConfig = "SystemMaxUse=50M";
     desktopManager.plasma6.enable = true;
@@ -125,6 +138,20 @@ in
         support32Bit = true;
       };
     };
+
+    ollama = {
+      enable = true;
+      package = pkgs.ollama-rocm;
+    };
+
+    # postgresql = {
+    #   enable = true;
+    #   package = pkgs.postgresql_16;
+
+    #   extensions = ps: with ps; [
+    #       pgvector
+    #     ];
+    # };
   };
 
   security = {
@@ -141,11 +168,35 @@ in
     };
   };
 
+  virtualisation.docker = {
+    enable = true;
+    daemon.settings = {
+      data-root = "/mnt/storage/docker";
+    };
+  };
+
   environment = {
     pathsToLink = [ "/share/zsh" ];
     systemPackages = with pkgs; [
       rocmPackages.rocm-smi
+      discord
+      docker-compose
+      docker
       # nix-fast-build
+
+      gst_all_1.gstreamer
+      gst_all_1.gst-plugins-base
+      gst_all_1.gst-plugins-good
+      gst_all_1.gst-plugins-bad
+      gst_all_1.gst-plugins-ugly
+      gst_all_1.gst-libav
+      
+      # Additional audio libraries
+      pulseaudio  # Even with pipewire, some games need PA libs
+      alsa-lib
+      ffmpeg-full
+
+
       git-crypt
       # surf
 
@@ -154,6 +205,16 @@ in
       dust
       zstd
 
+      flatpak
+      (scummvm.overrideAttrs (oldAttrs: rec {
+        version = "2.9.0git";
+        src = fetchFromGitHub {
+          owner = "scummvm";
+          repo = "scummvm";
+          rev = "master";  # or specific commit
+          sha256 = "sha256-no2PvOMR2gNA7Kymn5P2JTBi0W/I1akENzJJr4L3ptc="; # You'll need to get this
+        };
+      }))
 
       spicetify-cli
       time
@@ -167,6 +228,8 @@ in
       # Package managers
       nodejs  # npm
       firefox
+      git-lfs
+      git-lfs-transfer
 
       # workspaces
 
@@ -190,6 +253,8 @@ in
 
     variables = {
       SHELL = "${pkgs.zsh}/bin/zsh";
+      AMD_DEBUG = "nodma";  # Disable DMA, can help with stability
+      RADV_PERFTEST = "nggc";  # NGG culling
       # GDK_BACKEND = "x11";  # For surf.
     };
     # etc = {
@@ -205,6 +270,22 @@ in
       interactiveShellInit = ''
         any-nix-shell zsh --info-right | source /dev/stdin
       '';
+    };
+    nix-ld = {  # For minecraft AT launcher.
+      enable = false; 
+      libraries = with pkgs; [
+        # Common libraries needed for Minecraft/Java applications
+        libGL
+        libGLU
+        xorg.libX11
+        xorg.libXcursor
+        xorg.libXrandr
+        xorg.libXxf86vm
+        xorg.libXi
+        pulseaudio
+        alsa-lib
+        openal
+      ];
     };
   };
   
