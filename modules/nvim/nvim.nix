@@ -9,16 +9,22 @@
 /*
   TODO
   - Nested language support
-  - Theme colors
-  - Colored autocomp
-  - More color coding in text
+  - Autocomp menu looks
   - Change formatting rules
-  - Rainbow brackets
+  - Alt+B: Back-n-forth last 2 files/buffers
+  - LSP signature
+  - Borders
+  - gD -> usage menu
+  - Fix clipboard
+  - Folding behavior
+    - Auto on file open
+    - no nest beyond func/meth bodies
   - Agent stuff
   - devcontainer
     - sync LSP/TS errors with devcontainer (no "package not found" by looking in the wrong place)
     - Direnv kinda thing
   - Something debugger
+  - https://www.youtube.com/watch?v=cf72gMBrsI0
 */
 
 {
@@ -26,11 +32,26 @@
     enable = true;
     settings.vim = {
       theme = {
+        enable = true;
         name = "oxocarbon";
+        style = "dark";
       };
 
       visuals = {
-        rainbow-delimiters.enable = true;
+        rainbow-delimiters = {
+          enable = true;
+          setupOpts = {
+            highlight = [
+              "RainbowDelimiterRed"
+              "RainbowDelimiterYellow"
+              "RainbowDelimiterBlue"
+              "RainbowDelimiterOrange"
+              "RainbowDelimiterGreen"
+              "RainbowDelimiterViolet"
+              "RainbowDelimiterCyan"
+            ];
+          };
+        };
         cinnamon-nvim.enable = true;
         highlight-undo.enable = true;
         nvim-cursorline = {
@@ -40,7 +61,16 @@
       };
 
       ui = {
+        borders = {
+          enable = true;
+          globalStyle = "single";
+          # lsp-signature.enable = true;
+        };
         colorizer.enable = true;
+        colorful-menu-nvim = {
+          enable = true;
+          setupOpts = { };
+        };
       };
 
       keymaps = [
@@ -59,6 +89,24 @@
           silent = true;
           noremap = true;
           desc = "Save current file and open Yazi";
+        }
+        {
+          key = "<C-y>";
+          mode = [
+            "n"
+            "v"
+          ];
+          action = ''[["+y]]'';
+          desc = "Copy to system clipboard";
+        }
+        {
+          key = "<C-S-c>";
+          mode = [
+            "n"
+            "v"
+          ];
+          action = ''[["+y]]'';
+          desc = "Copy to system clipboard";
         }
         {
           key = "gl";
@@ -100,6 +148,15 @@
           desc = "Open project picker";
         }
       ];
+
+      # autocmds = [
+      #   {
+      #     event = [ "BufReadPost" ];
+      #     pattern = [ "*" ];
+      #     command = "normal zM";
+      #     desc = "Open all folds when reading a file";
+      #   }
+      # ];
 
       options = {
         tabstop = 2;
@@ -187,19 +244,53 @@
       };
 
       languages = {
-        bash.enable = true;
+        bash = {
+          enable = true;
+          treesitter.enable = true;
+          lsp.enable = true;
+        };
         # html.enable = true;
-        lua.enable = true;
-        python.enable = true;
-        rust.enable = true;
-        sql.enable = true;
-        json.enable = true;
-        nix.enable = true;
+        lua = {
+          enable = true;
+          treesitter.enable = true;
+          lsp.enable = true;
+        };
+        python = {
+          enable = true;
+          treesitter.enable = true;
+          lsp.enable = true;
+        };
+        rust = {
+          enable = true;
+          treesitter.enable = true;
+          lsp.enable = true;
+        };
+        sql = {
+          enable = true;
+          treesitter.enable = true;
+          lsp.enable = true;
+        };
+        json = {
+          enable = true;
+          treesitter.enable = true;
+          lsp.enable = true;
+        };
+        nix = {
+          enable = true;
+          treesitter.enable = true;
+          lsp.enable = true;
+        };
       };
 
       treesitter = {
         enable = true;
         fold = true;
+      };
+
+      options = {
+        foldlevel = 20;
+        foldlevelstart = 1;
+        foldnestmax = 8;
       };
 
       lsp = {
@@ -208,6 +299,19 @@
         inlayHints.enable = true;
         lspSignature.enable = false; # Using blink-cmp
         servers = {
+          basedpyright = {
+            settings.basedpyright = {
+              analysis = {
+                diagnosticSeverityOverrides = {
+                  reportAny = "none";
+                  reportUnknownMemberType = "none";
+                  reportUnknownVariableType = "none";
+                  reportMissingImports = "none"; # Handled by ty.
+                };
+              };
+            };
+          };
+
           ty = {
             cmd = lib.mkDefault [
               (lib.getExe pkgs.ty)
@@ -223,13 +327,114 @@
               "pyrightconfig.json"
             ];
 
-            # If your LSP accepts custom settings. See `:help lsp-config` for more details
-            # on available fields. This is a freeform field.
-            # settings.ty = {
-            # };
+            settings.ty = {
+              configuration = {
+                rules = {
+                  _type = "lua-inline";
+                  expr = ''{ ["unresolved-reference"] = "ignore" }'';
+                };
+              };
+            };
           };
         };
       };
+
+      luaConfigPost = ''
+          -- Enhanced diagnostic merger that survives file saves
+        local function setup_diagnostic_merger()
+          local orig_virtual_text_handler = vim.diagnostic.handlers.virtual_text
+          local merge_ns = vim.api.nvim_create_namespace("diagnostic_merger")
+
+          local function merge_diagnostics(diagnostics)
+            local merged = {}
+            local seen = {}
+
+            -- Sort diagnostics consistently: by line, column, severity, then source
+            table.sort(diagnostics, function(a, b)
+              if a.lnum ~= b.lnum then
+                return a.lnum < b.lnum
+              end
+              if a.col ~= b.col then
+                return a.col < b.col
+              end
+              if a.severity ~= b.severity then
+                return a.severity < b.severity  -- Lower numbers = higher severity
+              end
+              -- Tie-breaker: source name
+              local source_a = a.source or ""
+              local source_b = b.source or ""
+              return source_a < source_b
+            end)
+
+            for _, diag in ipairs(diagnostics) do
+              local key = string.format("%d:%d:%s", diag.lnum, diag.col, diag.message:sub(1, 50))
+
+              if not seen[key] then
+                seen[key] = true
+                table.insert(merged, diag)
+              end
+            end
+
+            return merged
+          end
+
+          local function refresh_merged_diagnostics(args)
+            local bufnr = args.buf
+            if not bufnr or not vim.api.nvim_buf_is_valid(bufnr) then
+              return
+            end
+
+            -- Get all current diagnostics for this buffer
+            local all_diagnostics = vim.diagnostic.get(bufnr)
+            local merged_diagnostics = merge_diagnostics(all_diagnostics)
+
+            -- Clear existing virtual text in our namespace
+            orig_virtual_text_handler.hide(merge_ns, bufnr)
+
+            -- Show merged diagnostics if we have any
+            if #merged_diagnostics > 0 then
+              -- Pass the full diagnostic config - the original handler extracts virtual_text from it
+              local full_config = vim.diagnostic.config()
+              orig_virtual_text_handler.show(merge_ns, bufnr, merged_diagnostics, full_config)
+            end
+          end
+
+          -- Override the virtual text handler to prevent individual LSPs from showing diagnostics
+          vim.diagnostic.handlers.virtual_text = {
+            show = function(namespace, bufnr, diagnostics, opts)
+              -- Only show if this is our merged namespace, ignore individual LSP namespaces
+              if namespace == merge_ns then
+                orig_virtual_text_handler.show(namespace, bufnr, diagnostics, opts)
+              end
+            end,
+
+            hide = function(namespace, bufnr)
+              if namespace == merge_ns then
+                orig_virtual_text_handler.hide(namespace, bufnr)
+              end
+            end
+          }
+
+          -- Re-merge diagnostics whenever they change from any source
+          vim.api.nvim_create_autocmd("DiagnosticChanged", {
+            callback = refresh_merged_diagnostics,
+            desc = "Refresh merged diagnostic virtual text"
+          })
+
+          -- Also refresh on initial buffer diagnostics
+          vim.api.nvim_create_autocmd("LspAttach", {
+            callback = function(args)
+              vim.defer_fn(function()
+                refresh_merged_diagnostics(args)
+              end, 100)
+            end,
+          })
+        end
+
+        -- Initialize the merger
+        vim.defer_fn(setup_diagnostic_merger, 50)
+
+      '';
 
       autocomplete.blink-cmp = {
         enable = true;
@@ -254,7 +459,78 @@
             ];
           };
 
-          completion.documentation.auto_show_delay_ms = 200;
+          completion = {
+            menu = {
+              min_width = 15;
+              max_height = 10;
+
+              draw = {
+                columns = [
+                  [ "kind_icon" ]
+                  [ "label" ]
+                ];
+
+                components = {
+                  kind_icon = {
+                    highlight = {
+                      _type = "lua-inline";
+                      expr = ''
+                        function(ctx)
+                          return require("colorful-menu").blink_components_highlight(ctx)
+                        end
+                      '';
+                    };
+                  };
+
+                  label = {
+                    text = {
+                      _type = "lua-inline";
+                      expr = ''
+                        function(ctx)
+                          return require("colorful-menu").blink_components_text(ctx)
+                        end
+                      '';
+                    };
+                    highlight = {
+                      _type = "lua-inline";
+                      expr = ''
+                        function(ctx)
+                          return require("colorful-menu").blink_components_highlight(ctx)
+                        end
+                      '';
+                    };
+                  };
+                };
+              };
+            };
+
+            documentation = {
+              window = {
+                min_width = 10;
+                max_width = 80;
+                max_height = 20;
+
+                desired_min_width = 50;
+                desired_min_height = 10;
+
+                border = "single";
+
+                direction_priority = {
+                  menu_north = [
+                    "e"
+                    "n"
+                    "s"
+                  ];
+                  menu_south = [
+                    "e"
+                    "s"
+                    "n"
+                  ];
+                };
+              };
+              auto_show_delay_ms = 200;
+            };
+          };
 
           keymap = {
             "<A-Tab>" = [
@@ -265,6 +541,11 @@
               "snippet_backward"
               "fallback"
             ];
+          };
+
+          cmdline = {
+            completion.menu.auto_show = true;
+            keymap.preset = "inherit";
           };
         };
         friendly-snippets.enable = true;
@@ -376,9 +657,11 @@
           severity_sort = true;
 
           float = {
+            severity_sort = true;
+
             focusable = false;
-            style = "minimal";
-            border = "rounded";
+            # style = "minimal";
+            border = "single"; # TODO: Make this work.
             source = "always";
             header = "";
             prefix = "";
@@ -528,6 +811,11 @@
           # Change directory scope
           scope_chdir = "global";
         };
+      };
+
+      clipboard = {
+        enable = true;
+        providers.wl-copy.enable = true;
       };
 
       extraPlugins = {

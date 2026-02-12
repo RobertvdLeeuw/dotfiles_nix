@@ -110,11 +110,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1770818644,
-        "narHash": "sha256-DYS4jIRpRoKOzJjnR/QqEd/MlT4OZZpt8CrBLv+cjsE=",
+        "lastModified": 1770936159,
+        "narHash": "sha256-INksKY2oo1hDNrDYh0r+uK0Fd4hBxkQwD4qQAl8lYyg=",
         "owner": "nix-community",
         "repo": "home-manager",
-        "rev": "0acbd1180697de56724821184ad2c3e6e7202cd7",
+        "rev": "9bdb6938109884cb8b6a79ab79ba18e7b585a881",
         "type": "github"
       },
       "original": {
@@ -299,8 +299,8 @@
         ]
       },
       "locked": {
-        "lastModified": 0,
-        "narHash": "sha256-nZ07ZsAKuAf/5WUx19Ru/BBMPnVGz2233e3ZbICFzvA=",
+        "lastModified": 1770937773,
+        "narHash": "sha256-5qeySxCbg5p5utmDtNVEiqagqn4n6QhLSK5H4hZuRgk=",
         "path": "/mnt/storage/nc/Personal/nixos/modules/waybar/modules/resources",
         "type": "path"
       },
@@ -319,7 +319,7 @@
       },
       "locked": {
         "lastModified": 0,
-        "narHash": "sha256-VLfETmlhRYLh+8ZM6qf0Pkdc0dg6YWU3sr/AQcBiXks=",
+        "narHash": "sha256-WiJBrLI0bs1q2DGEELRTHfPQ8sYGPI60NKafkVc312M=",
         "path": "/mnt/storage/nc/Personal/nixos/modules/waybar/modules/workspaces",
         "type": "path"
       },
