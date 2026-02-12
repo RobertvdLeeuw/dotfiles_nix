@@ -15,18 +15,25 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     
-    spicetify-nix = {
-      url = "github:Gerg-L/spicetify-nix";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
     sops-nix = {
       url = "github:Mic92/sops-nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    waybar-workspaces = {
+      url = "path:/mnt/storage/nc/Personal/nixos/modules/waybar/modules/workspaces";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    waybar-resources = {
+      url = "path:/mnt/storage/nc/Personal/nixos/modules/waybar/modules/resources";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    nvf.url = "github:notashelf/nvf";
   };
 
-  outputs = { self, nixpkgs, home-manager, ... }@inputs: {
+  outputs = { self, nixpkgs, home-manager, nvf, ... }@inputs: {
     nixosConfigurations = {
       nixos = nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
@@ -36,6 +43,7 @@
           # determinate.nixosModules.default
 
           ./configuration.nix
+          nvf.nixosModules.default
           # inputs.sops-nix.nixosModules.sops
           
           home-manager.nixosModules.home-manager {

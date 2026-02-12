@@ -5,7 +5,7 @@
       enable = true;
       shellAliases = {
         # rebuild = "sudo nixos-rebuild build --use-remote-sudo --impure && clear";
-        update = "sudo nix flake update; sudo nixos-rebuild switch --use-remote-sudo --impure && clear";
+        update = "cd /etc/nixos; sudo nix flake update; sudo nixos-rebuild switch --flake --sudo --impure && clear; cd -";
         cnfnix = "cd /etc/nixos && nvim configuration.nix && cd -";
         cnfnixr = "cd /etc/nixos && nvim README.md && cd -";
         try = "nix-shell -p";
@@ -24,13 +24,13 @@
         # man = "wikiman";
         cat = "bat";
         nano = "nvim";
-        surf = "GDK_BACKEND=x11 surf";  # TODO: Better fix for this, surf + xwayland = :()
+        surf = "GDK_BACKEND=x11 surf"; # TODO: Better fix for this, surf + xwayland = :()
       };
-      
+
       initContent = ''
         eval "$(zoxide init --cmd cd zsh)"
         eval "$(fzf --zsh)"
-        
+
         autoload -U compinit
         zmodload zsh/complist
         compinit
@@ -64,9 +64,8 @@
         export NIXPKGS_ALLOW_UNFREE=1
       '';
 
-      
       defaultKeymap = "viins";
-      
+
       history = {
         size = 10000;
         save = 10000;
@@ -74,7 +73,7 @@
         extended = true;
         share = true;
       };
-    
+
       syntaxHighlighting = {
         enable = true;
         highlighters = [
@@ -83,18 +82,18 @@
           "regexp"
         ];
       };
-      
+
       autosuggestion = {
         enable = true;
-        # highlight = "fg=8"; 
+        # highlight = "fg=8";
       };
     };
-    
+
     fzf = {
       enable = true;
       enableZshIntegration = true;
     };
-    
+
     zoxide = {
       enable = true;
       enableZshIntegration = true;
@@ -103,7 +102,7 @@
     direnv = {
       enable = true;
       enableZshIntegration = true;
-      config = {};
+      config = { };
       silent = true;
 
       nix-direnv.enable = true;

@@ -1,4 +1,10 @@
-{ config, pkgs, lib, inputs, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  inputs,
+  ...
+}:
 let
   user = "robert";
 
@@ -8,7 +14,7 @@ let
 
   # secrets = import ./secrets.nix;
 in
-  {
+{
   imports = [
     ./hardware-configuration.nix
     ./modules/sway/sway.nix
@@ -18,10 +24,13 @@ in
     ./modules/python.nix
     ./modules/rust.nix
 
+    ./modules/nvim/nvim.nix
+
     ./shells/bash.nix
+
   ];
 
-  systemd.services.NetworkManager-wait-online.wantedBy = lib.mkForce [];
+  systemd.services.NetworkManager-wait-online.wantedBy = lib.mkForce [ ];
 
   networking = {
     # TODO: secrets = builtins.fromJSON (builtins.readFile "${self}/secrets/secrets.json");
@@ -29,11 +38,18 @@ in
     networkmanager.enable = true;
     useDHCP = lib.mkDefault true;
 
-    nameservers = ["1.1.1.1" "8.8.8.8" ];
+    nameservers = [
+      "1.1.1.1"
+      "8.8.8.8"
+    ];
 
     firewall = {
       enable = true;
-      allowedTCPPorts = [ 80 443 12567];
+      allowedTCPPorts = [
+        80
+        443
+        12567
+      ];
       # allowedUDPPortRanges = [
       #   { from = 4000; to = 4007; }
       #   { from = 8000; to = 8010; }
@@ -46,7 +62,7 @@ in
     #     prefixLength = 24;
     #   }];
     # };
-  
+
     # defaultGateway = secrets.ip_gateway;
     # defaultGateway = [{
     #   address = secrets.ip_gateway;
@@ -55,7 +71,7 @@ in
   };
 
   system = {
-    stateVersion = "24.11";  # DO NOT TOUCH! Needed in case of backwards incompatible update.
+    stateVersion = "24.11"; # DO NOT TOUCH! Needed in case of backwards incompatible update.
     autoUpgrade = {
       enable = true;
       channel = "https://nixos.org/channels/nixos-VERSION";
@@ -65,12 +81,18 @@ in
   nixpkgs.config = {
     allowUnsupportedSystem = true;
     allowUnfree = true;
+    permittedInsecurePackages = [
+      "qtwebengine-5.15.19"
+    ];
   };
 
   nix = {
     settings = {
       auto-optimise-store = true;
-      experimental-features = [ "nix-command" "flakes" ];
+      experimental-features = [
+        "nix-command"
+        "flakes"
+      ];
     };
 
     gc = {
@@ -80,11 +102,14 @@ in
     };
   };
 
-  fonts.packages = with pkgs; [
-    iosevka
-    fira-code
-    fira-code-symbols
-  ] ++ builtins.filter lib.attrsets.isDerivation (builtins.attrValues pkgs.nerd-fonts);
+  fonts.packages =
+    with pkgs;
+    [
+      iosevka
+      fira-code
+      fira-code-symbols
+    ]
+    ++ builtins.filter lib.attrsets.isDerivation (builtins.attrValues pkgs.nerd-fonts);
 
   time.timeZone = "Europe/Amsterdam";
 
@@ -103,10 +128,10 @@ in
     };
   };
 
-  location.provider = "geoclue2";  # For redshift.
+  location.provider = "geoclue2"; # For redshift.
 
   services = {
-    printing.enable = true;  # CUPS
+    printing.enable = true; # CUPS
     redshift.enable = true;
     blueman.enable = true;
 
@@ -123,7 +148,8 @@ in
 
     xserver = {
       enable = true;
-      xkb = {  # Configure keymap in X11
+      xkb = {
+        # Configure keymap in X11
         layout = "us";
         variant = "";
       };
@@ -164,7 +190,12 @@ in
     users.${user} = {
       isNormalUser = true;
       description = "${user}";
-      extraGroups = [ "networkmanager" "wheel" "docker" "video" ];  # Added video group for GPU access
+      extraGroups = [
+        "networkmanager"
+        "wheel"
+        "docker"
+        "video"
+      ]; # Added video group for GPU access
     };
   };
 
@@ -190,12 +221,11 @@ in
       gst_all_1.gst-plugins-bad
       gst_all_1.gst-plugins-ugly
       gst_all_1.gst-libav
-      
+
       # Additional audio libraries
-      pulseaudio  # Even with pipewire, some games need PA libs
+      pulseaudio # Even with pipewire, some games need PA libs
       alsa-lib
       ffmpeg-full
-
 
       git-crypt
       # surf
@@ -206,17 +236,6 @@ in
       zstd
 
       flatpak
-      (scummvm.overrideAttrs (oldAttrs: rec {
-        version = "2.9.0git";
-        src = fetchFromGitHub {
-          owner = "scummvm";
-          repo = "scummvm";
-          rev = "master";  # or specific commit
-          sha256 = "sha256-no2PvOMR2gNA7Kymn5P2JTBi0W/I1akENzJJr4L3ptc="; # You'll need to get this
-        };
-      }))
-
-      spicetify-cli
       time
       pciutils
       usbutils
@@ -226,7 +245,7 @@ in
       ffmpeg_6
       # foot
       # Package managers
-      nodejs  # npm
+      nodejs # npm
       firefox
       git-lfs
       git-lfs-transfer
@@ -237,7 +256,7 @@ in
       git
       gcc
       ninja
-      any-nix-shell  # for nix-shell in zsh. In don't like bash. No. Stop it.
+      any-nix-shell # for nix-shell in zsh. In don't like bash. No. Stop it.
     ];
 
     plasma6.excludePackages = with pkgs.kdePackages; [
@@ -253,15 +272,10 @@ in
 
     variables = {
       SHELL = "${pkgs.zsh}/bin/zsh";
-      AMD_DEBUG = "nodma";  # Disable DMA, can help with stability
-      RADV_PERFTEST = "nggc";  # NGG culling
+      AMD_DEBUG = "nodma"; # Disable DMA, can help with stability
+      RADV_PERFTEST = "nggc"; # NGG culling
       # GDK_BACKEND = "x11";  # For surf.
     };
-    # etc = {
-    #   docs = {
-    #     source = /home/robert/documentation;
-    #   };
-    # };
   };
 
   programs = {
@@ -271,8 +285,9 @@ in
         any-nix-shell zsh --info-right | source /dev/stdin
       '';
     };
-    nix-ld = {  # For minecraft AT launcher.
-      enable = false; 
+    nix-ld = {
+      # For minecraft AT launcher.
+      enable = false;
       libraries = with pkgs; [
         # Common libraries needed for Minecraft/Java applications
         libGL
@@ -287,11 +302,5 @@ in
         openal
       ];
     };
-  };
-  
-  documentation = {
-    dev.enable = true;
-    man.generateCaches = true;
-    nixos.includeAllModules = true;     
   };
 }

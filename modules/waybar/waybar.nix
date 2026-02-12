@@ -8,7 +8,7 @@ let
     modules-right = [];
     clock = {
       tooltip-format = "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>";
-      format = "󰃰 {:%H:%M  <b>%d %b</b>}";
+      format = "󰃰 {:%H:%M  <b>%d %b</b>}";
       tooltip = false;
     };
 
@@ -48,9 +48,9 @@ let
     };} // (if screen.bar_id != "3" then {  # Horizontal only
       network = {
         format-wifi = "{essid} ({signalStrength}%) 󰤨 ";
-        format-ethernet = " 󰌘 ";
+        format-ethernet = " 󰌘 ";
         format-linked = "{ifname} (No IP) 󰤩 ";
-        format-disconnected = " 󰌙 ";
+        format-disconnected = " 󰌙 ";
         # format-alt = "{ifname}: {ipaddr}/{cidr}";
         tooltip = false;
       };
@@ -101,9 +101,8 @@ in
 
   home.packages = 
     let
-      config_dir = "/mnt/storage/nc/Personal/nixos";
-      workspaces = (builtins.getFlake "${config_dir}/modules/waybar/modules/workspaces").packages.x86_64-linux.default;
-      resources = (builtins.getFlake "${config_dir}/modules/waybar/modules/resources").packages.x86_64-linux.default;
+      workspaces = inputs.waybar-workspaces.packages.x86_64-linux.default;
+      resources = inputs.waybar-resources.packages.x86_64-linux.default;
     in [ workspaces resources ];
 
 }

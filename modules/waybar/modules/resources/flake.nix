@@ -1,36 +1,35 @@
 {
   inputs = {
-    cargo2nix.url = "github:cargo2nix/cargo2nix/release-0.11.0";
-    nixpkgs.follows = "cargo2nix/nixpkgs";
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+    crane.url = "github:ipetkov/crane";
+    flake-utils.url = "github:numtide/flake-utils";
   };
-  outputs = { self, cargo2nix, nixpkgs }: 
-    let
-      name = "resources";  # Name in Cargo.toml
 
-      pkgs = import nixpkgs {
-        system = "x86_64-linux";
-        overlays = [cargo2nix.overlays.default];
-      };
-      rustPkgs = pkgs.rustBuilder.makePackageSet {
-        rustVersion = "1.75.0";
-        packageFun = import ./Cargo.nix;
-        # packageOverrides = pkgs: pkgs.rustBuilder.overrides.all;  # TODO: What is the actual effect of this?
-      };
-    in {
-      packages.x86_64-linux.default = rustPkgs.workspace.${name} {};  # Nix build
+  outputs = { self, nixpkgs, crane, flake-utils }:
+    flake-utils.lib.eachDefaultSystem (system:
+      let
+        pkgs = nixpkgs.legacyPackages.${system};
+        craneLib = crane.mkLib pkgs;
+        
+        resources = craneLib.buildPackage {
+          src = craneLib.cleanCargoSource ./.;
+          strictDeps = true;
+        };
+      in
+      {
+        packages.default = resources;
 
-      apps.x86_64-linux.default = {  # Nix run
-        type = "app";
-        program = "${self.packages.x86_64-linux.default}/bin/${name}";
-      };
+        apps.default = {
+          type = "app";
+          program = "${resources}/bin/resources";
+        };
 
-      devShells = {  # Nix develop
-        default = rustPkgs.workspaceShell {  # TODO: Figure out why extra packages and shellHook don't do anything. 
-          packages = [ 
-            cargo2nix.packages.x86_64-linux.cargo2nix 
+        devShells.default = craneLib.devShell {
+          packages = with pkgs; [
+            rust-analyzer
+            clippy
           ];
         };
-      };
-
-    };
+      }
+    );
 }
