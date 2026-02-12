@@ -5,7 +5,7 @@
 
 use std::collections::HashMap;
 use std::env;
-use std::io::{self, Error, Write};
+use std::io::{self, Write};
 use std::process::{exit, Command, Stdio};
 use std::string::String;
 use std::thread::sleep;
@@ -26,9 +26,7 @@ fn build_workspace_reprs() -> HashMap<String, String> {
 
     // Then pad with empty
     for ws_id in (1..=4).chain(11..=14).chain(20..=24) {
-        if !data.contains_key(&ws_id.to_string()) {
-            data.insert(ws_id.to_string(), "".to_string());
-        }
+        data.entry(ws_id.to_string()).or_insert_with(|| "".to_string());
     }
 
     data
@@ -45,24 +43,21 @@ fn format_as_icon(repr: &str, visible: bool) -> String {
         .replace("]", "")
         .split(" ")
         .map(|app| {
-            match app {
-                "Spotify" => " ",
-                "Alacritty" => " ",
-                "Brave-browser" => " ",
+            match app.to_lowercase().as_str() {
+                "spotify" => " ",
+                "alacritty" => " ",
+                "brave-browser" => " ",
                 "firefox" => " ",
                 "libreoffice-calc" => "󰧷 ",
                 "steam" => " ",
-                "WasIstLos" => " ",
-                _ if app.contains("steam_app") => "󰊗 ",  // TODO: This only works for a handful of
-                                                         // games.
-                _ => "󱗼 ",
-
-
+                "wasistlos" => " ",
+                _ if app.contains("steam_app") => "󰊗 ",  // TODO: This only works for a handful of games.
                 // TEST NAMES FROM BELOW
-                "Teams" => "󰊻 ",
-
+                "teams" => "󰊻 ",
                 // "Blender" => "",
                 // "Discord" => "",
+
+                _ => "󱗼 ",
             }
             .to_string()
         })

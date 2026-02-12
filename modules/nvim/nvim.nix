@@ -17,6 +17,7 @@
   - gD -> usage menu
   - Fix clipboard
   - Folding behavior
+    - https://github.com/kevinhwang91/nvim-ufo
     - Auto on file open
     - no nest beyond func/meth bodies
   - Agent stuff
@@ -340,99 +341,100 @@
       };
 
       luaConfigPost = ''
-          -- Enhanced diagnostic merger that survives file saves
-        local function setup_diagnostic_merger()
-          local orig_virtual_text_handler = vim.diagnostic.handlers.virtual_text
-          local merge_ns = vim.api.nvim_create_namespace("diagnostic_merger")
+        -- TODO: Find better place for this diagnostics merging.
+                -- Enhanced diagnostic merger that survives file saves
+              local function setup_diagnostic_merger()
+                local orig_virtual_text_handler = vim.diagnostic.handlers.virtual_text
+                local merge_ns = vim.api.nvim_create_namespace("diagnostic_merger")
 
-          local function merge_diagnostics(diagnostics)
-            local merged = {}
-            local seen = {}
+                local function merge_diagnostics(diagnostics)
+                  local merged = {}
+                  local seen = {}
 
-            -- Sort diagnostics consistently: by line, column, severity, then source
-            table.sort(diagnostics, function(a, b)
-              if a.lnum ~= b.lnum then
-                return a.lnum < b.lnum
+                  -- Sort diagnostics consistently: by line, column, severity, then source
+                  table.sort(diagnostics, function(a, b)
+                    if a.lnum ~= b.lnum then
+                      return a.lnum < b.lnum
+                    end
+                    if a.col ~= b.col then
+                      return a.col < b.col
+                    end
+                    if a.severity ~= b.severity then
+                      return a.severity < b.severity  -- Lower numbers = higher severity
+                    end
+                    -- Tie-breaker: source name
+                    local source_a = a.source or ""
+                    local source_b = b.source or ""
+                    return source_a < source_b
+                  end)
+
+                  for _, diag in ipairs(diagnostics) do
+                    local key = string.format("%d:%d:%s", diag.lnum, diag.col, diag.message:sub(1, 50))
+
+                    if not seen[key] then
+                      seen[key] = true
+                      table.insert(merged, diag)
+                    end
+                  end
+
+                  return merged
+                end
+
+                local function refresh_merged_diagnostics(args)
+                  local bufnr = args.buf
+                  if not bufnr or not vim.api.nvim_buf_is_valid(bufnr) then
+                    return
+                  end
+
+                  -- Get all current diagnostics for this buffer
+                  local all_diagnostics = vim.diagnostic.get(bufnr)
+                  local merged_diagnostics = merge_diagnostics(all_diagnostics)
+
+                  -- Clear existing virtual text in our namespace
+                  orig_virtual_text_handler.hide(merge_ns, bufnr)
+
+                  -- Show merged diagnostics if we have any
+                  if #merged_diagnostics > 0 then
+                    -- Pass the full diagnostic config - the original handler extracts virtual_text from it
+                    local full_config = vim.diagnostic.config()
+                    orig_virtual_text_handler.show(merge_ns, bufnr, merged_diagnostics, full_config)
+                  end
+                end
+
+                -- Override the virtual text handler to prevent individual LSPs from showing diagnostics
+                vim.diagnostic.handlers.virtual_text = {
+                  show = function(namespace, bufnr, diagnostics, opts)
+                    -- Only show if this is our merged namespace, ignore individual LSP namespaces
+                    if namespace == merge_ns then
+                      orig_virtual_text_handler.show(namespace, bufnr, diagnostics, opts)
+                    end
+                  end,
+
+                  hide = function(namespace, bufnr)
+                    if namespace == merge_ns then
+                      orig_virtual_text_handler.hide(namespace, bufnr)
+                    end
+                  end
+                }
+
+                -- Re-merge diagnostics whenever they change from any source
+                vim.api.nvim_create_autocmd("DiagnosticChanged", {
+                  callback = refresh_merged_diagnostics,
+                  desc = "Refresh merged diagnostic virtual text"
+                })
+
+                -- Also refresh on initial buffer diagnostics
+                vim.api.nvim_create_autocmd("LspAttach", {
+                  callback = function(args)
+                    vim.defer_fn(function()
+                      refresh_merged_diagnostics(args)
+                    end, 100)
+                  end,
+                })
               end
-              if a.col ~= b.col then
-                return a.col < b.col
-              end
-              if a.severity ~= b.severity then
-                return a.severity < b.severity  -- Lower numbers = higher severity
-              end
-              -- Tie-breaker: source name
-              local source_a = a.source or ""
-              local source_b = b.source or ""
-              return source_a < source_b
-            end)
 
-            for _, diag in ipairs(diagnostics) do
-              local key = string.format("%d:%d:%s", diag.lnum, diag.col, diag.message:sub(1, 50))
-
-              if not seen[key] then
-                seen[key] = true
-                table.insert(merged, diag)
-              end
-            end
-
-            return merged
-          end
-
-          local function refresh_merged_diagnostics(args)
-            local bufnr = args.buf
-            if not bufnr or not vim.api.nvim_buf_is_valid(bufnr) then
-              return
-            end
-
-            -- Get all current diagnostics for this buffer
-            local all_diagnostics = vim.diagnostic.get(bufnr)
-            local merged_diagnostics = merge_diagnostics(all_diagnostics)
-
-            -- Clear existing virtual text in our namespace
-            orig_virtual_text_handler.hide(merge_ns, bufnr)
-
-            -- Show merged diagnostics if we have any
-            if #merged_diagnostics > 0 then
-              -- Pass the full diagnostic config - the original handler extracts virtual_text from it
-              local full_config = vim.diagnostic.config()
-              orig_virtual_text_handler.show(merge_ns, bufnr, merged_diagnostics, full_config)
-            end
-          end
-
-          -- Override the virtual text handler to prevent individual LSPs from showing diagnostics
-          vim.diagnostic.handlers.virtual_text = {
-            show = function(namespace, bufnr, diagnostics, opts)
-              -- Only show if this is our merged namespace, ignore individual LSP namespaces
-              if namespace == merge_ns then
-                orig_virtual_text_handler.show(namespace, bufnr, diagnostics, opts)
-              end
-            end,
-
-            hide = function(namespace, bufnr)
-              if namespace == merge_ns then
-                orig_virtual_text_handler.hide(namespace, bufnr)
-              end
-            end
-          }
-
-          -- Re-merge diagnostics whenever they change from any source
-          vim.api.nvim_create_autocmd("DiagnosticChanged", {
-            callback = refresh_merged_diagnostics,
-            desc = "Refresh merged diagnostic virtual text"
-          })
-
-          -- Also refresh on initial buffer diagnostics
-          vim.api.nvim_create_autocmd("LspAttach", {
-            callback = function(args)
-              vim.defer_fn(function()
-                refresh_merged_diagnostics(args)
-              end, 100)
-            end,
-          })
-        end
-
-        -- Initialize the merger
-        vim.defer_fn(setup_diagnostic_merger, 50)
+              -- Initialize the merger
+              vim.defer_fn(setup_diagnostic_merger, 50)
 
       '';
 

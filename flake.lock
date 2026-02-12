@@ -319,7 +319,7 @@
       },
       "locked": {
         "lastModified": 0,
-        "narHash": "sha256-WiJBrLI0bs1q2DGEELRTHfPQ8sYGPI60NKafkVc312M=",
+        "narHash": "sha256-7tJ3PdG5CZ/oIjOTcZX/9zWbWW8xz80+XQzjCGFR6ko=",
         "path": "/mnt/storage/nc/Personal/nixos/modules/waybar/modules/workspaces",
         "type": "path"
       },
