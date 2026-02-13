@@ -1,30 +1,7 @@
 {
   "name": "Python Development",
   "image": "docker.io/library/python:3.13-slim-trixie",
-  "features": {
-    "ghcr.io/devcontainers/features/common-utils:2": {
-      "installZsh": true,
-      "installOhMyZsh": false,
-      "username": "root",
-      "upgradePackages": true
-    },
-    "ghcr.io/mikaello/devcontainer-features/modern-shell-utils:2": {},
-    "ghcr.io/tobiaschc/devcontainer-features/starship:1": {
-      "userShell": "zsh",
-      "nerdFont": "FiraCode",
-      "defaultConfig": false,
-      "localConfig": true
-    }
-  },
-  "customizations": {
-    "vscode": {
-      "settings": {
-        "python.defaultInterpreterPath": "/usr/local/bin/python",
-        "python.terminal.activateEnvironment": true,
-        "terminal.integrated.defaultProfile.linux": "zsh"
-      }
-    }
-  },
+  "features": {},
   "forwardPorts": [
     8000,
     8080
