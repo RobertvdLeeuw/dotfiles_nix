@@ -1,12 +1,27 @@
 {
   "name": "Python Development",
   "image": "docker.io/library/python:3.13-slim-trixie",
-  "features": {},
+  "features": {
+    "ghcr.io/devcontainers/features/common-utils:2": {
+      "installZsh": true,
+      "installOhMyZsh": false,
+      "username": "root",
+      "upgradePackages": true
+    },
+    "ghcr.io/mikaello/devcontainer-features/modern-shell-utils:2": {},
+    "ghcr.io/tobiaschc/devcontainer-features/starship:1": {
+      "userShell": "zsh",
+      "nerdFont": "FiraCode",
+      "defaultConfig": false,
+      "localConfig": true
+    }
+  },
   "customizations": {
     "vscode": {
       "settings": {
         "python.defaultInterpreterPath": "/usr/local/bin/python",
-        "python.terminal.activateEnvironment": true
+        "python.terminal.activateEnvironment": true,
+        "terminal.integrated.defaultProfile.linux": "zsh"
       }
     }
   },
@@ -14,7 +29,7 @@
     8000,
     8080
   ],
-  "postCreateCommand": "",
+  "postCreateCommand": "chmod +x /workspace/.devcontainer/shell_init.sh && /workspace/.devcontainer/shell_init.sh",
   "remoteUser": "root",
   "mounts": [
     "source=${localWorkspaceFolder}/.devcontainer/starship.toml,target=/root/.config/starship.toml,type=bind"
