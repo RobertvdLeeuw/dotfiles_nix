@@ -1,0 +1,22 @@
+{
+  "name": "Python Development",
+  "image": "docker.io/library/python:3.13-slim-trixie",
+  "features": {},
+  "customizations": {
+    "vscode": {
+      "settings": {
+        "python.defaultInterpreterPath": "/usr/local/bin/python",
+        "python.terminal.activateEnvironment": true
+      }
+    }
+  },
+  "forwardPorts": [
+    8000,
+    8080
+  ],
+  "postCreateCommand": "",
+  "remoteUser": "root",
+  "mounts": [
+    "source=${localWorkspaceFolder}/.devcontainer/starship.toml,target=/root/.config/starship.toml,type=bind"
+  ]
+}

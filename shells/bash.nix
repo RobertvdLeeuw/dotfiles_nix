@@ -9,7 +9,7 @@
         todo = "nvim ~/Documents/todo.md";
         books = "nvim ~/Documents/books.txt";
       };
-      
+
       shellInit = ''
         bindkey '^I'   complete-word       # tab
 

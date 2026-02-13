@@ -8,22 +8,25 @@
 
 /*
   TODO
+  - devcontainer
+    - sync LSP/TS errors with devcontainer (no "package not found" by looking in the wrong place)
+    - Direnv kinda thing (vim.utility.direnv)
+  - Agent stuff
+
+  - Alt+B: Back-n-forth last 2 files/buffers
+  - gD -> usage menu
+  - Telescope find_files show hidden
+  - Git autogen commit message like CoPilot
   - Nested language support
   - Autocomp menu looks
   - Change formatting rules
-  - Alt+B: Back-n-forth last 2 files/buffers
   - LSP signature
   - Borders
-  - gD -> usage menu
   - Fix clipboard
   - Folding behavior
     - https://github.com/kevinhwang91/nvim-ufo
     - Auto on file open
     - no nest beyond func/meth bodies
-  - Agent stuff
-  - devcontainer
-    - sync LSP/TS errors with devcontainer (no "package not found" by looking in the wrong place)
-    - Direnv kinda thing
   - Something debugger
   - https://www.youtube.com/watch?v=cf72gMBrsI0
 */
@@ -617,6 +620,40 @@
             };
 
             winbar.enabled = false;
+
+            # Smart shell that auto-targets devcontainers
+            shell = {
+              _type = "lua-inline";
+              expr = ''
+                function()
+                  local status = require("devcontainer.status").get_status()
+                  local containers = status.running_containers
+
+                  if #containers > 0 then
+                    local container_id = containers[1].container_id
+                    return string.format("docker exec -it %s /bin/bash", container_id)
+                  else
+                    return vim.o.shell
+                  end
+                end
+              '';
+            };
+
+            # Show container indicator when in container
+            on_open = {
+              _type = "lua-inline";
+              expr = ''
+                function(term)
+                  local status = require("devcontainer.status").get_status()
+                  local containers = status.running_containers
+
+                  if #containers > 0 then
+                    local container_id = containers[1].container_id
+                    vim.wo[term.window].winbar = "🐳 Container: " .. container_id:sub(1, 12)
+                  end
+                end
+              '';
+            };
           };
         };
       };
@@ -820,30 +857,56 @@
         providers.wl-copy.enable = true;
       };
 
-      extraPlugins = {
+      utility = {
         yazi-nvim = {
-          package = pkgs.vimPlugins.yazi-nvim;
+          enable = true;
+
+          setupOpts = {
+            config_home = "/etc/nixos/modules/nvim/plugin/yazi/";
+
+            open_for_directories = true;
+            yazi_floating_window_border = "none";
+            floating_window_scaling_factor = 1;
+
+            keymaps = {
+              show_help = "<f1>";
+
+              # Disable other keymaps
+              open_file_in_vertical_split = false;
+              open_file_in_horizontal_split = false;
+              open_file_in_tab = false;
+              grep_in_directory = false;
+              replace_in_directory = false;
+              cycle_open_buffers = false;
+              copy_relative_path_to_selected_files = false;
+              send_to_quickfix_list = false;
+            };
+          };
+        };
+      };
+      extraPlugins = {
+        nvim-dev-container = {
+          package = pkgs.vimUtils.buildVimPlugin {
+            pname = "nvim-dev-container";
+            version = "2026-02-13";
+            src = pkgs.fetchFromGitHub {
+              owner = "RobertvdLeeuw";
+              repo = "nvim-dev-container-premium-edition";
+              rev = "main";
+              hash = "sha256-5zo2Gc3nekawkodj47uN7stXZqGiT1DZdldJFnHNgOc=";
+            };
+          };
           setup = ''
-            require("yazi").setup({
-              open_for_directories = true,
-
-              yazi_floating_window_border = "none",
-              floating_window_scaling_factor = 1,
-
-              keymaps = {
-                show_help = "<f1>",
-
-                -- Disable other keymaps
-                open_file_in_vertical_split = false,
-                open_file_in_horizontal_split = false,
-                open_file_in_tab = false,
-                grep_in_directory = false,
-                replace_in_directory = false,
-                cycle_open_buffers = false,
-                copy_relative_path_to_selected_files = false,
-                send_to_quickfix_list = false,
+            require("devcontainer").setup {
+              autocommands = {
+                init = true,
+                clean = true,
+                update = true,
               },
-            })
+
+              container_runtime = "docker",
+              disable_recursive_config_search = false,
+            }
           '';
         };
       };
