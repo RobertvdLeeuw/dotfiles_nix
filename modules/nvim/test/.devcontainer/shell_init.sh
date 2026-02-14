@@ -1,4 +1,2 @@
-apt-get update && apt-get install -y zsh curl wget fastfetch git
+apt-get update && apt-get install -y zsh curl wget fastfetch git fzf zoxide fonts-firacode starship
 
-sudo apt install fonts-firacode
-curl -sS https://starship.rs/install.sh | sh

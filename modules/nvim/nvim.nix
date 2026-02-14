@@ -649,7 +649,7 @@
 
                   if #containers > 0 then
                     local container_id = containers[1].container_id
-                    vim.wo[term.window].winbar = "🐳 Container: " .. container_id:sub(1, 12)
+                    -- vim.wo[term.window].winbar = "🐳 Container: " .. container_id:sub(1, 12)
                   end
                 end
               '';
