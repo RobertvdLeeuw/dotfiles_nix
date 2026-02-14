@@ -1,4 +1,4 @@
-format = "┌$username$directory$git_branch──\\[[devcontainer](bold green)\\]$shell\n$character"
+format = "┌$username$directory$git_branch──\\[[devcontainer](bold #90b99f)\\]$shell\n$character"
 add_newline = false
 
 [character]
@@ -6,23 +6,23 @@ success_symbol = "└─"
 error_symbol = "└─"
 
 [username]
-style_user = "bold green"
-style_root = "bold red"
+style_user = "bold #90b99f"
+style_root = "bold #ca1444"
 format = "──\\[[$user]($style)\\]"
 show_always = false
 disabled = false
 
 [directory]
-format = "──\\[[$path](bold purple)\\]"
+format = "──\\[[$path](bold #cb6fa1)\\]"
 truncation_length = 4
 truncate_to_repo = false
 truncation_symbol = "…/"
 
 [git_branch]
-format = "──\\[[$branch](bold cyan)\\]"
+format = "──\\[[$branch](bold #aca1cf)\\]"
 
 [shell]
-bash_indicator = "──\\[[bash](bold yellow)\\]"
+bash_indicator = "──\\[[bash](bold #e8a831)\\]"
 zsh_indicator = ""
 disabled = false
 format = "$indicator"

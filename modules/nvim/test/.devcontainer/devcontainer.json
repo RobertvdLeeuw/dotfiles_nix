@@ -7,13 +7,6 @@
     "cacheFrom": ""
   },
   "features": {
-    "ghcr.io/devcontainers/features/common-utils:2": {
-      "installZsh": true,
-      "installOhMyZsh": false,
-      "configureZshAsDefaultShell": true,
-      "username": "root",
-      "upgradePackages": true
-    },
     "ghcr.io/tobiaschc/devcontainer-features/starship:1": {
       "userShell": "zsh",
       "nerdFont": "FiraCode",

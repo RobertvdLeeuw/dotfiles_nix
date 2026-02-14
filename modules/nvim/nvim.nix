@@ -153,14 +153,36 @@
         }
       ];
 
-      # autocmds = [
-      #   {
-      #     event = [ "BufReadPost" ];
-      #     pattern = [ "*" ];
-      #     command = "normal zM";
-      #     desc = "Open all folds when reading a file";
-      #   }
-      # ];
+      autocmds = [
+        {
+          event = [ "BufReadPost" ];
+          pattern = [ "*" ];
+          command = "normal zM";
+          desc = "Open all folds when reading a file";
+        }
+        {
+          event = [ "BufWinEnter" ];
+          pattern = [
+            "*.css"
+            "*.scss"
+            "*.sass"
+            "*.less"
+            "*.html"
+            "*.htm"
+            "*.js"
+            "*.jsx"
+            "*.ts"
+            "*.tsx"
+            "*.vue"
+            "*.svelte"
+            "*.conf"
+            "*.config"
+            "*.nix"
+          ];
+          command = "ColorizerAttachToBuffer";
+          desc = "Auto-attach nvim-colorizer to color-relevant file types";
+        }
+      ];
 
       options = {
         tabstop = 2;
@@ -631,7 +653,7 @@
 
                   if #containers > 0 then
                     local container_id = containers[1].container_id
-                    return string.format("docker exec -it %s /bin/bash", container_id)
+                    return string.format("docker exec -it %s /bin/zsh", container_id)
                   else
                     return vim.o.shell
                   end
@@ -640,20 +662,20 @@
             };
 
             # Show container indicator when in container
-            on_open = {
-              _type = "lua-inline";
-              expr = ''
-                function(term)
-                  local status = require("devcontainer.status").get_status()
-                  local containers = status.running_containers
-
-                  if #containers > 0 then
-                    local container_id = containers[1].container_id
-                    -- vim.wo[term.window].winbar = "🐳 Container: " .. container_id:sub(1, 12)
-                  end
-                end
-              '';
-            };
+            # on_open = {
+            #   _type = "lua-inline";
+            #   expr = ''
+            #     function(term)
+            #       local status = require("devcontainer.status").get_status()
+            #       local containers = status.running_containers
+            #
+            #       if #containers > 0 then
+            #         local container_id = containers[1].container_id
+            #         -- vim.wo[term.window].winbar = "🐳 Container: " .. container_id:sub(1, 12)
+            #       end
+            #     end
+            #   '';
+            # };
           };
         };
       };

@@ -1,4 +1,9 @@
-{ config, pkgs, inputs, ... }:
+{
+  config,
+  pkgs,
+  inputs,
+  ...
+}:
 
 {
   programs.alacritty = {
@@ -76,7 +81,8 @@
     };
   };
 
-  home.packages = with pkgs; [  # TODO: Clean and reorgainze.
+  home.packages = with pkgs; [
+    # TODO: Clean and reorgainze.
     wget
     jq
     which
