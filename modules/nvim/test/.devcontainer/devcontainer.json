@@ -1,6 +1,11 @@
 {
   "name": "Python Development",
   "image": "docker.io/library/python:3.13-slim-trixie",
+  "build": {
+    "dockerfile": "Dockerfile",
+    "context": "..",
+    "cacheFrom": ""
+  },
   "features": {
     "ghcr.io/devcontainers/features/common-utils:2": {
       "installZsh": true,

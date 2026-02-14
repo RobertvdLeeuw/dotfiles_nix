@@ -53,6 +53,7 @@
     oterm
     code-cursor
     vscode
+    devcontainer
     # atlauncher
     prismlauncher
     lutris
