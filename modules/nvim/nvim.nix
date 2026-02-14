@@ -325,6 +325,7 @@
           basedpyright = {
             cmd = lib.mkForce {
               _type = "lua-inline";
+              # expr = "require('devcontainers').lsp_cmd({ '/usr/local/bin/basedpyright-langserver', '--stdio' })";
               expr = "require('devcontainers').lsp_cmd({ 'basedpyright-langserver', '--stdio' })";
             };
             settings.basedpyright = {
@@ -342,7 +343,9 @@
           ty = {
             cmd = lib.mkForce {
               _type = "lua-inline";
-              expr = "require('devcontainers').lsp_cmd({ '${lib.getExe pkgs.ty}', 'server' })";
+              # expr = "require('devcontainers').lsp_cmd({ '${lib.getexe pkgs.ty}', 'server' })";
+              expr = "require('devcontainers').lsp_cmd({ 'ty', 'server' })";
+
             };
             # cmd = lib.mkDefault [
             #   (lib.getExe pkgs.ty)
@@ -946,17 +949,22 @@
             pname = "devcontainers-nvim";
             version = "2026-02-14";
             src = pkgs.fetchFromGitHub {
-              owner = "jedrzejboczar";
-              repo = "devcontainers.nvim";
+              # owner = "jedrzejboczar";
+              # repo = "devcontainers.nvim";
+              # hash = "sha256-tHwN2x6lMq+KdNMzyccMIIq+C9rvSRb9RKtKg7DxrLk=";
+
+              owner = "RobertvdLeeuw";
+              repo = "devcontainers.nvim-premium-edition";
               rev = "master";
-              hash = "sha256-tHwN2x6lMq+KdNMzyccMIIq+C9rvSRb9RKtKg7DxrLk=";
+              hash = "sha256-twY2Yy4ns+bQY0szjFxLaEB1TpButc8tIV4ByTLCHc4=";
             };
 
             doCheck = false;
           };
           setup = ''
             require('devcontainers').setup({
-              log = { level = 'info' }
+              log = { level = 'info' },
+              use_docker_exec = true
             })
           '';
         };

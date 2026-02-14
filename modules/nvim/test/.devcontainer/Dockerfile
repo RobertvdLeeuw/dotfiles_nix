@@ -20,3 +20,6 @@ RUN apt-get update && apt-get install -y \
   starship
 
 RUN curl -LsSf https://astral.sh/uv/install.sh | sh
+
+RUN pip install basedpyright ty
+ENV PATH="/usr/local/bin:${PATH}"
