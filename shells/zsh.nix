@@ -13,7 +13,7 @@
         todo = "nvim ~/Documents/todo.md";
         books = "nvim ~/Documents/books.txt";
 
-        tr = "tree --gitignore -L 3 -a";
+        tr = "tree --gitignore -L 3 -a -I .git/";
 
         ga = "git add . && clear";
         gs = "git status";

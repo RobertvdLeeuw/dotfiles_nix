@@ -6,14 +6,7 @@
     "context": "..",
     "cacheFrom": ""
   },
-  "features": {
-    "ghcr.io/tobiaschc/devcontainer-features/starship:1": {
-      "userShell": "zsh",
-      "nerdFont": "FiraCode",
-      "defaultConfig": false,
-      "localConfig": true
-    }
-  },
+  "features": {},
   "forwardPorts": [
     8000,
     8080

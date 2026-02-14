@@ -202,16 +202,17 @@
         "systems": "systems"
       },
       "locked": {
-        "lastModified": 1771077040,
+        "lastModified": 1771059460,
         "narHash": "sha256-YgyhzNU7OTjGdOvPKS+IT6LNkw8B5hl/EQnsaS8dfwo=",
         "owner": "notashelf",
         "repo": "nvf",
-        "rev": "0dc687c6b34dc3dafe6830550468f2a6663ed3f5",
+        "rev": "aff5214a94133a7a6d3680ac9dc56ff6580a8672",
         "type": "github"
       },
       "original": {
         "owner": "notashelf",
         "repo": "nvf",
+        "rev": "aff5214a94133a7a6d3680ac9dc56ff6580a8672",
         "type": "github"
       }
     },

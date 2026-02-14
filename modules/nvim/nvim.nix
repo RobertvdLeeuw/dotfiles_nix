@@ -185,6 +185,9 @@
       ];
 
       options = {
+        foldlevel = 20;
+        foldlevelstart = 1;
+        foldnestmax = 8;
         tabstop = 2;
         shiftwidth = 2;
       };
@@ -313,12 +316,6 @@
         fold = true;
       };
 
-      options = {
-        foldlevel = 20;
-        foldlevelstart = 1;
-        foldnestmax = 8;
-      };
-
       lsp = {
         enable = true;
         formatOnSave = true; # TODO: False because conform-nvim?
@@ -326,6 +323,10 @@
         lspSignature.enable = false; # Using blink-cmp
         servers = {
           basedpyright = {
+            cmd = lib.mkForce {
+              _type = "lua-inline";
+              expr = "require('devcontainers').lsp_cmd({ 'basedpyright-langserver', '--stdio' })";
+            };
             settings.basedpyright = {
               analysis = {
                 diagnosticSeverityOverrides = {
@@ -339,10 +340,14 @@
           };
 
           ty = {
-            cmd = lib.mkDefault [
-              (lib.getExe pkgs.ty)
-              "server"
-            ];
+            cmd = lib.mkForce {
+              _type = "lua-inline";
+              expr = "require('devcontainers').lsp_cmd({ '${lib.getExe pkgs.ty}', 'server' })";
+            };
+            # cmd = lib.mkDefault [
+            #   (lib.getExe pkgs.ty)
+            #   "server"
+            # ];
             filetypes = [ "python" ];
             root_markers = [
               ".git"
@@ -366,101 +371,102 @@
       };
 
       luaConfigPost = ''
-        -- TODO: Find better place for this diagnostics merging.
-                -- Enhanced diagnostic merger that survives file saves
-              local function setup_diagnostic_merger()
-                local orig_virtual_text_handler = vim.diagnostic.handlers.virtual_text
-                local merge_ns = vim.api.nvim_create_namespace("diagnostic_merger")
+          -- TODO: Find better place for this diagnostics merging.
+          -- Enhanced diagnostic merger that survives file saves
+          local function setup_diagnostic_merger()
+          local orig_virtual_text_handler = vim.diagnostic.handlers.virtual_text
+          local merge_ns = vim.api.nvim_create_namespace("diagnostic_merger")
 
-                local function merge_diagnostics(diagnostics)
-                  local merged = {}
-                  local seen = {}
+          local function merge_diagnostics(diagnostics)
+            local merged = {}
+            local seen = {}
 
-                  -- Sort diagnostics consistently: by line, column, severity, then source
-                  table.sort(diagnostics, function(a, b)
-                    if a.lnum ~= b.lnum then
-                      return a.lnum < b.lnum
-                    end
-                    if a.col ~= b.col then
-                      return a.col < b.col
-                    end
-                    if a.severity ~= b.severity then
-                      return a.severity < b.severity  -- Lower numbers = higher severity
-                    end
-                    -- Tie-breaker: source name
-                    local source_a = a.source or ""
-                    local source_b = b.source or ""
-                    return source_a < source_b
-                  end)
-
-                  for _, diag in ipairs(diagnostics) do
-                    local key = string.format("%d:%d:%s", diag.lnum, diag.col, diag.message:sub(1, 50))
-
-                    if not seen[key] then
-                      seen[key] = true
-                      table.insert(merged, diag)
-                    end
-                  end
-
-                  return merged
-                end
-
-                local function refresh_merged_diagnostics(args)
-                  local bufnr = args.buf
-                  if not bufnr or not vim.api.nvim_buf_is_valid(bufnr) then
-                    return
-                  end
-
-                  -- Get all current diagnostics for this buffer
-                  local all_diagnostics = vim.diagnostic.get(bufnr)
-                  local merged_diagnostics = merge_diagnostics(all_diagnostics)
-
-                  -- Clear existing virtual text in our namespace
-                  orig_virtual_text_handler.hide(merge_ns, bufnr)
-
-                  -- Show merged diagnostics if we have any
-                  if #merged_diagnostics > 0 then
-                    -- Pass the full diagnostic config - the original handler extracts virtual_text from it
-                    local full_config = vim.diagnostic.config()
-                    orig_virtual_text_handler.show(merge_ns, bufnr, merged_diagnostics, full_config)
-                  end
-                end
-
-                -- Override the virtual text handler to prevent individual LSPs from showing diagnostics
-                vim.diagnostic.handlers.virtual_text = {
-                  show = function(namespace, bufnr, diagnostics, opts)
-                    -- Only show if this is our merged namespace, ignore individual LSP namespaces
-                    if namespace == merge_ns then
-                      orig_virtual_text_handler.show(namespace, bufnr, diagnostics, opts)
-                    end
-                  end,
-
-                  hide = function(namespace, bufnr)
-                    if namespace == merge_ns then
-                      orig_virtual_text_handler.hide(namespace, bufnr)
-                    end
-                  end
-                }
-
-                -- Re-merge diagnostics whenever they change from any source
-                vim.api.nvim_create_autocmd("DiagnosticChanged", {
-                  callback = refresh_merged_diagnostics,
-                  desc = "Refresh merged diagnostic virtual text"
-                })
-
-                -- Also refresh on initial buffer diagnostics
-                vim.api.nvim_create_autocmd("LspAttach", {
-                  callback = function(args)
-                    vim.defer_fn(function()
-                      refresh_merged_diagnostics(args)
-                    end, 100)
-                  end,
-                })
+            -- Sort diagnostics consistently: by line, column, severity, then source
+            table.sort(diagnostics, function(a, b)
+              if a.lnum ~= b.lnum then
+                return a.lnum < b.lnum
               end
+              if a.col ~= b.col then
+                return a.col < b.col
+              end
+              if a.severity ~= b.severity then
+                return a.severity < b.severity  -- Lower numbers = higher severity
+              end
+              -- Tie-breaker: source name
+              local source_a = a.source or ""
+              local source_b = b.source or ""
+              return source_a < source_b
+            end)
 
-              -- Initialize the merger
-              vim.defer_fn(setup_diagnostic_merger, 50)
+            for _, diag in ipairs(diagnostics) do
+              local key = string.format("%d:%d:%s", diag.lnum, diag.col, diag.message:sub(1, 50))
 
+              if not seen[key] then
+                seen[key] = true
+                table.insert(merged, diag)
+              end
+            end
+
+            return merged
+          end
+
+          local function refresh_merged_diagnostics(args)
+            local bufnr = args.buf
+            if not bufnr or not vim.api.nvim_buf_is_valid(bufnr) then
+              return
+            end
+
+            -- Get all current diagnostics for this buffer
+            local all_diagnostics = vim.diagnostic.get(bufnr)
+            local merged_diagnostics = merge_diagnostics(all_diagnostics)
+
+            -- Clear existing virtual text in our namespace
+            orig_virtual_text_handler.hide(merge_ns, bufnr)
+
+            -- Show merged diagnostics if we have any
+            if #merged_diagnostics > 0 then
+              -- Pass the full diagnostic config - the original handler extracts virtual_text from it
+              local full_config = vim.diagnostic.config()
+              orig_virtual_text_handler.show(merge_ns, bufnr, merged_diagnostics, full_config)
+            end
+          end
+
+          -- Override the virtual text handler to prevent individual LSPs from showing diagnostics
+          vim.diagnostic.handlers.virtual_text = {
+            show = function(namespace, bufnr, diagnostics, opts)
+              -- Only show if this is our merged namespace, ignore individual LSP namespaces
+              if namespace == merge_ns then
+                orig_virtual_text_handler.show(namespace, bufnr, diagnostics, opts)
+              end
+            end,
+
+            hide = function(namespace, bufnr)
+              if namespace == merge_ns then
+                orig_virtual_text_handler.hide(namespace, bufnr)
+              end
+            end
+          }
+
+          -- Re-merge diagnostics whenever they change from any source
+          vim.api.nvim_create_autocmd("DiagnosticChanged", {
+            callback = refresh_merged_diagnostics,
+            desc = "Refresh merged diagnostic virtual text"
+          })
+
+          -- Also refresh on initial buffer diagnostics
+          vim.api.nvim_create_autocmd("LspAttach", {
+            callback = function(args)
+              vim.defer_fn(function()
+                refresh_merged_diagnostics(args)
+              end, 100)
+            end,
+          })
+        end
+
+        -- Initialize the merger
+        vim.defer_fn(setup_diagnostic_merger, 50)
+
+        -- Override LSP commands for devcontainer support
       '';
 
       autocomplete.blink-cmp = {
@@ -648,12 +654,14 @@
               _type = "lua-inline";
               expr = ''
                 function()
+
+                  -- TODO: If open terminal before devcontainer built, goes to host.
                   local status = require("devcontainer.status").get_status()
                   local containers = status.running_containers
 
                   if #containers > 0 then
                     local container_id = containers[1].container_id
-                    return string.format("docker exec -it %s /bin/zsh", container_id)
+                    return string.format("docker exec -it -w /workspace %s /bin/zsh", container_id)
                   else
                     return vim.o.shell
                   end
@@ -908,6 +916,7 @@
       };
       extraPlugins = {
         nvim-dev-container = {
+          # General/main devcontainer plugin
           package = pkgs.vimUtils.buildVimPlugin {
             pname = "nvim-dev-container";
             version = "2026-02-13";
@@ -929,6 +938,26 @@
               container_runtime = "docker",
               disable_recursive_config_search = false,
             }
+          '';
+        };
+        devcontainers-nvim = {
+          # For LSP-in-devcontainer stuff
+          package = pkgs.vimUtils.buildVimPlugin {
+            pname = "devcontainers-nvim";
+            version = "2026-02-14";
+            src = pkgs.fetchFromGitHub {
+              owner = "jedrzejboczar";
+              repo = "devcontainers.nvim";
+              rev = "master";
+              hash = "sha256-tHwN2x6lMq+KdNMzyccMIIq+C9rvSRb9RKtKg7DxrLk=";
+            };
+
+            doCheck = false;
+          };
+          setup = ''
+            require('devcontainers').setup({
+              log = { level = 'info' }
+            })
           '';
         };
       };
