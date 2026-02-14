@@ -1,4 +1,4 @@
-format = "┌$username$directory$git_branch$custom.devcontainer$shell\n$character"
+format = "┌$username$directory$git_branch──\\[[devcontainer](bold green)\\]$shell\n$character"
 add_newline = false
 
 [character]
@@ -20,12 +20,6 @@ truncation_symbol = "…/"
 
 [git_branch]
 format = "──\\[[$branch](bold cyan)\\]"
-
-[custom.devcontainer]
-command = "echo 'test123'"
-when = "[ -d '/workspaces' ] || [ -n '$REMOTE_CONTAINERS_IPC' ] || [ -n '$CODESPACES' ]"
-format = "──\\[[$output](bold green)\\]"
-shell = ["sh", "-c"]
 
 [shell]
 bash_indicator = "──\\[[bash](bold yellow)\\]"

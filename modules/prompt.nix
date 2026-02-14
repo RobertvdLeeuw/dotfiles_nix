@@ -1,4 +1,9 @@
-{ config, pkgs, inputs, ... }:
+{
+  config,
+  pkgs,
+  inputs,
+  ...
+}:
 
 {
   programs.starship = {
@@ -15,7 +20,7 @@
       };
 
       username = {
-        style_user = "bold green"; 
+        style_user = "bold green";
         style_root = "bold red";
         format = "──\\[[$user]($style)\\]";
         show_always = false;

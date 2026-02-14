@@ -6,7 +6,7 @@
     8000,
     8080
   ],
-  "postCreateCommand": "chmod +x /workspace/.devcontainer/shell_init.sh && /workspace/.devcontainer/shell_init.sh",
+  "postCreateCommand": "chmod +x /workspace/.devcontainer/shell_init.sh && /workspace/.devcontainer/shell_init.sh; zsh; source /workspace/.devcontainer/zshrc",
   "remoteUser": "root",
   "mounts": [
     "source=${localWorkspaceFolder}/.devcontainer/starship.toml,target=/root/.config/starship.toml,type=bind"
