@@ -87,7 +87,7 @@
     jq
     which
 
-    neofetch
+    fastfetch
     bat
     fd
     fzf

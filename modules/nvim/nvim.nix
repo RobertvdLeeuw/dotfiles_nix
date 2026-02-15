@@ -329,47 +329,47 @@
               expr = "require('devcontainers').lsp_cmd({ 'basedpyright-langserver', '--stdio' })";
             };
             settings.basedpyright = {
-              analysis = {
-                diagnosticSeverityOverrides = {
-                  reportAny = "none";
-                  reportUnknownMemberType = "none";
-                  reportUnknownVariableType = "none";
-                  reportMissingImports = "none"; # Handled by ty.
-                };
-              };
+              # analysis = {
+              #   diagnosticSeverityOverrides = {
+              #     reportAny = "none";
+              #     reportUnknownMemberType = "none";
+              #     reportUnknownVariableType = "none";
+              #     reportMissingImports = "none"; # Handled by ty.
+              #   };
+              # };
             };
           };
 
-          ty = {
-            cmd = lib.mkForce {
-              _type = "lua-inline";
-              # expr = "require('devcontainers').lsp_cmd({ '${lib.getexe pkgs.ty}', 'server' })";
-              expr = "require('devcontainers').lsp_cmd({ 'ty', 'server' })";
-
-            };
-            # cmd = lib.mkDefault [
-            #   (lib.getExe pkgs.ty)
-            #   "server"
-            # ];
-            filetypes = [ "python" ];
-            root_markers = [
-              ".git"
-              "pyproject.toml"
-              "setup.cfg"
-              "requirements.txt"
-              "Pipfile"
-              "pyrightconfig.json"
-            ];
-
-            settings.ty = {
-              configuration = {
-                rules = {
-                  _type = "lua-inline";
-                  expr = ''{ ["unresolved-reference"] = "ignore" }'';
-                };
-              };
-            };
-          };
+          # ty = {
+          #   cmd = lib.mkForce {
+          #     _type = "lua-inline";
+          #     # expr = "require('devcontainers').lsp_cmd({ '${lib.getexe pkgs.ty}', 'server' })";
+          #     expr = "require('devcontainers').lsp_cmd({ 'ty', 'server' })";
+          #
+          #   };
+          #   # cmd = lib.mkDefault [
+          #   #   (lib.getExe pkgs.ty)
+          #   #   "server"
+          #   # ];
+          #   filetypes = [ "python" ];
+          #   root_markers = [
+          #     ".git"
+          #     "pyproject.toml"
+          #     "setup.cfg"
+          #     "requirements.txt"
+          #     "Pipfile"
+          #     "pyrightconfig.json"
+          #   ];
+          #
+          #   settings.ty = {
+          #     configuration = {
+          #       rules = {
+          #         _type = "lua-inline";
+          #         expr = ''{ ["unresolved-reference"] = "ignore" }'';
+          #       };
+          #     };
+          #   };
+          # };
         };
       };
 
@@ -469,7 +469,7 @@
         -- Initialize the merger
         vim.defer_fn(setup_diagnostic_merger, 50)
 
-        -- Override LSP commands for devcontainer support
+        vim.lsp.set_log_level('debug')
       '';
 
       autocomplete.blink-cmp = {
@@ -918,54 +918,73 @@
         };
       };
       extraPlugins = {
-        nvim-dev-container = {
-          # General/main devcontainer plugin
-          package = pkgs.vimUtils.buildVimPlugin {
-            pname = "nvim-dev-container";
-            version = "2026-02-13";
-            src = pkgs.fetchFromGitHub {
-              owner = "RobertvdLeeuw";
-              repo = "nvim-dev-container-premium-edition";
-              rev = "main";
-              hash = "sha256-5zo2Gc3nekawkodj47uN7stXZqGiT1DZdldJFnHNgOc=";
-            };
-          };
-          setup = ''
-            require("devcontainer").setup {
-              autocommands = {
-                init = true,
-                clean = true,
-                update = true,
-              },
-
-              container_runtime = "docker",
-              disable_recursive_config_search = false,
-            }
-          '';
-        };
+        # nvim-dev-container = {
+        #   # General/main devcontainer plugin
+        #   package = pkgs.vimUtils.buildVimPlugin {
+        #     pname = "nvim-dev-container";
+        #     version = "2026-02-13";
+        #     src = pkgs.fetchFromGitHub {
+        #       owner = "RobertvdLeeuw";
+        #       repo = "nvim-dev-container-premium-edition";
+        #       rev = "main";
+        #       hash = "sha256-5zo2Gc3nekawkodj47uN7stXZqGiT1DZdldJFnHNgOc=";
+        #     };
+        #   };
+        #   setup = ''
+        #     require("devcontainer").setup {
+        #       autocommands = {
+        #         init = true,
+        #         clean = true,
+        #         update = true,
+        #       },
+        #
+        #       container_runtime = "docker",
+        #       disable_recursive_config_search = false,
+        #     }
+        #   '';
+        # };
         devcontainers-nvim = {
           # For LSP-in-devcontainer stuff
           package = pkgs.vimUtils.buildVimPlugin {
             pname = "devcontainers-nvim";
             version = "2026-02-14";
             src = pkgs.fetchFromGitHub {
-              # owner = "jedrzejboczar";
-              # repo = "devcontainers.nvim";
-              # hash = "sha256-tHwN2x6lMq+KdNMzyccMIIq+C9rvSRb9RKtKg7DxrLk=";
-
-              owner = "RobertvdLeeuw";
-              repo = "devcontainers.nvim-premium-edition";
+              owner = "jedrzejboczar";
+              repo = "devcontainers.nvim";
               rev = "master";
-              hash = "sha256-twY2Yy4ns+bQY0szjFxLaEB1TpButc8tIV4ByTLCHc4=";
+              hash = "sha256-tHwN2x6lMq+KdNMzyccMIIq+C9rvSRb9RKtKg7DxrLk=";
+
+              # owner = "RobertvdLeeuw";
+              # repo = "devcontainers.nvim-premium-edition";
+              # rev = "master";
+              # hash = "sha256-twY2Yy4ns+bQY0szjFxLaEB1TpButc8tIV4ByTLCHc4=";
             };
 
             doCheck = false;
           };
           setup = ''
             require('devcontainers').setup({
-              log = { level = 'info' },
-              use_docker_exec = true
+              log = { level = 'debug' }
+              -- , use_docker_exec = false
             })
+          '';
+        };
+        netman-nvim = {
+          # For devcontainers.nvim
+          package = pkgs.vimUtils.buildVimPlugin {
+            pname = "netman-nvim";
+            version = "2026-02-14";
+            src = pkgs.fetchFromGitHub {
+              owner = "miversen33";
+              repo = "netman.nvim";
+              rev = "master";
+              hash = "sha256-SmpAuhDM764kT8BG1XWztNt3CJITohhrGoaB3DBo0U0=";
+            };
+
+            doCheck = false;
+          };
+          setup = ''
+            require('netman')
           '';
         };
       };
