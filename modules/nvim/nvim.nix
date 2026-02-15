@@ -287,7 +287,10 @@
         python = {
           enable = true;
           treesitter.enable = true;
-          lsp.enable = true;
+          lsp = {
+            enable = true;
+            servers = [ ];
+          };
         };
         rust = {
           enable = true;
@@ -322,54 +325,101 @@
         inlayHints.enable = true;
         lspSignature.enable = false; # Using blink-cmp
         servers = {
-          basedpyright = {
-            cmd = lib.mkForce {
-              _type = "lua-inline";
-              # expr = "require('devcontainers').lsp_cmd({ '/usr/local/bin/basedpyright-langserver', '--stdio' })";
-              expr = "require('devcontainers').lsp_cmd({ 'basedpyright-langserver', '--stdio' })";
-            };
-            settings.basedpyright = {
-              # analysis = {
-              #   diagnosticSeverityOverrides = {
-              #     reportAny = "none";
-              #     reportUnknownMemberType = "none";
-              #     reportUnknownVariableType = "none";
-              #     reportMissingImports = "none"; # Handled by ty.
-              #   };
-              # };
-            };
-          };
-
-          # ty = {
+          # pylsp = {
           #   cmd = lib.mkForce {
           #     _type = "lua-inline";
-          #     # expr = "require('devcontainers').lsp_cmd({ '${lib.getexe pkgs.ty}', 'server' })";
-          #     expr = "require('devcontainers').lsp_cmd({ 'ty', 'server' })";
-          #
+          #     expr = "require('devcontainers').lsp_cmd({ 'pylsp' })";
           #   };
-          #   # cmd = lib.mkDefault [
-          #   #   (lib.getExe pkgs.ty)
-          #   #   "server"
-          #   # ];
+          #
           #   filetypes = [ "python" ];
           #   root_markers = [
-          #     ".git"
           #     "pyproject.toml"
           #     "setup.cfg"
           #     "requirements.txt"
           #     "Pipfile"
           #     "pyrightconfig.json"
           #   ];
-          #
-          #   settings.ty = {
-          #     configuration = {
-          #       rules = {
-          #         _type = "lua-inline";
-          #         expr = ''{ ["unresolved-reference"] = "ignore" }'';
-          #       };
-          #     };
-          #   };
           # };
+          pyright = {
+            cmd = lib.mkForce {
+              _type = "lua-inline";
+              expr = "require('devcontainers').lsp_cmd({ 'pyright-langserver', '--stdio' })";
+            };
+
+            filetypes = [ "python" ];
+            root_markers = [
+              "pyproject.toml"
+              "setup.cfg"
+              "requirements.txt"
+              "Pipfile"
+              "pyrightconfig.json"
+            ];
+          };
+          basedpyright = {
+            cmd = lib.mkForce {
+              _type = "lua-inline";
+              expr = "require('devcontainers').lsp_cmd({ 'basedpyright-langserver', '--stdio' })";
+            };
+
+            filetypes = [ "python" ];
+            root_markers = [
+              "pyproject.toml"
+              "setup.cfg"
+              "requirements.txt"
+              "Pipfile"
+              "pyrightconfig.json"
+            ];
+
+            settings.basedpyright = {
+              # analysis = {
+              #   # Reduce the features that might cause issues
+              #   typeCheckingMode = "basic";
+              #   diagnosticMode = "openFilesOnly";
+              #
+              #   # Disable some features that might cause RPC issues
+              #   inlayHints.enable = false;
+              #   semanticTokens.enable = false;
+              #   logLevel = "Trace";
+              # };
+              analysis = {
+                diagnosticSeverityOverrides = {
+                  reportAny = "none";
+                  reportUnknownMemberType = "none";
+                  reportUnknownVariableType = "none";
+                  reportMissingImports = "none"; # Handled by ty.
+                };
+              };
+            };
+          };
+
+          ty = {
+            cmd = lib.mkForce {
+              _type = "lua-inline";
+              expr = "require('devcontainers').lsp_cmd({ 'ty', 'server' })";
+
+            };
+            # cmd = lib.mkDefault [
+            #   (lib.getExe pkgs.ty)
+            #   "server"
+            # ];
+            filetypes = [ "python" ];
+            root_markers = [
+              "pyproject.toml"
+              "setup.cfg"
+              "requirements.txt"
+              "Pipfile"
+              "pyrightconfig.json"
+            ];
+
+            settings.ty = {
+              configuration = {
+                rules = {
+                  _type = "lua-inline";
+                  expr = ''{ ["unresolved-reference"] = "ignore" }'';
+                };
+              };
+            };
+          };
         };
       };
 
@@ -469,6 +519,7 @@
         -- Initialize the merger
         vim.defer_fn(setup_diagnostic_merger, 50)
 
+        -- LSP DEVCONTAINER STUFF
         vim.lsp.set_log_level('debug')
       '';
 
@@ -918,31 +969,31 @@
         };
       };
       extraPlugins = {
-        # nvim-dev-container = {
-        #   # General/main devcontainer plugin
-        #   package = pkgs.vimUtils.buildVimPlugin {
-        #     pname = "nvim-dev-container";
-        #     version = "2026-02-13";
-        #     src = pkgs.fetchFromGitHub {
-        #       owner = "RobertvdLeeuw";
-        #       repo = "nvim-dev-container-premium-edition";
-        #       rev = "main";
-        #       hash = "sha256-5zo2Gc3nekawkodj47uN7stXZqGiT1DZdldJFnHNgOc=";
-        #     };
-        #   };
-        #   setup = ''
-        #     require("devcontainer").setup {
-        #       autocommands = {
-        #         init = true,
-        #         clean = true,
-        #         update = true,
-        #       },
-        #
-        #       container_runtime = "docker",
-        #       disable_recursive_config_search = false,
-        #     }
-        #   '';
-        # };
+        nvim-dev-container = {
+          # General/main devcontainer plugin
+          package = pkgs.vimUtils.buildVimPlugin {
+            pname = "nvim-dev-container";
+            version = "2026-02-13";
+            src = pkgs.fetchFromGitHub {
+              owner = "RobertvdLeeuw";
+              repo = "nvim-dev-container-premium-edition";
+              rev = "main";
+              hash = "sha256-5zo2Gc3nekawkodj47uN7stXZqGiT1DZdldJFnHNgOc=";
+            };
+          };
+          setup = ''
+            require("devcontainer").setup {
+              autocommands = {
+                init = true,
+                clean = true,
+                update = true,
+              },
+
+              container_runtime = "docker",
+              disable_recursive_config_search = false,
+            }
+          '';
+        };
         devcontainers-nvim = {
           # For LSP-in-devcontainer stuff
           package = pkgs.vimUtils.buildVimPlugin {
@@ -964,7 +1015,7 @@
           };
           setup = ''
             require('devcontainers').setup({
-              log = { level = 'debug' }
+              log = { level = 'trace' }
               -- , use_docker_exec = false
             })
           '';

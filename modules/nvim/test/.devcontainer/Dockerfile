@@ -21,5 +21,5 @@ RUN apt-get update && apt-get install -y \
 
 RUN curl -LsSf https://astral.sh/uv/install.sh | sh
 
-RUN pip install basedpyright ty
+RUN pip install basedpyright ty pyright
 ENV PATH="/usr/local/bin:${PATH}"
