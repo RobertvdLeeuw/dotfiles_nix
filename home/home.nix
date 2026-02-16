@@ -4,7 +4,6 @@
   inputs,
   ...
 }:
-
 {
   imports = [
     ../shells/zsh.nix
@@ -73,6 +72,8 @@
     freetype
 
     p7zip
+
+    opencode
 
     space-cadet-pinball
     # lunar-client  # Minecraft

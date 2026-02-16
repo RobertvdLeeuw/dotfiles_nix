@@ -62,6 +62,44 @@
         eval "$(direnv hook zsh)"
 
         export NIXPKGS_ALLOW_UNFREE=1
+        # Declare the ZSH_HIGHLIGHT_STYLES array for syntax highlighting color overrides
+        # typeset -a zsh_highlight_styles
+        #
+        # # Hardcoded colors so nvim theme doesn't fuck things up
+        # zsh_highlight_styles[unknown-token]='fg=#ca1444'
+        # zsh_highlight_styles[reserved-word]='fg=#cb6fa1,bold'
+        # zsh_highlight_styles[alias]='fg=#aca1cf'
+        # zsh_highlight_styles[builtin]='fg=#e8a831'
+        # zsh_highlight_styles[function]='fg=#90b99f'
+        # zsh_highlight_styles[command]='fg=#90b99f'
+        # zsh_highlight_styles[precommand]='fg=#e8a831,underline'
+        # zsh_highlight_styles[commandseparator]='fg=#c9c7cd'
+        # zsh_highlight_styles[hashed-command]='fg=#90b99f'
+        # zsh_highlight_styles[path]='fg=#aca1cf'
+        # zsh_highlight_styles[path_prefix]='fg=#aca1cf,underline'
+        # zsh_highlight_styles[globbing]='fg=#b9aeda'
+        # zsh_highlight_styles[history-expansion]='fg=#cb6fa1,bold'
+        # zsh_highlight_styles[command-substitution]='fg=#282828,bg=#e8a831'
+        # zsh_highlight_styles[command-substitution-delimiter]='fg=#e8a831'
+        # zsh_highlight_styles[process-substitution]='fg=#282828,bg=#e8a831'
+        # zsh_highlight_styles[process-substitution-delimiter]='fg=#e8a831'
+        # zsh_highlight_styles[single-hyphen-option]='fg=#aca1cf'
+        # zsh_highlight_styles[double-hyphen-option]='fg=#aca1cf'
+        # zsh_highlight_styles[back-quoted-argument]='fg=#282828,bg=#e8a831'
+        # zsh_highlight_styles[single-quoted-argument]='fg=#e8a831'
+        # zsh_highlight_styles[double-quoted-argument]='fg=#e8a831'
+        # zsh_highlight_styles[dollar-quoted-argument]='fg=#e8a831'
+        # zsh_highlight_styles[rc-quote]='fg=#aca1cf'
+        # zsh_highlight_styles[dollar-double-quoted-argument]='fg=#cb6fa1'
+        # zsh_highlight_styles[back-double-quoted-argument]='fg=#aca1cf'
+        # zsh_highlight_styles[back-dollar-quoted-argument]='fg=#aca1cf'
+        # zsh_highlight_styles[assign]='fg=#cb6fa1'
+        # zsh_highlight_styles[redirection]='fg=#e8a831,bold'
+        # zsh_highlight_styles[comment]='fg=#282828,bold'
+        # zsh_highlight_styles[named-fd]='fg=#b9aeda'
+        # zsh_highlight_styles[numeric-fd]='fg=#b9aeda'
+        # zsh_highlight_styles[arg0]='fg=#c9c7cd'
+        # zsh_highlight_styles[default]='fg=#c9c7cd'
       '';
 
       defaultKeymap = "viins";

@@ -102,5 +102,7 @@
     git
     gcc
     ninja
+
+    opencommit
   ];
 }

@@ -9,20 +9,21 @@
 /*
   TODO
   - devcontainer
-    - sync LSP/TS errors with devcontainer (no "package not found" by looking in the wrong place)
-    - Direnv kinda thing (vim.utility.direnv)
+    - open issue
+  - Customize lualine
   - Agent stuff
+      - How would this mesh with lazygit?
+    - CodeCompanion
+    - minuet-ai.nvim? Blink AI comp
+    - Skills
+    - Agents.md?
 
-  - Alt+B: Back-n-forth last 2 files/buffers
-  - gD -> usage menu
-  - Telescope find_files show hidden
-  - Git autogen commit message like CoPilot
+  - Configure OpenCommit (Git autogen commit message)
   - Nested language support
   - Autocomp menu looks
   - Change formatting rules
   - LSP signature
   - Borders
-  - Fix clipboard
   - Folding behavior
     - https://github.com/kevinhwang91/nvim-ufo
     - Auto on file open
@@ -64,6 +65,10 @@
         };
       };
 
+      statusline.lualine = {
+        enable = true;
+      };
+
       ui = {
         borders = {
           enable = true;
@@ -78,6 +83,121 @@
       };
 
       keymaps = [
+        {
+          key = "gD";
+          mode = "n";
+          lua = true;
+          silent = true;
+          action = ''
+            function()
+              require('glance').open('references')
+            end
+          '';
+          noremap = true;
+          desc = "Show references in glance menu";
+        }
+        {
+          key = "gd";
+          mode = "n";
+          lua = true;
+          silent = true;
+          action = ''
+            function()
+              require('glance').open('definitions')
+            end
+          '';
+          noremap = true;
+          desc = "Show definitions in glance menu";
+        }
+        {
+          key = "<A-a>";
+          mode = "n";
+          lua = true;
+          silent = true;
+          action = ''
+            function()
+              local codecompanion = require("codecompanion")
+              local last_chat = codecompanion.last_chat()
+
+              -- Check if there's a chat and if it's visible
+              if last_chat and not vim.tbl_isempty(last_chat) and last_chat.ui:is_visible() then
+                -- Remember if we were in fullscreen before closing
+                vim.g.codecompanion_was_fullscreen = vim.t.codecompanion_maximized or false
+                -- Close the chat
+                codecompanion.close_last_chat()
+                -- Clear the current fullscreen state since window is closed
+                vim.t.codecompanion_maximized = false
+              else
+                -- Open the chat
+                codecompanion.chat()
+                -- If we were previously in fullscreen, restore that state immediately
+                if vim.g.codecompanion_was_fullscreen then
+                  vim.cmd('resize')
+                  vim.cmd('vertical resize')
+                  vim.t.codecompanion_maximized = true
+                end
+              end
+            end
+          '';
+          noremap = true;
+          desc = "Toggle CodeCompanion chat sidebar";
+        }
+        {
+          key = "<A-f>";
+          mode = "n";
+          lua = true;
+          silent = true;
+          action = ''
+            function()
+              local current_win = vim.api.nvim_get_current_win()
+              local buf = vim.api.nvim_win_get_buf(current_win)
+              local filetype = vim.api.nvim_buf_get_option(buf, 'filetype')
+
+              if filetype == 'codecompanion' then
+                if vim.t.codecompanion_maximized then
+                  -- Restore normal size
+                  vim.cmd('wincmd =')
+                  vim.t.codecompanion_maximized = false
+                  vim.g.codecompanion_was_fullscreen = false
+                else
+                  -- Maximize
+                  vim.cmd('resize')
+                  vim.cmd('vertical resize')
+                  vim.t.codecompanion_maximized = true
+                  vim.g.codecompanion_was_fullscreen = true
+                end
+              end
+            end
+          '';
+          noremap = true;
+          desc = "Toggle fullscreen for CodeCompanion chat";
+        }
+        {
+          key = "<A-b>";
+          mode = "n";
+          lua = true;
+          action = ''
+            function()
+              local current_buf = vim.api.nvim_get_current_buf()
+              local alt_buf = vim.g.alternate_file_buffer
+
+              -- Check if alternate buffer is valid and is a file buffer
+              if alt_buf and
+                 vim.api.nvim_buf_is_valid(alt_buf) and
+                 vim.api.nvim_buf_is_loaded(alt_buf) and
+                 vim.api.nvim_buf_get_name(alt_buf) ~= "" and
+                 vim.bo[alt_buf].buftype == "" and
+                 alt_buf ~= current_buf then
+                vim.api.nvim_set_current_buf(alt_buf)
+              else
+                print("No alternate file buffer available")
+              end
+            end
+          '';
+          silent = true;
+          noremap = true;
+          desc = "Switch to alternate file buffer";
+        }
         {
           key = "<C-e>";
           mode = "n";
@@ -94,22 +214,26 @@
           noremap = true;
           desc = "Save current file and open Yazi";
         }
+        # {
+        #   key = "<C-f>";
+        #   mode = [
+        #     "n"
+        #     "v"
+        #   ];
+        #   action = ":Telescope find_files hidden=true";
+        #   silent = true;
+        #   noremap = true;
+        #   desc = "Copy to system clipboard";
+        # }
         {
           key = "<C-y>";
           mode = [
             "n"
             "v"
           ];
-          action = ''[["+y]]'';
-          desc = "Copy to system clipboard";
-        }
-        {
-          key = "<C-S-c>";
-          mode = [
-            "n"
-            "v"
-          ];
-          action = ''[["+y]]'';
+          action = ''"+y'';
+          silent = true;
+          noremap = true;
           desc = "Copy to system clipboard";
         }
         {
@@ -124,19 +248,6 @@
           '';
           noremap = true;
           desc = "Show line diagnostics";
-        }
-        {
-          key = "<A-t>";
-          mode = "n";
-          lua = true;
-          silent = true;
-          action = ''
-            function()
-              require("conform").format({ lsp_format = "fallback" })
-            end
-          '';
-          noremap = true;
-          desc = "Format current buffer";
         }
         {
           key = "<C-p>";
@@ -154,6 +265,34 @@
       ];
 
       autocmds = [
+        {
+          event = [ "BufEnter" ];
+          pattern = [ "*" ];
+          callback = {
+            _type = "lua-inline";
+            expr = ''
+              function()
+                local current_buf = vim.api.nvim_get_current_buf()
+                local prev_buf = vim.g.current_file_buffer
+
+                -- Only track file buffers
+                if vim.fn.expand("%") ~= "" and vim.bo.buftype == "" then
+                  -- Set previous file buffer as alternate
+                  if prev_buf and
+                     prev_buf ~= current_buf and
+                     vim.api.nvim_buf_is_valid(prev_buf) and
+                     vim.api.nvim_buf_get_name(prev_buf) ~= "" and
+                     vim.bo[prev_buf].buftype == "" then
+                    vim.g.alternate_file_buffer = prev_buf
+                  end
+                  -- Update current file buffer tracker
+                  vim.g.current_file_buffer = current_buf
+                end
+              end
+            '';
+          };
+          desc = "Track file buffer changes for Alt+b alternation";
+        }
         {
           event = [ "BufReadPost" ];
           pattern = [ "*" ];
@@ -288,7 +427,7 @@
           enable = true;
           treesitter.enable = true;
           lsp = {
-            enable = true;
+            enable = true; # TODO: Are these settings just equivalent to enable = false?
             servers = [ ];
           };
         };
@@ -325,41 +464,11 @@
         inlayHints.enable = true;
         lspSignature.enable = false; # Using blink-cmp
         servers = {
-          # pylsp = {
-          #   cmd = lib.mkForce {
-          #     _type = "lua-inline";
-          #     expr = "require('devcontainers').lsp_cmd({ 'pylsp' })";
-          #   };
-          #
-          #   filetypes = [ "python" ];
-          #   root_markers = [
-          #     "pyproject.toml"
-          #     "setup.cfg"
-          #     "requirements.txt"
-          #     "Pipfile"
-          #     "pyrightconfig.json"
-          #   ];
-          # };
-          pyright = {
-            cmd = lib.mkForce {
-              _type = "lua-inline";
-              expr = "require('devcontainers').lsp_cmd({ 'pyright-langserver', '--stdio' })";
-            };
-
-            filetypes = [ "python" ];
-            root_markers = [
-              "pyproject.toml"
-              "setup.cfg"
-              "requirements.txt"
-              "Pipfile"
-              "pyrightconfig.json"
-            ];
-          };
           basedpyright = {
-            cmd = lib.mkForce {
-              _type = "lua-inline";
-              expr = "require('devcontainers').lsp_cmd({ 'basedpyright-langserver', '--stdio' })";
-            };
+            # cmd = lib.mkForce {
+            #   _type = "lua-inline";
+            #   expr = "require('devcontainers').lsp_cmd({ 'basedpyright-langserver', '--stdio' })";
+            # };
 
             filetypes = [ "python" ];
             root_markers = [
@@ -371,16 +480,6 @@
             ];
 
             settings.basedpyright = {
-              # analysis = {
-              #   # Reduce the features that might cause issues
-              #   typeCheckingMode = "basic";
-              #   diagnosticMode = "openFilesOnly";
-              #
-              #   # Disable some features that might cause RPC issues
-              #   inlayHints.enable = false;
-              #   semanticTokens.enable = false;
-              #   logLevel = "Trace";
-              # };
               analysis = {
                 diagnosticSeverityOverrides = {
                   reportAny = "none";
@@ -393,15 +492,14 @@
           };
 
           ty = {
-            cmd = lib.mkForce {
-              _type = "lua-inline";
-              expr = "require('devcontainers').lsp_cmd({ 'ty', 'server' })";
-
-            };
-            # cmd = lib.mkDefault [
-            #   (lib.getExe pkgs.ty)
-            #   "server"
-            # ];
+            # cmd = lib.mkForce {
+            #   _type = "lua-inline";
+            #   expr = "require('devcontainers').lsp_cmd({ 'ty', 'server' })";
+            # };
+            cmd = lib.mkDefault [
+              (lib.getExe pkgs.ty)
+              "server"
+            ];
             filetypes = [ "python" ];
             root_markers = [
               "pyproject.toml"
@@ -521,6 +619,70 @@
 
         -- LSP DEVCONTAINER STUFF
         vim.lsp.set_log_level('debug')
+
+        -- Force CodeCompanion setup if it hasn't been initialized
+        vim.defer_fn(function()
+          if not pcall(function() return require("codecompanion.config") end) then
+            require("codecompanion").setup({
+              adapters = {
+                ollama = function()
+                  return require("codecompanion.adapters").extend("ollama", {
+                    name = "ollama",
+                    env = {
+                      url = "http://localhost:11434",
+                    },
+                    headers = {
+                      ["Content-Type"] = "application/json",
+                    },
+                    parameters = {
+                      sync = true,
+                    },
+                    schema = {
+                      model = {
+                        default = "qwen2.5-coder:7b-instruct",
+                      },
+                    },
+                  })
+                end,
+              },
+              strategies = {
+                chat = {
+                  adapter = "ollama",
+                  keymaps = {
+                    options = {
+                      modes = { "n" },
+                      silent = true,
+                      noremap = true,
+                    },
+                    ["<A-b>"] = "close",
+                  },
+                },
+                inline = {
+                  adapter = "ollama",
+                },
+              },
+              display = {
+                chat = {
+                  start_in_insert_mode = true,
+                  auto_scroll = true,
+                  show_settings = true,
+                  show_token_count = true,
+                  intro_message = "CodeCompanion with OpenCode ✨ Press ? for help, <A-a> to close",
+                },
+                action_palette = {
+                  provider = "telescope",
+                  width = 120,
+                  height = 15,
+                },
+              },
+              opts = {
+                log_level = "INFO",
+                send_code = true,
+                language = "English",
+              },
+            })
+          end
+        end, 100)
       '';
 
       autocomplete.blink-cmp = {
@@ -657,7 +819,7 @@
                   mappings = {
                     i = {},
                     n = {},
-                  }
+                  },
                 }
               '';
             };
@@ -667,6 +829,36 @@
         mappings = {
           findFiles = "<C-f>";
           liveGrep = "<S-f>";
+        };
+
+        setupOpts = {
+          defaults = {
+            vimgrep_arguments = [
+              "${pkgs.ripgrep}/bin/rg"
+              "--color=never"
+              "--no-heading"
+              "--with-filename"
+              "--line-number"
+              "--column"
+              "--smart-case"
+              "--hidden"
+              # "--no-ignore"
+            ];
+            mappings.i = {
+              _type = "lua-inline";
+              expr = ''{["<esc>"] = require("telescope.actions").close}'';
+            };
+          };
+          pickers.find_files.find_command = [
+            "${pkgs.ripgrep}/bin/rg"
+            "--files"
+            "--hidden"
+            # "--ignore-vcs"
+            # "-g"
+            # "!**/.git/*"
+            #   "\${pkgs.fd}/bin/fd"
+            #   "--type=file"
+          ];
         };
       };
 
@@ -722,22 +914,6 @@
                 end
               '';
             };
-
-            # Show container indicator when in container
-            # on_open = {
-            #   _type = "lua-inline";
-            #   expr = ''
-            #     function(term)
-            #       local status = require("devcontainer.status").get_status()
-            #       local containers = status.running_containers
-            #
-            #       if #containers > 0 then
-            #         local container_id = containers[1].container_id
-            #         -- vim.wo[term.window].winbar = "🐳 Container: " .. container_id:sub(1, 12)
-            #       end
-            #     end
-            #   '';
-            # };
           };
         };
       };
@@ -749,10 +925,6 @@
           toggleCurrentLine = "<C-c>";
           toggleSelectedLine = "<C-c>";
         };
-      };
-
-      assistant.codecompanion-nvim = {
-        enable = true;
       };
 
       snippets.luasnip.enable = true;
@@ -896,6 +1068,10 @@
         };
       };
 
+      assistant.codecompanion-nvim = {
+        enable = true;
+      };
+
       projects.project-nvim = {
         enable = true;
         setupOpts = {
@@ -939,6 +1115,7 @@
       clipboard = {
         enable = true;
         providers.wl-copy.enable = true;
+        registers = "unnamedplus";
       };
 
       utility = {
@@ -969,6 +1146,75 @@
         };
       };
       extraPlugins = {
+        glance-nvim = {
+          package = pkgs.vimPlugins.glance-nvim;
+          setup = ''
+            local glance = require('glance')
+            local actions = glance.actions
+
+            glance.setup({
+              height = 18, -- Height of the floating window
+              zindex = 45, -- Z-index for the window
+
+              -- Position the window near cursor (similar to completion menu)
+              preview_win_opts = {
+                cursorline = true,
+                number = true,
+                wrap = true,
+              },
+
+              hooks = {
+                before_open = function(results, open, jump, method)
+                  local uri = vim.uri_from_bufnr(0)
+                  if #results == 1 then
+                    -- If only one result, jump directly instead of opening menu
+                    jump(results[1])
+                    return
+                  end
+                  open(results)
+                end,
+              },
+
+              list = {
+                position = 'right', -- Position relative to main window
+                width = 0.33, -- Width as percentage of screen
+              },
+
+              -- Customize appearance to match your blink-cmp style
+              theme = {
+                enable = true,
+                mode = 'auto',
+              },
+
+              -- Configure the floating window border
+              border = {
+                enable = true,
+                style = 'single', -- Match your LSP border style
+              },
+
+              -- Key mappings within the glance window
+              mappings = {
+                list = {
+                  ['<A-j>'] = actions.next,      -- Match your blink-cmp navigation
+                  ['<A-k>'] = actions.previous,  -- Match your blink-cmp navigation
+                  ['<Tab>'] = actions.jump,       -- Match your blink-cmp confirm
+                  ['<CR>'] = actions.jump,
+                  ['<Esc>'] = actions.close,
+                  ['q'] = actions.close,
+                },
+
+                preview = {
+                  ['<A-j>'] = actions.next,      -- Match your blink-cmp navigation
+                  ['<A-k>'] = actions.previous,  -- Match your blink-cmp navigation
+                  ['<Tab>'] = actions.jump,       -- Match your blink-cmp confirm
+                  ['<CR>'] = actions.jump,
+                  ['<Esc>'] = actions.close,
+                  ['q'] = actions.close,
+                },
+              },
+            })
+          '';
+        };
         nvim-dev-container = {
           # General/main devcontainer plugin
           package = pkgs.vimUtils.buildVimPlugin {
