@@ -18,7 +18,7 @@
     - Skills
     - Agents.md?
 
-  - Configure OpenCommit (Git autogen commit message)
+  - Fix opencommit within devcontainer.
   - Nested language support
   - Autocomp menu looks
   - Change formatting rules
@@ -683,6 +683,9 @@
             })
           end
         end, 100)
+
+        -- Start CodeCompanion on fullscreen.
+        vim.g.codecompanion_was_fullscreen = true
       '';
 
       autocomplete.blink-cmp = {
