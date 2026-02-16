@@ -29,7 +29,7 @@
     - Auto on file open
     - no nest beyond func/meth bodies
   - Something debugger
-  - https://www.youtube.com/watch?v=cf72gMBrsI0
+  - Test integration https://www.youtube.com/watch?v=cf72gMBrsI0
 */
 
 {
