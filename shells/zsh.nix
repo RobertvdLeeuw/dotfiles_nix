@@ -17,8 +17,7 @@
 
         ga = "git add . && clear";
         gs = "git status";
-        gc = "git commit -m ";
-        gac = "oco";
+        gc = "oco";
         gp = "git push && clear";
       };
       shellGlobalAliases = {

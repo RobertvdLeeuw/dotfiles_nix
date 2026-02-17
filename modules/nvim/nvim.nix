@@ -20,7 +20,6 @@
 
   - Fix opencommit within devcontainer.
   - Nested language support
-  - Autocomp menu looks
   - Change formatting rules
   - LSP signature
   - Borders
@@ -64,9 +63,187 @@
           setupOpts.cursorword.enable = true;
         };
       };
-
       statusline.lualine = {
         enable = true;
+        activeSection = {
+          c = [ ];
+
+          x = [
+            ''
+              {
+                function()
+                  local buf_ft = vim.bo.filetype
+                  local excluded_buf_ft = { toggleterm = true, NvimTree = true, ["neo-tree"] = true, TelescopePrompt = true }
+
+                  if excluded_buf_ft[buf_ft] then
+                    return ""
+                  end
+
+                  -- Expected LSPs per filetype
+                  local expected_lsps = {
+                    bash = { "bash-ls" },
+                    lua = { "lua-language-server" },
+                    python = { "ty", "basedpyright" },
+                    rust = { "rust-analyzer" },
+                    sql = { "sqls" },
+                    json = { "jsonls" },
+                    nix = { "nil" }
+                  }
+
+                  local bufnr = vim.api.nvim_get_current_buf()
+                  local clients = vim.lsp.get_clients({ bufnr = bufnr })
+
+                  local current_lsps = {}
+                  for _, client in ipairs(clients) do
+                    table.insert(current_lsps, client.name)
+                  end
+
+                  local expected = expected_lsps[buf_ft] or {}
+
+                  -- Check if any expected LSPs are missing
+                  local missing_lsps = {}
+                  for _, expected_lsp in ipairs(expected) do
+                    local found = false
+                    for _, current_lsp in ipairs(current_lsps) do
+                      if expected_lsp == current_lsp then
+                        found = true
+                        break
+                      end
+                    end
+                    if not found then
+                      table.insert(missing_lsps, expected_lsp)
+                    end
+                  end
+
+                  -- Initialize grace period tracking if not exists
+                  if not _G.lsp_grace_state then
+                    _G.lsp_grace_state = {}
+                  end
+                  if not _G.lsp_status_by_buffer then
+                    _G.lsp_status_by_buffer = {}
+                  end
+
+                  local buffer_key = buf_ft .. "_" .. bufnr
+                  local now = vim.loop.hrtime() / 1e9
+
+                  -- Grace period logic
+                  if #missing_lsps > 0 then
+                    if not _G.lsp_grace_state[buffer_key] then
+                      _G.lsp_grace_state[buffer_key] = now
+                    end
+                  else
+                    _G.lsp_grace_state[buffer_key] = nil
+                  end
+
+                  -- Store state per buffer
+                  _G.lsp_status_by_buffer[bufnr] = {
+                    current = current_lsps,
+                    expected = expected,
+                    missing = missing_lsps,
+                    filetype = buf_ft,
+                    grace_start = _G.lsp_grace_state[buffer_key],
+                    current_time = now
+                  }
+
+                  return table.concat(current_lsps, ",")
+                end,
+                color = function()
+                  local bufnr = vim.api.nvim_get_current_buf()
+                  local status = _G.lsp_status_by_buffer and _G.lsp_status_by_buffer[bufnr]
+
+                  if not status then
+                    return { fg = "gray" }
+                  end
+
+                  local current = status.current
+                  local expected = status.expected
+                  local missing = status.missing
+                  local grace_start = status.grace_start
+                  local current_time = status.current_time
+
+                  -- Check for unexpected LSPs (trumps all)
+                  for _, current_lsp in ipairs(current) do
+                    local found = false
+                    for _, expected_lsp in ipairs(expected) do
+                      if current_lsp == expected_lsp then
+                        found = true
+                        break
+                      end
+                    end
+                    if not found then
+                      return { fg = "purple" }
+                    end
+                  end
+
+                  -- No LSPs
+                  if #current == 0 then
+                    return { fg = "gray" }
+                  end
+
+                  -- Missing LSPs - check grace period
+                  if #missing > 0 then
+                    if grace_start and (current_time - grace_start) < 3 then
+                      return { fg = "yellow" }
+                    else
+                      return { fg = "red" }
+                    end
+                  end
+
+                  -- All expected LSPs present
+                  if #expected > 0 then
+                    return { fg = "white" }
+                  else
+                    return { fg = "gray" }
+                  end
+                end,
+                icon = " ",
+                separator = {left = ""}
+              }
+            ''
+            ''
+              {
+                "diagnostics",
+                sources = {"nvim_lsp", "nvim_diagnostic", "nvim_diagnostic", "vim_lsp", "coc"},
+                symbols = {error = '󰅙  ', warn = '  ', info = '  ', hint = '󰌵 '},
+                colored = true,
+                update_in_insert = false,
+                always_visible = false,
+                diagnostics_color = {
+                  color_error = { fg = "red" },
+                  color_warn = { fg = "yellow" },
+                  color_info = { fg = "cyan" },
+                },
+              }
+            ''
+          ];
+
+          z = [
+            ''
+              {
+                "",
+                draw_empty = true,
+                separator = { left = "", right = "" }
+              }
+            ''
+            ''
+              {
+                "progress",
+                separator = {left = ""}
+              }
+            ''
+            ''
+              {
+                "fileformat",
+                color = {fg='black'},
+                symbols = {
+                  unix = "", -- e712
+                  dos = "",  -- e70f
+                  mac = "",  -- e711
+                }
+              }
+            ''
+          ];
+        };
       };
 
       ui = {
@@ -428,7 +605,7 @@
           treesitter.enable = true;
           lsp = {
             enable = true; # TODO: Are these settings just equivalent to enable = false?
-            servers = [ ];
+            # servers = [ ];  # TODO: Get based working just from lsp.servers
           };
         };
         rust = {
