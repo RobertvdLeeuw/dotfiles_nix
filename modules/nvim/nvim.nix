@@ -67,12 +67,33 @@
       statusline.lualine = {
         enable = true;
         activeSection = {
+          a = [
+            ''
+              {
+                "mode",
+                icons_enabled = true,
+                color = { gui = "bold" },
+                separator = {
+                  -- left = '▎',
+                  right = ''
+                },
+              }
+            ''
+            ''
+              {
+                "",
+                draw_empty = true,
+                separator = { left = '', right = '' }
+              }
+            ''
+          ];
           b = [
             ''
               {
                 "branch",
-                icon = ' ',
-                -- separator = {left = ''}
+                color = { bg='#9599da', fg='#111111', gui = "bold" },
+                icon = "",
+                separator = {right = ''}
               }
             ''
           ];
@@ -80,8 +101,9 @@
             ''
               {
                 "filename",
+                color = {bg='#111111'},
                 symbols = {modified = ' ', readonly = ' '},
-                separator = {right = ''}
+                -- separator = {right = ''}
               }
             ''
           ];
@@ -89,10 +111,11 @@
           x = [
             ''
               {
-                'searchcount',
+                'searchcount',  -- TODO: Change formatting
                 maxcount = 999,
                 timeout = 30,
-                separator = {left = ''}
+                color = {bg='#111111'},
+                -- separator = {left = ""}
               }
             ''
           ];
@@ -267,7 +290,8 @@
                     return { fg = "white" }
                   end,
                   icon = "",
-                  separator = {left = ""}
+                  color = {bg='#1e1e1e'},
+                  separator = {left = ''}
                 }
               ''
               ''
@@ -283,11 +307,13 @@
                     color_warn = { fg = "yellow" },
                     color_info = { fg = "cyan" },
                   },
+                  color = {bg='#1e1e1e'},
                 }
               ''
             ];
 
           z = [
+            #
             # ''
             #   {
             #     "",
