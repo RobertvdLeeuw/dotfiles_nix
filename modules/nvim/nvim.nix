@@ -91,9 +91,10 @@
             ''
               {
                 "branch",
-                color = { bg='#9599da', fg='#111111', gui = "bold" },
+                -- color = { bg='#b4befe', fg='#111111', gui = "bold" },
+                color = { bg='#111111', fg='#b4befe', gui = "bold" },
                 icon = "",
-                separator = {right = ''}
+                -- separator = {right = ''}
               }
             ''
           ];
