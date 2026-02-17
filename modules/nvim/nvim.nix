@@ -67,9 +67,36 @@
       statusline.lualine = {
         enable = true;
         activeSection = {
-          c = [ ];
+          b = [
+            ''
+              {
+                "branch",
+                icon = ' ',
+                -- separator = {left = ''}
+              }
+            ''
+          ];
+          c = [
+            ''
+              {
+                "filename",
+                symbols = {modified = ' ', readonly = ' '},
+                separator = {right = ''}
+              }
+            ''
+          ];
 
-          x =
+          x = [
+            ''
+              {
+                'searchcount',
+                maxcount = 999,
+                timeout = 30,
+                separator = {left = ''}
+              }
+            ''
+          ];
+          y =
             let
               expected-lsps = ''
                 local expected_lsps = {
@@ -261,30 +288,30 @@
             ];
 
           z = [
-            ''
-              {
-                "",
-                draw_empty = true,
-                separator = { left = "", right = "" }
-              }
-            ''
-            ''
-              {
-                "progress",
-                separator = {left = ""}
-              }
-            ''
-            ''
-              {
-                "fileformat",
-                color = {fg='black'},
-                symbols = {
-                  unix = "", -- e712
-                  dos = "",  -- e70f
-                  mac = "",  -- e711
-                }
-              }
-            ''
+            # ''
+            #   {
+            #     "",
+            #     draw_empty = true,
+            #     separator = { left = "", right = "" }
+            #   }
+            # ''
+            # # ''
+            # #   {
+            # #     "progress",
+            # #     separator = {left = ""}
+            # #   }
+            # # ''
+            # ''
+            #   {
+            #     "fileformat",
+            #     color = {fg='black'},
+            #     symbols = {
+            #       unix = "", -- e712
+            #       dos = "",  -- e70f
+            #       mac = "",  -- e711
+            #     }
+            #   }
+            # ''
           ];
         };
       };
