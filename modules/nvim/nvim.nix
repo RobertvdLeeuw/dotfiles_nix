@@ -9,16 +9,17 @@
 /*
   TODO
   - devcontainer
+    - Fix start, terminal connect
     - open issue
-  - Customize lualine
+    - Re-enable LSPs
+    - Fix opencommit
+      - Give high level notes
   - Agent stuff
-      - How would this mesh with lazygit?
     - CodeCompanion
     - minuet-ai.nvim? Blink AI comp
     - Skills
     - Agents.md?
 
-  - Fix opencommit within devcontainer.
   - Nested language support
   - Change formatting rules
   - LSP signature
@@ -66,6 +67,29 @@
       };
       statusline.lualine = {
         enable = true;
+        setupOpts = {
+          options = {
+            theme = {
+              _type = "lua-inline";
+              expr = ''
+                (function()
+                  local theme = require('lualine.themes.auto')
+                  local bg_color = '#111111'
+
+                  -- Set section c background for all modes
+                  for _, mode in pairs({'normal', 'insert', 'visual', 'replace', 'command', 'inactive'}) do
+                    if theme[mode] and theme[mode].c then
+                      theme[mode].c.bg = bg_color
+                    end
+                  end
+
+                  return theme
+                end)()
+              '';
+            };
+          };
+        };
+
         activeSection = {
           a = [
             ''
@@ -91,7 +115,6 @@
             ''
               {
                 "branch",
-                -- color = { bg='#b4befe', fg='#111111', gui = "bold" },
                 color = { bg='#111111', fg='#b4befe', gui = "bold" },
                 icon = "",
                 -- separator = {right = ''}
@@ -112,9 +135,17 @@
           x = [
             ''
               {
-                'searchcount',  -- TODO: Change formatting
-                maxcount = 999,
-                timeout = 30,
+                'searchcount',
+                 fmt = function(str)  -- TODO: Make autodissappear
+                  local text = str:gsub('[%[%]]', "")
+                  if text == '0/0' then
+                    return "Not found"
+                  else
+                    return text
+                  end
+                end,
+                maxcount = 99,
+                timeout = 10,
                 color = {bg='#111111'},
                 -- separator = {left = ""}
               }
@@ -194,7 +225,7 @@
                     -- Handle missing LSPs with grace period
                     if #missing_lsps > 0 then
                       local current_time = vim.fn.localtime()
-                      local grace_start = vim.b.lsp_grace_start
+                      local grace_start = vim.b.lsp_grace_start  -- TODO: Make table keyed by bufnr
 
                       if not grace_start then
                         vim.b.lsp_grace_start = current_time
@@ -314,31 +345,47 @@
             ];
 
           z = [
-            #
-            # ''
-            #   {
-            #     "",
-            #     draw_empty = true,
-            #     separator = { left = "", right = "" }
-            #   }
-            # ''
-            # # ''
-            # #   {
-            # #     "progress",
-            # #     separator = {left = ""}
-            # #   }
-            # # ''
-            # ''
-            #   {
-            #     "fileformat",
-            #     color = {fg='black'},
-            #     symbols = {
-            #       unix = "", -- e712
-            #       dos = "",  -- e70f
-            #       mac = "",  -- e711
-            #     }
-            #   }
-            # ''
+            ''
+              {
+                function() return " " end,
+                color = function ()
+                  local cli = require('devcontainers.cli')
+                  local manager = require('devcontainers.manager')
+
+                  local workspace_dir = manager.find_workspace_dir()
+
+                  if not workspace_dir then
+                    -- TODO: Check for unexpected container (purple)
+                    return { bg = 'grey', fg = "#1e1e1e"}
+                  end
+
+                  local running = cli.container_is_running(workspace_dir)
+                  -- TODO: Some ping-like command to devcontainer (devcontainer exec echo "test")
+
+                  if not running then
+                    local current_time = vim.fn.localtime()
+                    -- TODO: Skip grace if not the first buffer opened.
+                    local grace_start = vim.b.devcontainer_grace_start
+
+                    if not grace_start then
+                      vim.b.devcontainer_grace_start = current_time
+                      return { bg = 'yellow', fg = "#1e1e1e"}
+                    end
+
+                    if (current_time - grace_start) < 3 then
+                      return { bg = 'yellow', fg = "#1e1e1e"}
+                    end
+
+                    -- TODO: Some logic to make sure it's the right container.
+                    return { bg = 'red', fg = "#1e1e1e"}
+                  end
+
+                  return { bg = 'white', fg = "#1e1e1e"}
+                end,
+                icon = '',
+                separator = {left = ''}
+              }
+            ''
           ];
         };
       };
@@ -1130,11 +1177,6 @@
             "${pkgs.ripgrep}/bin/rg"
             "--files"
             "--hidden"
-            # "--ignore-vcs"
-            # "-g"
-            # "!**/.git/*"
-            #   "\${pkgs.fd}/bin/fd"
-            #   "--type=file"
           ];
         };
       };
@@ -1172,22 +1214,36 @@
 
             winbar.enabled = false;
 
+            on_create = {
+              _type = "lua-inline";
+              expr = ''
+                function(t)
+                  local manager = require("devcontainers.manager")
+                  local cli = require("devcontainers.cli")
+
+                  local workspace_dir = manager.find_workspace_dir()
+                  if cli.container_is_running(workspace_dir) then
+                    t.send("devcontainer exec /bin/bash")
+                  end
+                end
+              '';
+            };
             # Smart shell that auto-targets devcontainers
             shell = {
               _type = "lua-inline";
               expr = ''
                 function()
+                  -- local workspace_dir = require("devcontainers.manager").find_workspace_dir()
+                  -- if not workspace_dir then return vim.o.shell end
 
-                  -- TODO: If open terminal before devcontainer built, goes to host.
-                  local status = require("devcontainer.status").get_status()
-                  local containers = status.running_containers
+                  -- local cli = require('devcontainers.cli')
+                  -- if not cli.container_is_running(workspace_dir) then
+                    -- vim.api.nvim_command('DevcontainersUp')
+                    -- TODO: while not running: sleep with timeout
+                  -- end
 
-                  if #containers > 0 then
-                    local container_id = containers[1].container_id
-                    return string.format("docker exec -it -w /workspace %s /bin/zsh", container_id)
-                  else
-                    return vim.o.shell
-                  end
+                  return vim.o.shell
+                  -- return table.concat(cli.cmd(workspace_dir, 'exec', '/bin/bash'), " ")
                 end
               '';
             };
@@ -1250,7 +1306,6 @@
             # Python - use ruff for comprehensive linting
             python = [ "ruff" ];
 
-            # Lua - use luacheck for static analysis
             lua = [ "luacheck" ];
 
             # Rust - use clippy for advanced linting (beyond LSP)
@@ -1492,31 +1547,31 @@
             })
           '';
         };
-        nvim-dev-container = {
-          # General/main devcontainer plugin
-          package = pkgs.vimUtils.buildVimPlugin {
-            pname = "nvim-dev-container";
-            version = "2026-02-13";
-            src = pkgs.fetchFromGitHub {
-              owner = "RobertvdLeeuw";
-              repo = "nvim-dev-container-premium-edition";
-              rev = "main";
-              hash = "sha256-5zo2Gc3nekawkodj47uN7stXZqGiT1DZdldJFnHNgOc=";
-            };
-          };
-          setup = ''
-            require("devcontainer").setup {
-              autocommands = {
-                init = true,
-                clean = true,
-                update = true,
-              },
-
-              container_runtime = "docker",
-              disable_recursive_config_search = false,
-            }
-          '';
-        };
+        # nvim-dev-container = {
+        #   # General/main devcontainer plugin
+        #   package = pkgs.vimUtils.buildVimPlugin {
+        #     pname = "nvim-dev-container";
+        #     version = "2026-02-13";
+        #     src = pkgs.fetchFromGitHub {
+        #       owner = "RobertvdLeeuw";
+        #       repo = "nvim-dev-container-premium-edition";
+        #       rev = "main";
+        #       hash = "sha256-5zo2Gc3nekawkodj47uN7stXZqGiT1DZdldJFnHNgOc=";
+        #     };
+        #   };
+        #   setup = ''
+        #     require("devcontainer").setup {
+        #       autocommands = {
+        #         init = true,
+        #         clean = true,
+        #         update = true,
+        #       },
+        #
+        #       container_runtime = "docker",
+        #       disable_recursive_config_search = false,
+        #     }
+        #   '';
+        # };
         devcontainers-nvim = {
           # For LSP-in-devcontainer stuff
           package = pkgs.vimUtils.buildVimPlugin {
