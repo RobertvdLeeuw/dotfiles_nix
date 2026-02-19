@@ -4,7 +4,6 @@
     crane.url = "github:ipetkov/crane";
     flake-utils.url = "github:numtide/flake-utils";
   };
-
   outputs =
     {
       self,
@@ -18,23 +17,31 @@
         pkgs = nixpkgs.legacyPackages.${system};
         craneLib = crane.mkLib pkgs;
 
-        workspaces = craneLib.buildPackage {
+        resources = craneLib.buildPackage {
           src = craneLib.cleanCargoSource ./.;
           strictDeps = true;
+
+          nativeBuildInputs = with pkgs; [
+            makeWrapper
+          ];
+
+          postInstall = ''
+            wrapProgram $out/bin/resources \
+              --prefix PATH : ${pkgs.lib.makeBinPath [ pkgs.rocmPackages.rocm-smi ]}
+          '';
         };
       in
       {
-        packages.default = workspaces;
-
+        packages.default = resources;
         apps.default = {
           type = "app";
-          program = "${workspaces}/bin/workspaces";
+          program = "${resources}/bin/resources";
         };
-
         devShells.default = craneLib.devShell {
           packages = with pkgs; [
             rust-analyzer
             clippy
+            rocmPackages.rocm-smi # Also available in dev shell
           ];
         };
       }

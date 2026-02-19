@@ -99,7 +99,7 @@ fn get_gpu_info() -> (i32, i32, i32) {
 fn main() {
     let mut sys = System::new_all();
     sys.refresh_all();
-    
+
     let stdout = io::stdout();
     let mut handle = stdout.lock();
 

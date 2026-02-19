@@ -7,7 +7,6 @@
         # rebuild = "sudo nixos-rebuild build --use-remote-sudo --impure && clear";
         update = "cd /etc/nixos; sudo nix flake update; sudo nixos-rebuild switch --flake --sudo --impure && clear; cd -";
         cnfnix = "cd /etc/nixos && nvim configuration.nix && cd -";
-        cnfnixr = "cd /etc/nixos && nvim README.md && cd -";
         try = "nix-shell -p";
 
         todo = "nvim ~/Documents/todo.md";
@@ -18,13 +17,13 @@
         ga = "git add . && clear";
         gs = "git status";
         gc = "oco";
+        gcm = "git commit -m ";
         gp = "git push && clear";
       };
       shellGlobalAliases = {
-        # man = "wikiman";
         cat = "bat";
         nano = "nvim";
-        surf = "GDK_BACKEND=x11 surf"; # TODO: Better fix for this, surf + xwayland = :()
+        # surf = "GDK_BACKEND=x11 surf"; # TODO: Better fix for this, surf + xwayland = :()
       };
 
       initContent = ''

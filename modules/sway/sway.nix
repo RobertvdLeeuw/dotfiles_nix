@@ -1,14 +1,14 @@
 { config, pkgs, ... }:
 
 {
-	programs = {
+  programs = {
     sway = {
       enable = true;
       wrapperFeatures.gtk = true;
       extraPackages = with pkgs; [
         # Notification daemon  TODO: Don't I just need 1, not both?
         libnotify
-        mako  
+        mako
 
         waybar
 
@@ -29,5 +29,5 @@
         # kdePackages.dolphin
       ];
     };
-	};
+  };
 }

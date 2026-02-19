@@ -41,7 +41,6 @@
     marimo
     # spotdl
     teams
-    unigine-superposition
     gimp
 
     vlc
@@ -50,14 +49,11 @@
     pavucontrol
 
     oterm
-    code-cursor
-    vscode
+    opencode
     devcontainer
-    # atlauncher
+
     prismlauncher
     lutris
-
-    # unstable.scummvm
 
     steam-run
     libtheora # This provides libtheoradec.so.1
@@ -72,8 +68,6 @@
     freetype
 
     p7zip
-
-    opencode
 
     space-cadet-pinball
     # lunar-client  # Minecraft

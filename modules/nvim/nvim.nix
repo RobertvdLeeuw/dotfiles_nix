@@ -20,10 +20,11 @@
     - Skills
     - Agents.md?
 
-  - Nested language support
-  - Change formatting rules
-  - LSP signature
+  - otter.nvim if I ever need LSPs for embedded languages.
+  - Change file formatting rules
   - Borders
+    - gl, gk
+    - autocomp
   - Folding behavior
     - https://github.com/kevinhwang91/nvim-ufo
     - Auto on file open
@@ -69,75 +70,80 @@
         enable = true;
         setupOpts = {
           options = {
-            theme = {
-              _type = "lua-inline";
-              expr = ''
-                (function()
-                  local theme = require('lualine.themes.auto')
-                  local bg_color = '#111111'
+            theme = lib.generators.mkLuaInline /* lua */ ''
+              (function()
+              	local theme = require("lualine.themes.auto")
+              	local bg_color = "#111111"
 
-                  -- Set section c background for all modes
-                  for _, mode in pairs({'normal', 'insert', 'visual', 'replace', 'command', 'inactive'}) do
-                    if theme[mode] and theme[mode].c then
-                      theme[mode].c.bg = bg_color
-                    end
-                  end
+              	-- Set section c background for all modes
+              	for _, mode in pairs({ "normal", "insert", "visual", "replace", "command", "inactive" }) do
+              		if theme[mode] and theme[mode].c then
+              			theme[mode].c.bg = bg_color
+              		end
+              	end
 
-                  return theme
-                end)()
-              '';
-            };
+              	return theme
+              end)()
+            '';
           };
         };
 
         activeSection = {
           a = [
-            ''
+            /* lua */ ''
               {
                 "mode",
                 icons_enabled = true,
                 color = { gui = "bold" },
                 separator = {
-                  -- left = '▎',
-                  right = ''
+                  right = ''
                 },
-              }
-            ''
-            ''
-              {
-                "",
-                draw_empty = true,
-                separator = { left = '', right = '' }
               }
             ''
           ];
           b = [
-            ''
+            /* lua */ ''
               {
                 "branch",
                 color = { bg='#111111', fg='#b4befe', gui = "bold" },
                 icon = "",
-                -- separator = {right = ''}
+              }
+            ''
+            /* lua */ ''
+              {
+                "",
+                draw_empty = true,
+                color = { bg='#333333' },
+                separator = {left = '', right = ""}
               }
             ''
           ];
           c = [
-            ''
+            /* lua */ ''
               {
                 "filename",
                 color = {bg='#111111'},
                 symbols = {modified = ' ', readonly = ' '},
-                -- separator = {right = ''}
               }
             ''
           ];
 
           x = [
-            ''
+            /* lua */ ''
               {
                 'searchcount',
-                 fmt = function(str)  -- TODO: Make autodissappear
+                fmt = function(str)
+                  if not vim.g.searchcount_timestamp then
+                    vim.g.searchcount_timestamp = vim.loop.now()
+                  end
+
+                  local elapsed = vim.loop.now() - vim.g.searchcount_timestamp
+                  if elapsed > 3000 then
+                    return ""  -- Auto disappearing
+                  end
+
                   local text = str:gsub('[%[%]]', "")
+
                   if text == '0/0' then
                     return "Not found"
                   else
@@ -147,26 +153,33 @@
                 maxcount = 99,
                 timeout = 10,
                 color = {bg='#111111'},
-                -- separator = {left = ""}
               }
             ''
           ];
           y =
             let
-              expected-lsps = ''
+              expected-lsps = /* lua */ ''
                 local expected_lsps = {
-                  bash = { "bash-ls" },
-                  lua = { "lua-language-server" },
-                  python = { "ty", "basedpyright" },
-                  rust = { "rust-analyzer" },
-                  sql = { "sqls" },
-                  json = { "jsonls" },
-                  nix = { "nil" }
+                	bash = { "bash-ls" },
+                	lua = { "lua-language-server" },
+                	python = { "ty", "basedpyright" },
+                	rust = { "rust-analyzer" },
+                	sql = { "sqls" },
+                	json = { "jsonls" },
+                	nix = { "nil" },
                 }
               '';
             in
             [
+              /* lua */ ''
+                {
+                "",
+                  draw_empty = true,
+                  color = { bg='#333333' },
+                  separator = {left = "", right = ""}
+                }
               ''
+              /* lua */ ''
                 {
                   function()
                     local buf_ft = vim.bo.filetype
@@ -204,7 +217,8 @@
                     end
 
                     if #unexpected_lsps > 0 then
-                      return " " .. table.concat(unexpected_lsps, ",")  -- All unexpected LSPs, purple
+                      -- All unexpected LSPs, purple
+                      return " " .. table.concat(unexpected_lsps, ",") .. "  "
                     end
 
                     -- Check for missing expected LSPs
@@ -230,14 +244,13 @@
                       if not grace_start then
                         vim.b.lsp_grace_start = current_time
                         return " "  -- Yellow/grace: just icon, no text
-                        -- returning "" results in lsp icon not being rendered
                       end
 
                       if (current_time - grace_start) < 3 then
                         return " "  -- Yellow/grace: just icon, no text
                       else
                         -- Grace period over - show all missing LSPs in red
-                        return " " .. table.concat(missing_lsps, ",")
+                        return " " .. table.concat(missing_lsps, ",") .. "  "
                       end
                     else
                       -- Reset grace period if no missing LSPs
@@ -252,7 +265,7 @@
                     local excluded_buf_ft = { toggleterm = true, NvimTree = true, ["neo-tree"] = true, TelescopePrompt = true }
 
                     if excluded_buf_ft[buf_ft] then
-                      return { fg = "white" }
+                      return { bg='#111111', fg = "white" }
                     end
 
                     ${expected-lsps}
@@ -284,7 +297,7 @@
                     end
 
                     if has_unexpected then
-                      return { fg = "purple" }
+                      return { bg='#111111', fg = "purple" }
                     end
 
                     -- Check for missing LSPs
@@ -307,30 +320,30 @@
                       local grace_start = vim.b.lsp_grace_start
 
                       if grace_start and (current_time - grace_start) < 3 then
-                        return { fg = "yellow" }
+                        return { bg='#111111', fg = "yellow" }
                       else
-                        return { fg = "red" }
+                        return { bg='#111111', fg = "red" }
                       end
                     end
 
                     -- No LSPs
                     if #current_lsps == 0 then
-                      return { fg = "gray" }
+                      return { bg='#111111', fg = "gray" }
                     end
 
                     -- All good
-                    return { fg = "white" }
+                    return { bg='#111111', fg = "white" }
                   end,
+                  padding = { left = 1, right = 0 },
                   icon = "",
-                  color = {bg='#1e1e1e'},
-                  separator = {left = ''}
                 }
               ''
-              ''
+              /* lua */ ''
                 {
                   "diagnostics",
+                  -- TODO: Do these get filtered down by my lsp settings?
                   sources = {"nvim_lsp", "nvim_diagnostic", "nvim_diagnostic", "vim_lsp", "coc"},
-                  symbols = {error = '󰅙  ', warn = '  ', info = '  ', hint = '󰌵 '},
+                  symbols = {error = '󰅙 ', warn = ' ', info = ' ', hint = '󰌵'},
                   colored = true,
                   update_in_insert = false,
                   always_visible = false,
@@ -339,13 +352,15 @@
                     color_warn = { fg = "yellow" },
                     color_info = { fg = "cyan" },
                   },
-                  color = {bg='#1e1e1e'},
+                  color = {bg='#11111'},
+                  padding = { left = 0, right = 1 },
+                  -- color = {bg='#1e1e1e'},
                 }
               ''
             ];
 
           z = [
-            ''
+            /* lua */ ''
               {
                 function() return " " end,
                 color = function ()
@@ -382,8 +397,9 @@
 
                   return { bg = 'white', fg = "#1e1e1e"}
                 end,
+                padding = { left = 1, right = 0 },
                 icon = '',
-                separator = {left = ''}
+                separator = {left = ''}
               }
             ''
           ];
@@ -404,6 +420,14 @@
       };
 
       keymaps = [
+        {
+          key = "Q";
+          mode = "n";
+          silent = true;
+          action = ":Telescope cmdline<CR>";
+          noremap = true;
+          desc = "Show references in glance menu";
+        }
         {
           key = "gD";
           mode = "n";
@@ -432,10 +456,13 @@
         }
         {
           key = "<A-a>";
-          mode = "n";
+          mode = [
+            "i"
+            "n"
+          ];
           lua = true;
           silent = true;
-          action = ''
+          action = /* lua */ ''
             function()
               local codecompanion = require("codecompanion")
               local last_chat = codecompanion.last_chat()
@@ -444,6 +471,8 @@
               if last_chat and not vim.tbl_isempty(last_chat) and last_chat.ui:is_visible() then
                 -- Remember if we were in fullscreen before closing
                 vim.g.codecompanion_was_fullscreen = vim.t.codecompanion_maximized or false
+
+                -- TODO: Make this re-open last chat, create some other way to refresh (ALt+r?)
                 -- Close the chat
                 codecompanion.close_last_chat()
                 -- Clear the current fullscreen state since window is closed
@@ -465,10 +494,13 @@
         }
         {
           key = "<A-f>";
-          mode = "n";
+          mode = [
+            "i"
+            "n"
+          ];
           lua = true;
           silent = true;
-          action = ''
+          action = /* lua */ ''
             function()
               local current_win = vim.api.nvim_get_current_win()
               local buf = vim.api.nvim_win_get_buf(current_win)
@@ -495,9 +527,12 @@
         }
         {
           key = "<A-b>";
-          mode = "n";
+          mode = [
+            "i"
+            "n"
+          ];
           lua = true;
-          action = ''
+          action = /* lua */ ''
             function()
               local current_buf = vim.api.nvim_get_current_buf()
               local alt_buf = vim.g.alternate_file_buffer
@@ -523,7 +558,7 @@
           key = "<C-e>";
           mode = "n";
           lua = true;
-          action = ''
+          action = /* lua */ ''
             function()
               if vim.fn.expand("%") ~= "" then
                 vim.cmd("w")
@@ -535,17 +570,6 @@
           noremap = true;
           desc = "Save current file and open Yazi";
         }
-        # {
-        #   key = "<C-f>";
-        #   mode = [
-        #     "n"
-        #     "v"
-        #   ];
-        #   action = ":Telescope find_files hidden=true";
-        #   silent = true;
-        #   noremap = true;
-        #   desc = "Copy to system clipboard";
-        # }
         {
           key = "<C-y>";
           mode = [
@@ -571,11 +595,24 @@
           desc = "Show line diagnostics";
         }
         {
-          key = "<C-p>";
+          key = "gk";
           mode = "n";
           lua = true;
           silent = true;
           action = ''
+            function()
+              vim.lsp.buf.hover()
+            end
+          '';
+          noremap = true;
+          desc = "Show line diagnostics";
+        }
+        {
+          key = "<C-p>";
+          mode = "n";
+          lua = true;
+          silent = true;
+          action = /* lua */ ''
             function()
               require('telescope').extensions.projects.projects{}
             end
@@ -583,36 +620,73 @@
           noremap = true;
           desc = "Open project picker";
         }
+        {
+          key = "n";
+          mode = "n";
+          lua = true;
+          action = ''
+            function()
+              vim.g.searchcount_timestamp = vim.loop.now()
+              vim.cmd.normal({ bang = true, args = {'n'} })
+            end
+          '';
+          silent = true;
+          desc = "Next match (reset searchcount timer)";
+        }
+        {
+          key = "N";
+          mode = "n";
+          lua = true;
+          action = ''
+            function()
+              vim.g.searchcount_timestamp = vim.loop.now()
+              vim.cmd.normal({ bang = true, args = {'N'} })
+            end
+          '';
+          silent = true;
+          desc = "Previous match (reset searchcount timer)";
+        }
       ];
 
       autocmds = [
         {
           event = [ "BufEnter" ];
           pattern = [ "*" ];
-          callback = {
-            _type = "lua-inline";
-            expr = ''
-              function()
-                local current_buf = vim.api.nvim_get_current_buf()
-                local prev_buf = vim.g.current_file_buffer
+          callback = lib.generators.mkLuaInline /* lua */ ''
+            function()
+              local current_buf = vim.api.nvim_get_current_buf()
+              local prev_buf = vim.g.current_file_buffer
 
-                -- Only track file buffers
-                if vim.fn.expand("%") ~= "" and vim.bo.buftype == "" then
-                  -- Set previous file buffer as alternate
-                  if prev_buf and
-                     prev_buf ~= current_buf and
-                     vim.api.nvim_buf_is_valid(prev_buf) and
-                     vim.api.nvim_buf_get_name(prev_buf) ~= "" and
-                     vim.bo[prev_buf].buftype == "" then
-                    vim.g.alternate_file_buffer = prev_buf
-                  end
-                  -- Update current file buffer tracker
-                  vim.g.current_file_buffer = current_buf
+              -- Only track file buffers
+              if vim.fn.expand("%") ~= "" and vim.bo.buftype == "" then
+                -- Set previous file buffer as alternate
+                if prev_buf and
+                   prev_buf ~= current_buf and
+                   vim.api.nvim_buf_is_valid(prev_buf) and
+                   vim.api.nvim_buf_get_name(prev_buf) ~= "" and
+                   vim.bo[prev_buf].buftype == "" then
+                  vim.g.alternate_file_buffer = prev_buf
                 end
+                -- Update current file buffer tracker
+                vim.g.current_file_buffer = current_buf
               end
-            '';
-          };
+            end
+          '';
           desc = "Track file buffer changes for Alt+b alternation";
+        }
+        {
+          event = [ "CmdlineLeave" ];
+          pattern = [
+            "/"
+            "?"
+            ":"
+          ];
+          callback = lib.generators.mkLuaInline /* lua */ ''
+                        function()
+                          vim.g.searchcount_timestamp = vim.loop.now()
+            	    end
+          '';
+          desc = "Disable searchcount in lualine upon new command";
         }
         {
           event = [ "BufReadPost" ];
@@ -659,14 +733,12 @@
             python = [
               "isort"
               "ruff_format"
+              "injected"
             ];
 
             lua = [ "stylua" ];
 
-            rust = {
-              _type = "lua-inline";
-              expr = ''{ "rustfmt", lsp_format = "fallback" }'';
-            };
+            rust = lib.generators.mkLuaInline ''{ "rustfmt", lsp_format = "fallback" }'';
 
             bash = [ "shfmt" ];
             sh = [ "shfmt" ];
@@ -674,9 +746,15 @@
               "prettier"
               "jq"
             ];
-            nix = [ "nixfmt" ];
+            nix = [
+              "nixfmt"
+              "injected"
+            ];
             sql = [ "sqlfmt" ];
-            markdown = [ "prettier" ];
+            markdown = [
+              "prettier"
+              "injected"
+            ];
 
             # Fallback
             "*" = [ "trim_whitespace" ];
@@ -713,18 +791,15 @@
           };
 
           # Format on save configuration
-          format_on_save = {
-            _type = "lua-inline";
-            expr = ''
-              function()
-                if not vim.g.formatsave or vim.b.disableFormatSave then
-                  return
-                else
-                  return { lsp_format = "fallback", timeout_ms = 1000 }
-                end
+          format_on_save = lib.generators.mkLuaInline /* lua */ ''
+            function()
+              if not vim.g.formatsave or vim.b.disableFormatSave then
+                return
+              else
+                return { lsp_format = "fallback", timeout_ms = 1000 }
               end
-            '';
-          };
+            end
+          '';
 
           # Notify settings
           notify_on_error = true;
@@ -832,177 +907,179 @@
 
             settings.ty = {
               configuration = {
-                rules = {
-                  _type = "lua-inline";
-                  expr = ''{ ["unresolved-reference"] = "ignore" }'';
-                };
+                rules = lib.generators.mkLuaInline ''{ ["unresolved-reference"] = "ignore" }'';
               };
             };
           };
         };
       };
 
-      luaConfigPost = ''
-          -- TODO: Find better place for this diagnostics merging.
-          -- Enhanced diagnostic merger that survives file saves
-          local function setup_diagnostic_merger()
-          local orig_virtual_text_handler = vim.diagnostic.handlers.virtual_text
-          local merge_ns = vim.api.nvim_create_namespace("diagnostic_merger")
+      luaConfigPost = /* lua */ ''
+        -- Disables [index/total] search in cmdline.
+        vim.opt.shortmess:append("S")
 
-          local function merge_diagnostics(diagnostics)
-            local merged = {}
-            local seen = {}
+        -- TODO: Find better place for this diagnostics merging.
+        -- Enhanced diagnostic merger that survives file saves
+        local function setup_diagnostic_merger()
+        	local orig_virtual_text_handler = vim.diagnostic.handlers.virtual_text
+        	local merge_ns = vim.api.nvim_create_namespace("diagnostic_merger")
 
-            -- Sort diagnostics consistently: by line, column, severity, then source
-            table.sort(diagnostics, function(a, b)
-              if a.lnum ~= b.lnum then
-                return a.lnum < b.lnum
-              end
-              if a.col ~= b.col then
-                return a.col < b.col
-              end
-              if a.severity ~= b.severity then
-                return a.severity < b.severity  -- Lower numbers = higher severity
-              end
-              -- Tie-breaker: source name
-              local source_a = a.source or ""
-              local source_b = b.source or ""
-              return source_a < source_b
-            end)
+        	local function merge_diagnostics(diagnostics)
+        		local merged = {}
+        		local seen = {}
 
-            for _, diag in ipairs(diagnostics) do
-              local key = string.format("%d:%d:%s", diag.lnum, diag.col, diag.message:sub(1, 50))
+        		-- Sort diagnostics consistently: by line, column, severity, then source
+        		table.sort(diagnostics, function(a, b)
+        			if a.lnum ~= b.lnum then
+        				return a.lnum < b.lnum
+        			end
+        			if a.col ~= b.col then
+        				return a.col < b.col
+        			end
+        			if a.severity ~= b.severity then
+        				return a.severity < b.severity -- Lower numbers = higher severity
+        			end
+        			-- Tie-breaker: source name
+        			local source_a = a.source or ""
+        			local source_b = b.source or ""
+        			return source_a < source_b
+        		end)
 
-              if not seen[key] then
-                seen[key] = true
-                table.insert(merged, diag)
-              end
-            end
+        		for _, diag in ipairs(diagnostics) do
+        			local key = string.format("%d:%d:%s", diag.lnum, diag.col, diag.message:sub(1, 50))
 
-            return merged
-          end
+        			if not seen[key] then
+        				seen[key] = true
+        				table.insert(merged, diag)
+        			end
+        		end
 
-          local function refresh_merged_diagnostics(args)
-            local bufnr = args.buf
-            if not bufnr or not vim.api.nvim_buf_is_valid(bufnr) then
-              return
-            end
+        		return merged
+        	end
 
-            -- Get all current diagnostics for this buffer
-            local all_diagnostics = vim.diagnostic.get(bufnr)
-            local merged_diagnostics = merge_diagnostics(all_diagnostics)
+        	local function refresh_merged_diagnostics(args)
+        		local bufnr = args.buf
+        		if not bufnr or not vim.api.nvim_buf_is_valid(bufnr) then
+        			return
+        		end
 
-            -- Clear existing virtual text in our namespace
-            orig_virtual_text_handler.hide(merge_ns, bufnr)
+        		-- Get all current diagnostics for this buffer
+        		local all_diagnostics = vim.diagnostic.get(bufnr)
+        		local merged_diagnostics = merge_diagnostics(all_diagnostics)
 
-            -- Show merged diagnostics if we have any
-            if #merged_diagnostics > 0 then
-              -- Pass the full diagnostic config - the original handler extracts virtual_text from it
-              local full_config = vim.diagnostic.config()
-              orig_virtual_text_handler.show(merge_ns, bufnr, merged_diagnostics, full_config)
-            end
-          end
+        		-- Clear existing virtual text in our namespace
+        		orig_virtual_text_handler.hide(merge_ns, bufnr)
 
-          -- Override the virtual text handler to prevent individual LSPs from showing diagnostics
-          vim.diagnostic.handlers.virtual_text = {
-            show = function(namespace, bufnr, diagnostics, opts)
-              -- Only show if this is our merged namespace, ignore individual LSP namespaces
-              if namespace == merge_ns then
-                orig_virtual_text_handler.show(namespace, bufnr, diagnostics, opts)
-              end
-            end,
+        		-- Show merged diagnostics if we have any
+        		if #merged_diagnostics > 0 then
+        			-- Pass the full diagnostic config - the original handler extracts virtual_text from it
+        			local full_config = vim.diagnostic.config()
+        			orig_virtual_text_handler.show(merge_ns, bufnr, merged_diagnostics, full_config)
+        		end
+        	end
 
-            hide = function(namespace, bufnr)
-              if namespace == merge_ns then
-                orig_virtual_text_handler.hide(namespace, bufnr)
-              end
-            end
-          }
+        	-- Override the virtual text handler to prevent individual LSPs from showing diagnostics
+        	vim.diagnostic.handlers.virtual_text = {
+        		show = function(namespace, bufnr, diagnostics, opts)
+        			-- Only show if this is our merged namespace, ignore individual LSP namespaces
+        			if namespace == merge_ns then
+        				orig_virtual_text_handler.show(namespace, bufnr, diagnostics, opts)
+        			end
+        		end,
 
-          -- Re-merge diagnostics whenever they change from any source
-          vim.api.nvim_create_autocmd("DiagnosticChanged", {
-            callback = refresh_merged_diagnostics,
-            desc = "Refresh merged diagnostic virtual text"
-          })
+        		hide = function(namespace, bufnr)
+        			if namespace == merge_ns then
+        				orig_virtual_text_handler.hide(namespace, bufnr)
+        			end
+        		end,
+        	}
 
-          -- Also refresh on initial buffer diagnostics
-          vim.api.nvim_create_autocmd("LspAttach", {
-            callback = function(args)
-              vim.defer_fn(function()
-                refresh_merged_diagnostics(args)
-              end, 100)
-            end,
-          })
+        	-- Re-merge diagnostics whenever they change from any source
+        	vim.api.nvim_create_autocmd("DiagnosticChanged", {
+        		callback = refresh_merged_diagnostics,
+        		desc = "Refresh merged diagnostic virtual text",
+        	})
+
+        	-- Also refresh on initial buffer diagnostics
+        	vim.api.nvim_create_autocmd("LspAttach", {
+        		callback = function(args)
+        			vim.defer_fn(function()
+        				refresh_merged_diagnostics(args)
+        			end, 100)
+        		end,
+        	})
         end
 
         -- Initialize the merger
         vim.defer_fn(setup_diagnostic_merger, 50)
 
         -- LSP DEVCONTAINER STUFF
-        vim.lsp.set_log_level('debug')
+        vim.lsp.set_log_level("debug")
 
         -- Force CodeCompanion setup if it hasn't been initialized
         vim.defer_fn(function()
-          if not pcall(function() return require("codecompanion.config") end) then
-            require("codecompanion").setup({
-              adapters = {
-                ollama = function()
-                  return require("codecompanion.adapters").extend("ollama", {
-                    name = "ollama",
-                    env = {
-                      url = "http://localhost:11434",
-                    },
-                    headers = {
-                      ["Content-Type"] = "application/json",
-                    },
-                    parameters = {
-                      sync = true,
-                    },
-                    schema = {
-                      model = {
-                        default = "qwen2.5-coder:7b-instruct",
-                      },
-                    },
-                  })
-                end,
-              },
-              strategies = {
-                chat = {
-                  adapter = "ollama",
-                  keymaps = {
-                    options = {
-                      modes = { "n" },
-                      silent = true,
-                      noremap = true,
-                    },
-                    ["<A-b>"] = "close",
-                  },
-                },
-                inline = {
-                  adapter = "ollama",
-                },
-              },
-              display = {
-                chat = {
-                  start_in_insert_mode = true,
-                  auto_scroll = true,
-                  show_settings = true,
-                  show_token_count = true,
-                  intro_message = "CodeCompanion with OpenCode ✨ Press ? for help, <A-a> to close",
-                },
-                action_palette = {
-                  provider = "telescope",
-                  width = 120,
-                  height = 15,
-                },
-              },
-              opts = {
-                log_level = "INFO",
-                send_code = true,
-                language = "English",
-              },
-            })
-          end
+        	if not pcall(function()
+        		return require("codecompanion.config")
+        	end) then
+        		require("codecompanion").setup({
+        			adapters = {
+        				ollama = function()
+        					return require("codecompanion.adapters").extend("ollama", {
+        						name = "ollama",
+        						env = {
+        							url = "http://localhost:11434",
+        						},
+        						headers = {
+        							["Content-Type"] = "application/json",
+        						},
+        						parameters = {
+        							sync = true,
+        						},
+        						schema = {
+        							model = {
+        								default = "qwen2.5-coder:7b-instruct",
+        							},
+        						},
+        					})
+        				end,
+        			},
+        			strategies = {
+        				chat = {
+        					adapter = "ollama",
+        					keymaps = {
+        						options = {
+        							modes = { "n" },
+        							silent = true,
+        							noremap = true,
+        						},
+        						["<A-b>"] = "close",
+        					},
+        				},
+        				inline = {
+        					adapter = "ollama",
+        				},
+        			},
+        			display = {
+        				chat = {
+        					start_in_insert_mode = true,
+        					auto_scroll = true,
+        					show_settings = true,
+        					show_token_count = true,
+        					intro_message = "CodeCompanion with OpenCode ✨ Press ? for help, <A-a> to close",
+        				},
+        				action_palette = {
+        					provider = "telescope",
+        					width = 120,
+        					height = 15,
+        				},
+        			},
+        			opts = {
+        				log_level = "INFO",
+        				send_code = true,
+        				language = "English",
+        			},
+        		})
+        	end
         end, 100)
 
         -- Start CodeCompanion on fullscreen.
@@ -1045,33 +1122,24 @@
 
                 components = {
                   kind_icon = {
-                    highlight = {
-                      _type = "lua-inline";
-                      expr = ''
-                        function(ctx)
-                          return require("colorful-menu").blink_components_highlight(ctx)
-                        end
-                      '';
-                    };
+                    highlight = lib.generators.mkLuaInline ''
+                      function(ctx)
+                        return require("colorful-menu").blink_components_highlight(ctx)
+                      end
+                    '';
                   };
 
                   label = {
-                    text = {
-                      _type = "lua-inline";
-                      expr = ''
-                        function(ctx)
-                          return require("colorful-menu").blink_components_text(ctx)
-                        end
-                      '';
-                    };
-                    highlight = {
-                      _type = "lua-inline";
-                      expr = ''
-                        function(ctx)
-                          return require("colorful-menu").blink_components_highlight(ctx)
-                        end
-                      '';
-                    };
+                    text = lib.generators.mkLuaInline ''
+                      function(ctx)
+                        return require("colorful-menu").blink_components_text(ctx)
+                      end
+                    '';
+                    highlight = lib.generators.mkLuaInline ''
+                      function(ctx)
+                        return require("colorful-menu").blink_components_highlight(ctx)
+                      end
+                    '';
                   };
                 };
               };
@@ -1091,8 +1159,8 @@
                 direction_priority = {
                   menu_north = [
                     "e"
-                    "n"
                     "s"
+                    "n"
                   ];
                   menu_south = [
                     "e"
@@ -1135,18 +1203,15 @@
           {
             name = "projects";
             packages = [ pkgs.vimPlugins.project-nvim ];
-            setup = {
-              _type = "lua-inline";
-              expr = ''
-                {
-                  -- Disable all default telescope keymaps for project picker
-                  mappings = {
-                    i = {},
-                    n = {},
-                  },
-                }
-              '';
-            };
+            setup = lib.generators.mkLuaInline ''
+              {
+                -- Disable all default telescope keymaps for project picker
+                mappings = {
+                  i = {},
+                  n = {},
+                },
+              }
+            '';
           }
         ];
 
@@ -1168,9 +1233,12 @@
               "--hidden"
               # "--no-ignore"
             ];
-            mappings.i = {
-              _type = "lua-inline";
-              expr = ''{["<esc>"] = require("telescope.actions").close}'';
+            mappings = {
+              i = lib.generators.mkLuaInline /* lua */ ''
+                {["<esc>"] = require("telescope.actions").close,
+                 ["<A-j>"] = require("telescope.actions").move_selection_next,
+                 ["<A-k>"] = require("telescope.actions").move_selection_previous}
+              '';
             };
           };
           pickers.find_files.find_command = [
@@ -1207,46 +1275,37 @@
           mappings.open = "<C-Space>";
           setupOpts = {
             direction = "horizontal";
-            size = {
-              _type = "lua-inline";
-              expr = "function(term) return (10 + vim.o.lines / 4) end";
-            };
+            size = lib.generators.mkLuaInline "function(term) return (10 + vim.o.lines / 4) end";
 
             winbar.enabled = false;
 
-            on_create = {
-              _type = "lua-inline";
-              expr = ''
-                function(t)
-                  local manager = require("devcontainers.manager")
-                  local cli = require("devcontainers.cli")
+            on_create = lib.generators.mkLuaInline /* lua */ ''
+              function(t)
+                local manager = require("devcontainers.manager")
+                local cli = require("devcontainers.cli")
 
-                  local workspace_dir = manager.find_workspace_dir()
-                  if cli.container_is_running(workspace_dir) then
-                    t.send("devcontainer exec /bin/bash")
-                  end
+                local workspace_dir = manager.find_workspace_dir()
+                if cli.container_is_running(workspace_dir) then
+                  t.send("devcontainer exec /bin/bash")
                 end
-              '';
-            };
+              end
+            '';
             # Smart shell that auto-targets devcontainers
-            shell = {
-              _type = "lua-inline";
-              expr = ''
-                function()
-                  -- local workspace_dir = require("devcontainers.manager").find_workspace_dir()
-                  -- if not workspace_dir then return vim.o.shell end
+            shell = lib.generators.mkLuaInline /* lua */ ''
+              function()
+                -- local workspace_dir = require("devcontainers.manager").find_workspace_dir()
+                -- if not workspace_dir then return vim.o.shell end
 
-                  -- local cli = require('devcontainers.cli')
-                  -- if not cli.container_is_running(workspace_dir) then
-                    -- vim.api.nvim_command('DevcontainersUp')
-                    -- TODO: while not running: sleep with timeout
-                  -- end
+                -- local cli = require('devcontainers.cli')
+                -- if not cli.container_is_running(workspace_dir) then
+                  -- vim.api.nvim_command('DevcontainersUp')
+                  -- TODO: while not running: sleep with timeout
+                -- end
 
-                  return vim.o.shell
-                  -- return table.concat(cli.cmd(workspace_dir, 'exec', '/bin/bash'), " ")
-                end
-              '';
-            };
+                return vim.o.shell
+                -- return table.concat(cli.cmd(workspace_dir, 'exec', '/bin/bash'), " ")
+              end
+            '';
           };
         };
       };
@@ -1270,14 +1329,11 @@
           virtual_text = {
             spacing = 4;
             prefix = "■";
-            format = {
-              _type = "lua-inline";
-              expr = ''
-                function(diagnostic)
-                  return diagnostic.message
-                end
-              '';
-            };
+            format = lib.generators.mkLuaInline ''
+              function(diagnostic)
+                return diagnostic.message
+              end
+            '';
           };
 
           signs = false;
@@ -1354,10 +1410,7 @@
                 "--no-cache"
                 "--exit-zero"
                 "--stdin-filename"
-                {
-                  _type = "lua-inline";
-                  expr = "vim.api.nvim_buf_get_name(0)";
-                }
+                (lib.generators.mkLuaInline "vim.api.nvim_buf_get_name(0)")
                 "-"
               ];
             };
@@ -1480,70 +1533,70 @@
       extraPlugins = {
         glance-nvim = {
           package = pkgs.vimPlugins.glance-nvim;
-          setup = ''
-            local glance = require('glance')
+          setup = /* lua */ ''
+            local glance = require("glance")
             local actions = glance.actions
 
             glance.setup({
-              height = 18, -- Height of the floating window
-              zindex = 45, -- Z-index for the window
+            	height = 18, -- Height of the floating window
+            	zindex = 45, -- Z-index for the window
 
-              -- Position the window near cursor (similar to completion menu)
-              preview_win_opts = {
-                cursorline = true,
-                number = true,
-                wrap = true,
-              },
+            	-- Position the window near cursor (similar to completion menu)
+            	preview_win_opts = {
+            		cursorline = true,
+            		number = true,
+            		wrap = true,
+            	},
 
-              hooks = {
-                before_open = function(results, open, jump, method)
-                  local uri = vim.uri_from_bufnr(0)
-                  if #results == 1 then
-                    -- If only one result, jump directly instead of opening menu
-                    jump(results[1])
-                    return
-                  end
-                  open(results)
-                end,
-              },
+            	hooks = {
+            		before_open = function(results, open, jump, method)
+            			local uri = vim.uri_from_bufnr(0)
+            			if #results == 1 then
+            				-- If only one result, jump directly instead of opening menu
+            				jump(results[1])
+            				return
+            			end
+            			open(results)
+            		end,
+            	},
 
-              list = {
-                position = 'right', -- Position relative to main window
-                width = 0.33, -- Width as percentage of screen
-              },
+            	list = {
+            		position = "right", -- Position relative to main window
+            		width = 0.33, -- Width as percentage of screen
+            	},
 
-              -- Customize appearance to match your blink-cmp style
-              theme = {
-                enable = true,
-                mode = 'auto',
-              },
+            	-- Customize appearance to match your blink-cmp style
+            	theme = {
+            		enable = true,
+            		mode = "auto",
+            	},
 
-              -- Configure the floating window border
-              border = {
-                enable = true,
-                style = 'single', -- Match your LSP border style
-              },
+            	-- Configure the floating window border
+            	border = {
+            		enable = true,
+            		style = "single", -- Match your LSP border style
+            	},
 
-              -- Key mappings within the glance window
-              mappings = {
-                list = {
-                  ['<A-j>'] = actions.next,      -- Match your blink-cmp navigation
-                  ['<A-k>'] = actions.previous,  -- Match your blink-cmp navigation
-                  ['<Tab>'] = actions.jump,       -- Match your blink-cmp confirm
-                  ['<CR>'] = actions.jump,
-                  ['<Esc>'] = actions.close,
-                  ['q'] = actions.close,
-                },
+            	-- Key mappings within the glance window
+            	mappings = {
+            		list = {
+            			["<A-j>"] = actions.next, -- Match your blink-cmp navigation
+            			["<A-k>"] = actions.previous, -- Match your blink-cmp navigation
+            			["<Tab>"] = actions.jump, -- Match your blink-cmp confirm
+            			["<CR>"] = actions.jump,
+            			["<Esc>"] = actions.close,
+            			["q"] = actions.close,
+            		},
 
-                preview = {
-                  ['<A-j>'] = actions.next,      -- Match your blink-cmp navigation
-                  ['<A-k>'] = actions.previous,  -- Match your blink-cmp navigation
-                  ['<Tab>'] = actions.jump,       -- Match your blink-cmp confirm
-                  ['<CR>'] = actions.jump,
-                  ['<Esc>'] = actions.close,
-                  ['q'] = actions.close,
-                },
-              },
+            		preview = {
+            			["<A-j>"] = actions.next, -- Match your blink-cmp navigation
+            			["<A-k>"] = actions.previous, -- Match your blink-cmp navigation
+            			["<Tab>"] = actions.jump, -- Match your blink-cmp confirm
+            			["<CR>"] = actions.jump,
+            			["<Esc>"] = actions.close,
+            			["q"] = actions.close,
+            		},
+            	},
             })
           '';
         };
@@ -1616,6 +1669,23 @@
             require('netman')
           '';
         };
+        nvim-luapad = {
+          package = pkgs.vimUtils.buildVimPlugin {
+            pname = "rafcamlet";
+            version = "0.3.1";
+            src = pkgs.fetchFromGitHub {
+              owner = "rafcamlet";
+              repo = "nvim-luapad";
+              rev = "v0.3.1";
+              hash = "sha256-B0LG7EUyyXyg6N5BWijMWBNtzeF51Cd9m0gzZ437Huc=";
+            };
+
+            doCheck = false;
+          };
+          setup = ''
+            require('luapad').setup()
+          '';
+        };
       };
 
       extraPackages = [
@@ -1628,7 +1698,7 @@
         pkgs.shfmt # Shell/Bash
         pkgs.nodePackages.prettier # JSON, Markdown
         pkgs.jq # JSON fallback
-        pkgs.nixfmt-rfc-style # Nix
+        pkgs.nixfmt # Nix
         pkgs.ruff # Python (includes ruff_format and ruff linter)
         pkgs.python311Packages.isort # Python import sorting
         pkgs.python313Packages.sqlfmt # SQL

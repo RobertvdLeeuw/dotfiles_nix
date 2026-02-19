@@ -9,7 +9,7 @@
     enable = true;
     wrapperFeatures.gtk = true;
 
-    # Already installed via conf (for extraPackages), this is jsut for conf.
+    # Already installed via conf (for extraPackages), this is just for conf.
     package = null;
 
     config = {
