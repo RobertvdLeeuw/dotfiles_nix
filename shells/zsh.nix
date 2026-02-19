@@ -86,10 +86,10 @@
           # If not in current directory, cd there first
           if [[ "$devcontainer_dir" != "$PWD" ]]; then
             cd "$devcontainer_dir"
-            devcontainer exec /bin/bash
+            devcontainer exec /bin/zsh
             cd -
           else
-            devcontainer exec /bin/bash
+            devcontainer exec /bin/zsh
           fi
         }
 

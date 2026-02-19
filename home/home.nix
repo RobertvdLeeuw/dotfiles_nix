@@ -123,6 +123,9 @@
   #
   #  /etc/profiles/per-user/robert/etc/profile.d/hm-session-vars.sh
   #
+  home.sessionVariables = {
+    BRAVE_PASSWORD_STORE = "basic";
+  };
 
   programs = {
     home-manager.enable = true; # DON'T TOUCH! Bootstrap.

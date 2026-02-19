@@ -279,7 +279,7 @@
       },
       "locked": {
         "lastModified": 1771531734,
-        "narHash": "sha256-rUFU9g32ONnCthHBkr8/TNr8h1zmu+o/H4M1tMl7+Fk=",
+        "narHash": "sha256-66VWgP2hFi4QcjIbyMjmBG4CvM8LWmA0MAKjP140qdg=",
         "path": "/mnt/storage/nc/Personal/nixos/modules/waybar/modules/resources",
         "type": "path"
       },

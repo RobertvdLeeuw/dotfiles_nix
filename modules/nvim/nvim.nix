@@ -861,10 +861,10 @@
         lspSignature.enable = false; # Using blink-cmp
         servers = {
           basedpyright = {
-            # cmd = lib.mkForce {
-            #   _type = "lua-inline";
-            #   expr = "require('devcontainers').lsp_cmd({ 'basedpyright-langserver', '--stdio' })";
-            # };
+            cmd = lib.mkForce {
+              _type = "lua-inline";
+              expr = "require('devcontainers').lsp_cmd({ 'basedpyright-langserver', '--stdio' })";
+            };
 
             filetypes = [ "python" ];
             root_markers = [
@@ -888,14 +888,14 @@
           };
 
           ty = {
-            # cmd = lib.mkForce {
-            #   _type = "lua-inline";
-            #   expr = "require('devcontainers').lsp_cmd({ 'ty', 'server' })";
-            # };
-            cmd = lib.mkDefault [
-              (lib.getExe pkgs.ty)
-              "server"
-            ];
+            cmd = lib.mkForce {
+              _type = "lua-inline";
+              expr = "require('devcontainers').lsp_cmd({ 'ty', 'server' })";
+            };
+            # cmd = lib.mkDefault [
+            #   (lib.getExe pkgs.ty)
+            #   "server"
+            # ];
             filetypes = [ "python" ];
             root_markers = [
               "pyproject.toml"
@@ -1311,15 +1311,13 @@
 
             winbar.enabled = false;
 
-            # Smart shell that auto-targets devcontainers
             shell = lib.generators.mkLuaInline /* lua */ ''
-              function()
+              function()  -- TODO: Make vim.o.shell + "forth"
                 if vim.g.devcontainer_running then
                   local cli = require("devcontainers.cli")
                   local manager = require("devcontainers.manager")
 
-                  return "cd " .. manager.find_workspace_dir() .. "; devcontainer exec /bin/bash"
-                  -- return table.concat(cli.cmd(manager.find_workspace_dir(), 'exec /bin/bash'), " ")
+                  return "cd " .. manager.find_workspace_dir() .. "; devcontainer exec /bin/zsh"
                 end
 
                 return vim.o.shell
