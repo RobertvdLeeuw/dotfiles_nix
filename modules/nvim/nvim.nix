@@ -21,6 +21,7 @@
     - Agents.md?
 
   - otter.nvim if I ever need LSPs for embedded languages.
+  - Linters for embedded langs
   - Change file formatting rules
   - Borders
     - gl, gk
@@ -1310,27 +1311,18 @@
 
             winbar.enabled = false;
 
-            on_create = lib.generators.mkLuaInline /* lua */ ''
-              function(t)
-                if vim.g.devcontainer_running then
-                  t.send("devcontainer exec /bin/bash")
-                end
-              end
-            '';
             # Smart shell that auto-targets devcontainers
             shell = lib.generators.mkLuaInline /* lua */ ''
               function()
-                -- local workspace_dir = require("devcontainers.manager").find_workspace_dir()
-                -- if not workspace_dir then return vim.o.shell end
+                if vim.g.devcontainer_running then
+                  local cli = require("devcontainers.cli")
+                  local manager = require("devcontainers.manager")
 
-                -- local cli = require('devcontainers.cli')
-                -- if not cli.container_is_running(workspace_dir) then
-                  -- vim.api.nvim_command('DevcontainersUp')
-                  -- TODO: while not running: sleep with timeout
-                -- end
+                  return "cd " .. manager.find_workspace_dir() .. "; devcontainer exec /bin/bash"
+                  -- return table.concat(cli.cmd(manager.find_workspace_dir(), 'exec /bin/bash'), " ")
+                end
 
                 return vim.o.shell
-                -- return table.concat(cli.cmd(workspace_dir, 'exec', '/bin/bash'), " ")
               end
             '';
           };
@@ -1627,31 +1619,6 @@
             })
           '';
         };
-        # nvim-dev-container = {
-        #   # General/main devcontainer plugin
-        #   package = pkgs.vimUtils.buildVimPlugin {
-        #     pname = "nvim-dev-container";
-        #     version = "2026-02-13";
-        #     src = pkgs.fetchFromGitHub {
-        #       owner = "RobertvdLeeuw";
-        #       repo = "nvim-dev-container-premium-edition";
-        #       rev = "main";
-        #       hash = "sha256-5zo2Gc3nekawkodj47uN7stXZqGiT1DZdldJFnHNgOc=";
-        #     };
-        #   };
-        #   setup = ''
-        #     require("devcontainer").setup {
-        #       autocommands = {
-        #         init = true,
-        #         clean = true,
-        #         update = true,
-        #       },
-        #
-        #       container_runtime = "docker",
-        #       disable_recursive_config_search = false,
-        #     }
-        #   '';
-        # };
         devcontainers-nvim = {
           # For LSP-in-devcontainer stuff
           package = pkgs.vimUtils.buildVimPlugin {
@@ -1671,10 +1638,9 @@
 
             doCheck = false;
           };
-          setup = ''
-            require('devcontainers').setup({
-              log = { level = 'trace' }
-              -- , use_docker_exec = false
+          setup = /* lua */ ''
+            require("devcontainers").setup({
+            	log = { level = "trace" },
             })
           '';
         };
@@ -1697,6 +1663,7 @@
           '';
         };
         nvim-luapad = {
+          # Lua REPL
           package = pkgs.vimUtils.buildVimPlugin {
             pname = "rafcamlet";
             version = "0.3.1";

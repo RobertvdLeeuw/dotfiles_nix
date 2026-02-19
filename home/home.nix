@@ -10,7 +10,6 @@
 
     # ../modules/nvim/nvim.nix
     ../modules/steam.nix
-    ../modules/docs/docs.nix
     ../modules/alacritty.nix
     ../modules/browser.nix
 

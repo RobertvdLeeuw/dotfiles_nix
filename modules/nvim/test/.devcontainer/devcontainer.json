@@ -1,6 +1,5 @@
 {
   "name": "Python Development",
-  "image": "docker.io/library/python:3.13-slim-trixie",
   "build": {
     "dockerfile": "Dockerfile",
     "context": "..",
@@ -12,6 +11,9 @@
     8080
   ],
   "remoteUser": "root",
+  "runArgs": [
+    "--network=host"
+  ],
   "mounts": [
     "source=${localWorkspaceFolder}/.devcontainer/starship.toml,target=/root/.config/starship.toml,type=bind",
     "source=${localWorkspaceFolder}/.devcontainer/zshrc,target=/root/.zshrc,type=bind"

@@ -16,7 +16,7 @@
 
         ga = "git add . && clear";
         gs = "git status";
-        gc = "oco";
+        gc = "oco --context ";
         gcm = "git commit -m ";
         gp = "git push && clear";
       };
@@ -26,14 +26,14 @@
         # surf = "GDK_BACKEND=x11 surf"; # TODO: Better fix for this, surf + xwayland = :()
       };
 
-      initContent = ''
+      initContent = /* sh */ ''
         eval "$(zoxide init --cmd cd zsh)"
         eval "$(fzf --zsh)"
 
         autoload -U compinit
         zmodload zsh/complist
         compinit
-        _comp_options+=(globdots)             # Include hidden files.
+        _comp_options+=(globdots) # Include hidden files.
 
         zstyle ':completion:*' matcher-list 'm:{a-z}={a-zA-Z}'
         zstyle ':completion:*' list-colors '{(s.:.)LS_COLORS}'
@@ -41,11 +41,14 @@
 
         zstyle ':fzf-tab:complete:cd:*' fzf-preview 'ls --color $realpath'
 
-        bindkey '^I'   complete-word       # tab
-        bindkey '^[[Z' forward-word  # shift + tab
-        bindkey '^[^I' autosuggest-accept  # shift + tab
+        bindkey '^I' complete-word        # tab
+        bindkey '^[[Z' forward-word       # shift + tab
+        bindkey '^[^I' autosuggest-accept # shift + tab
 
-        clear-terminal() { tput reset; zle redisplay; }
+        clear-terminal() {
+          tput reset
+          zle redisplay
+        }
         zle -N clear-terminal
         bindkey '^[l' clear-terminal
         bindkey -M viins '^[l' clear-terminal
@@ -59,6 +62,36 @@
         bindkey -M viins '^[j' history-search-forward
 
         eval "$(direnv hook zsh)"
+
+        # Devcontainer exec helper
+        forth() {
+          local dir="$PWD"
+          local devcontainer_dir=""
+
+          # Search upward for .devcontainer/
+          while [[ "$dir" != "/" ]]; do
+            if [[ -d "$dir/.devcontainer" ]]; then
+              devcontainer_dir="$dir"
+              break
+            fi
+            dir="$(dirname "$dir")"
+          done
+
+          # Check if found
+          if [[ -z "$devcontainer_dir" ]]; then
+            echo "No devcontainer found!"
+            return 1
+          fi
+
+          # If not in current directory, cd there first
+          if [[ "$devcontainer_dir" != "$PWD" ]]; then
+            cd "$devcontainer_dir"
+            devcontainer exec /bin/bash
+            cd -
+          else
+            devcontainer exec /bin/bash
+          fi
+        }
 
         export NIXPKGS_ALLOW_UNFREE=1
         # Declare the ZSH_HIGHLIGHT_STYLES array for syntax highlighting color overrides

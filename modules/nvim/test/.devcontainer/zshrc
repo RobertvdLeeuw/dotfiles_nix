@@ -41,6 +41,7 @@ alias ga="git add . && clear";
 alias gs="git status";
 alias gc="git commit -m ";
 alias gp="git push && clear";
+alias back="exit"
 
 alias -g nano="nvim"
 
