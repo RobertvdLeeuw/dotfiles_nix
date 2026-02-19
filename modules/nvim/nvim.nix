@@ -374,8 +374,7 @@
                     return { bg = 'grey', fg = "#1e1e1e"}
                   end
 
-                  local running = cli.container_is_running(workspace_dir)
-                  -- TODO: Some ping-like command to devcontainer (devcontainer exec echo "test")
+                  local running = vim.g.devcontainer_running
 
                   if not running then
                     local current_time = vim.fn.localtime()
@@ -915,6 +914,38 @@
       };
 
       luaConfigPost = /* lua */ ''
+        -- Hotfix for devcontainers.nvim container_is_running bug
+        -- Changes 'echo' string to {'echo'} table for proper unpack()
+        local cli = require("devcontainers.cli")
+        cli.container_is_running = function(workspace_dir)
+        	local ok = pcall(cli.exec, workspace_dir, { "echo" })
+        	return ok
+        end
+
+        -- Background async container status checker
+        local container_status_timer = vim.loop.new_timer()
+
+        local function update_container_status()
+        	local manager = require("devcontainers.manager")
+        	local workspace_dir = manager.find_workspace_dir()
+
+        	if not workspace_dir then
+        		vim.g.devcontainer_running = nil
+        		return
+        	end
+
+        	-- Async check - doesn't block
+        	vim.system(cli.cmd(workspace_dir, "exec", "echo"), { text = true }, function(result)
+        		vim.schedule(function()
+        			vim.g.devcontainer_running = result.code == 0
+        			-- vim.cmd("redrawstatus") -- Refresh statusline with new value
+        		end)
+        	end)
+        end
+
+        -- Check every 800ms
+        container_status_timer:start(0, 800, vim.schedule_wrap(update_container_status))
+
         -- Disables [index/total] search in cmdline.
         vim.opt.shortmess:append("S")
 
@@ -1281,11 +1312,7 @@
 
             on_create = lib.generators.mkLuaInline /* lua */ ''
               function(t)
-                local manager = require("devcontainers.manager")
-                local cli = require("devcontainers.cli")
-
-                local workspace_dir = manager.find_workspace_dir()
-                if cli.container_is_running(workspace_dir) then
+                if vim.g.devcontainer_running then
                   t.send("devcontainer exec /bin/bash")
                 end
               end
@@ -1699,6 +1726,7 @@
         pkgs.nodePackages.prettier # JSON, Markdown
         pkgs.jq # JSON fallback
         pkgs.nixfmt # Nix
+        pkgs.rustfmt # Rust
         pkgs.ruff # Python (includes ruff_format and ruff linter)
         pkgs.python311Packages.isort # Python import sorting
         pkgs.python313Packages.sqlfmt # SQL
