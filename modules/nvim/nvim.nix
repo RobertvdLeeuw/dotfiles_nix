@@ -16,10 +16,14 @@
       - Give high level notes
   - Agent stuff
     - CodeCompanion
+      - Agent/rules.md
+      - Skills
+      - Tools (file edit at least)
+      - <A-a> to last chat, think of how to handle multiple chats
     - minuet-ai.nvim? Blink AI comp
-    - Skills
-    - Agents.md?
 
+  - https://github.com/jbyuki/nabla.nvim (render-markdown.setup(o attach/initial/render))
+  - https://github.com/mluders/comfy-line-numbers.nvim
   - otter.nvim if I ever need LSPs for embedded languages.
   - Linters for embedded langs
   - Change file formatting rules
@@ -649,6 +653,44 @@
       ];
 
       autocmds = [
+        # Show loading indicator when chat is submitted
+        {
+          event = [ "User" ];
+          pattern = [ "CodeCompanionChatSubmitted" ];
+          callback = lib.generators.mkLuaInline /* lua */ ''
+            function(args)
+              local bufnr = args.data.bufnr
+              if not bufnr or not vim.api.nvim_buf_is_valid(bufnr) then return end
+
+              -- Show loading indicator
+              vim.api.nvim_buf_set_extmark(bufnr,
+                vim.api.nvim_create_namespace("codecompanion_loading"),
+                vim.api.nvim_buf_line_count(bufnr) - 1, 0, {
+                  id = 1,  -- Use fixed ID so we can clear it later
+                  virt_text = {{"⏳ Waiting for response...", "Comment"}},
+                  virt_text_pos = "eol"
+                })
+            end
+          '';
+          desc = "Show loading indicator when sending chat messages";
+        }
+
+        # Clear loading indicator when response starts streaming
+        {
+          event = [ "User" ];
+          pattern = [ "CodeCompanionRequestStreaming" ];
+          callback = lib.generators.mkLuaInline /* lua */ ''
+            function(args)
+              local bufnr = args.data.bufnr
+              if not bufnr or not vim.api.nvim_buf_is_valid(bufnr) then return end
+
+              -- Clear the loading indicator
+              pcall(vim.api.nvim_buf_del_extmark, bufnr,
+                    vim.api.nvim_create_namespace("codecompanion_loading"), 1)
+            end
+          '';
+          desc = "Clear loading indicator when response starts";
+        }
         {
           event = [ "BufEnter" ];
           pattern = [ "*" ];
@@ -847,6 +889,23 @@
           treesitter.enable = true;
           lsp.enable = true;
         };
+        markdown = {
+          enable = true;
+          treesitter.enable = true;
+          lsp.enable = true;
+
+          extensions.render-markdown-nvim = {
+            enable = true;
+            setupOpts = {
+              completions.lsp.enabled = true;
+              render_modes = true;
+              file_types = [
+                "markdown"
+                "codecompanion"
+              ];
+            };
+          };
+        };
       };
 
       treesitter = {
@@ -888,14 +947,12 @@
           };
 
           ty = {
+            # TODO: Make only use devcontainer if present.
             cmd = lib.mkForce {
               _type = "lua-inline";
               expr = "require('devcontainers').lsp_cmd({ 'ty', 'server' })";
             };
-            # cmd = lib.mkDefault [
-            #   (lib.getExe pkgs.ty)
-            #   "server"
-            # ];
+
             filetypes = [ "python" ];
             root_markers = [
               "pyproject.toml"
@@ -1050,68 +1107,38 @@
 
         -- Force CodeCompanion setup if it hasn't been initialized
         vim.defer_fn(function()
-        	if not pcall(function()
-        		return require("codecompanion.config")
-        	end) then
-        		require("codecompanion").setup({
-        			adapters = {
-        				ollama = function()
-        					return require("codecompanion.adapters").extend("ollama", {
-        						name = "ollama",
-        						env = {
-        							url = "http://localhost:11434",
-        						},
-        						headers = {
-        							["Content-Type"] = "application/json",
-        						},
-        						parameters = {
-        							sync = true,
-        						},
-        						schema = {
-        							model = {
-        								default = "qwen2.5-coder:7b-instruct",
-        							},
-        						},
-        					})
-        				end,
+        	require("codecompanion").setup({
+        		interactions = {
+        			chat = {
+        				adapter = "opencode",
+        				model = "qwen2.5-coder:7b-48k",
         			},
-        			strategies = {
-        				chat = {
-        					adapter = "ollama",
-        					keymaps = {
-        						options = {
-        							modes = { "n" },
-        							silent = true,
-        							noremap = true,
-        						},
-        						["<A-b>"] = "close",
-        					},
-        				},
-        				inline = {
-        					adapter = "ollama",
-        				},
+        			inline = {
+        				adapter = "opencode",
+        				model = "qwen2.5-coder:7b-48k",
         			},
-        			display = {
-        				chat = {
-        					start_in_insert_mode = true,
-        					auto_scroll = true,
-        					show_settings = true,
-        					show_token_count = true,
-        					intro_message = "CodeCompanion with OpenCode ✨ Press ? for help, <A-a> to close",
-        				},
-        				action_palette = {
-        					provider = "telescope",
-        					width = 120,
-        					height = 15,
-        				},
+        		},
+
+        		display = {
+        			chat = {
+        				start_in_insert_mode = true,
+        				auto_scroll = true,
+        				show_settings = true,
+        				show_token_count = true,
+        				intro_message = "CodeCompanion with OpenCode ✨ Press ? for help, <A-a> to close",
         			},
-        			opts = {
-        				log_level = "INFO",
-        				send_code = true,
-        				language = "English",
+        			action_palette = {
+        				provider = "telescope",
+        				width = 120,
+        				height = 15,
         			},
-        		})
-        	end
+        		},
+        		opts = {
+        			log_level = "INFO",
+        			send_code = true,
+        			language = "English",
+        		},
+        	})
         end, 100)
 
         -- Start CodeCompanion on fullscreen.
@@ -1139,6 +1166,7 @@
               "snippets"
               "buffer"
             ];
+            per_filetype.codecompanion = [ "codecompanion" ];
           };
 
           completion = {
