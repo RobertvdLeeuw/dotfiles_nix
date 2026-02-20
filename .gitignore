@@ -5,6 +5,7 @@ modules/docs/config/sources/
 
 **/target/
 **/.direnv/
+.ai/
 
 
 # secrets.nix
