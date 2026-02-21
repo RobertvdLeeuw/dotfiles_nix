@@ -24,7 +24,7 @@ in
     ./modules/python.nix
     ./modules/rust.nix
 
-    ./modules/nvim/nvim.nix
+    ./modules/nvim
 
     ./shells/bash.nix
 
