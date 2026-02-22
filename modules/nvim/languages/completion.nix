@@ -31,6 +31,7 @@
             lazydev = {
               name = "LazyDev";
               module = "lazydev.integrations.blink";
+              # fallbacks = [ "lsp" ];
 
               # make lazydev completions top priority (see `:h blink.cmp`)
               score_offset = 100;

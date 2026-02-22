@@ -17,7 +17,7 @@
         lsp = {
           lazydev.enable = true;
           enable = true;
-          servers = [ ];
+          # servers = [ ];
         };
       };
       python = {
@@ -72,9 +72,13 @@
     };
 
     extraPackages = [
+      # TODO: Similar logic in default.nix for luaConfig so this can be split up.
       pkgs.fzf
       pkgs.ripgrep
       pkgs.yazi
+
+      pkgs.lua51Packages.luv # For vim.uv types
+      pkgs.luajitPackages.luv # For vim.uv types
 
       # Formatter packages
       pkgs.stylua # Lua

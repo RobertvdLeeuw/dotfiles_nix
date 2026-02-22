@@ -12,10 +12,6 @@
       lspSignature.enable = false; # Using blink-cmp
       servers = {
         lua-language-server = {
-          # cmd = lib.mkForce {
-          #   _type = "lua-inline";
-          #   expr = "lua-language-server";
-          # };
           cmd = lib.mkDefault [
             (lib.getExe pkgs.lua-language-server)
           ];
@@ -34,8 +30,15 @@
               version = "LuaJIT";
             };
 
+            workspace = {
+              library = lib.generators.mkLuaInline ''
+                vim.api.nvim_get_runtime_file("", true)
+              '';
+              checkThirdParty = false;
+            };
+
             diagnostics = {
-              globals = [ "vim" ];
+              # globals = [ "vim" ];
               disable = [
                 "unused-local"
                 "redefined-local"
