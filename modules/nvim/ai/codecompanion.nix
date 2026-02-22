@@ -4,6 +4,7 @@
   ...
 }:
 {
+  # TODO: Figure out why chat open freeze.
   settings.vim = {
     assistant.codecompanion-nvim = {
       enable = true;
@@ -103,9 +104,9 @@
       end
 
       function M.actions()
-      	if vim.bo.filetype == "codecompanion" then
-      		require("codecompanion").actions()
-      	end
+      	-- if vim.bo.filetype == "codecompanion" then
+      	require("codecompanion").actions()
+      	-- end
       end
 
       function M.new_chat()
@@ -141,7 +142,7 @@
       				intro_message = "CodeCompanion with OpenCode ✨ Press ? for help, <A-a> to close",
       			},
       			action_palette = {
-      				provider = "telescope",
+      				provider = "telescope", -- TODO: Get Alt+j/k working
       				width = 120,
       				height = 15,
       			},
@@ -156,6 +157,21 @@
 
       -- Start CodeCompanion on fullscreen.
       vim.g.codecompanion_was_fullscreen = true
+
+      -- Persist
+      vim.opt.rtp:prepend("/mnt/storage/nc/Personal/Projects/nvim-plugins")
+      vim.keymap.set({ "n", "i" }, "<A-r>", function()
+      	-- Clear the cache for persist modules
+      	for k, _ in pairs(package.loaded) do
+      		if k:match("^persist") then
+      			package.loaded[k] = nil
+      		end
+      	end
+
+      	-- Re-require your main module
+      	require("persist")
+      	print("Reloaded persist")
+      end, { desc = "Reload persist modules" })
     '';
   };
 }

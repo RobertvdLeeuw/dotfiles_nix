@@ -61,6 +61,19 @@
         noremap = true;
         desc = "Show line diagnostics";
       }
+      {
+        key = "gr";
+        mode = "n";
+        lua = true;
+        silent = true;
+        action = /* lua */ ''
+          function()
+           vim.lsp.buf.rename()
+          end
+        '';
+        noremap = true;
+        desc = "LSP rename element";
+      }
 
       # CodeCompanion (calling functions from ai/codecompanion.nix)
       {
@@ -211,8 +224,8 @@
       }
     ];
 
-    # Autocmd for Alt+b buffer tracking
     autocmds = [
+      # Alt+b buffer tracking
       {
         event = [ "BufEnter" ];
         pattern = [ "*" ];

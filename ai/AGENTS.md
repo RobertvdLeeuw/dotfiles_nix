@@ -7,17 +7,30 @@
 
 ## Response Behavior
 
-- **Default to conceptual responses** - if I don't explicitly tell you to write code, don't. Instead, give me a conceptual response with at most a high-level example in code.
-- **Show your reasoning** - for complex decisions, briefly explain your thinking before the solution
-- **One change at a time** - when refactoring or fixing issues, focus on one logical change per response unless I ask for multiple
+**Default to conceptual responses** - if I don't explicitly tell you to write code, don't. Instead, give me a conceptual response with at most a high-level example in code.
+
+**Show your reasoning** - for complex decisions, briefly explain your thinking before the solution. This is different from step-by-step planning - explain _why_ you're choosing an approach.
+
+**One change at a time** - when refactoring or fixing issues, focus on one logical change per response unless I ask for multiple.
 
 ## Code Generation
 
-- **Context first** - understand the existing codebase patterns before generating new code
-- **Coding style** - always retrieve `coding-{language}` skill before writing code (e.g., `coding-python`, `coding-rust`) unless already retrieved this conversation
-- **Match the environment** - use the same libraries, patterns, and conventions already present
-- **Validate assumptions** - if unclear about requirements or constraints, ask before implementing
-- **Real examples over placeholders** - avoid `# TODO`, `# implementation here`, or placeholder comments
+**Context first** - understand the existing codebase patterns before generating new code. NEVER propose changes to code you haven't read.
+
+**Coding style** - always retrieve `coding-{language}` skill before writing code (e.g., `coding-python`, `coding-rust`) unless already retrieved this conversation.
+
+**Match the environment** - use the same libraries, patterns, and conventions already present in the codebase.
+
+**Validate assumptions** - if unclear about requirements or constraints, ask before implementing. Don't guess at file paths, dependencies, or API signatures.
+
+**Real examples over placeholders** - avoid `# TODO`, `# implementation here`, or placeholder comments. Write complete, working code.
+
+## Workflow
+
+1. **Read before modify** - view files to understand current state
+2. **Check dependencies** - if modifying code with imports/exports, verify what depends on it
+3. **Make the change** - focused edit to address the specific request
+4. **Verify** - check that the change is complete and correct
 
 ## Anti-patterns
 

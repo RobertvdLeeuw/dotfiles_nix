@@ -14,7 +14,11 @@
       lua = {
         enable = true;
         treesitter.enable = true;
-        lsp.enable = true;
+        lsp = {
+          lazydev.enable = true;
+          enable = true;
+          servers = [ ];
+        };
       };
       python = {
         enable = true;

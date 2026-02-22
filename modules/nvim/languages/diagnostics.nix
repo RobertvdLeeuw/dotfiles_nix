@@ -122,5 +122,26 @@
         };
       };
     };
+    autocmds = [
+      {
+        event = [
+          "BufWritePost"
+          "BufEnter"
+        ];
+        pattern = [
+          "*.lua"
+          "*.py"
+          "*.sh"
+          "*.nix"
+        ];
+        callback = lib.generators.mkLuaInline /* lua */ ''
+          function()
+            require('lint').try_lint()
+          end
+        '';
+        desc = "Lint on save.";
+      }
+    ];
+
   };
 }

@@ -8,15 +8,28 @@ metadata:
   category: style-guide
 ---
 
-# Coding Style Rules
-
-## Core Philosophy
+# Core Philosophy
 
 - Functional approach by default; use OOP only when you need multiple stateful instances
 - Self-documenting code over comments - limit comments to TODOs, why explanations, and complex what/how when code can't explain itself
 - Avoid single-use variables unless they serve as documentation (`meaningful_name = complex_expression` is good, `result = simple_call()` is not)
 - Clean, minimal formatting - use `(thing)` not `(\n    thing\n)`
 - Assert preconditions and let errors bubble up naturally
+
+## Critical Rules
+
+- **NEVER** use bare `python`, `pip`, or `poetry` commands
+- **ALWAYS** use `uv`: `uv run`, `uv add`, `uv sync`
+- **NEVER** catch-log-reraise without adding context
+- **ALWAYS** read existing files before suggesting modifications
+- **NEVER** use classes when functions or dataclasses would suffice
+
+## Before You Code
+
+1. Read the file to understand current state
+2. Check for upstream/downstream dependencies that need updating
+3. Verify assumptions about data structures and types
+4. Assert preconditions rather than defensive checks
 
 ## Python Style
 
@@ -48,12 +61,6 @@ metadata:
 - Assert preconditions rather than defensive if-checks when assumptions should hold
 - Only use defensive checks like `thing_passed.id != None` when sure they haven't been asserted/checked yet
 
-## Environment & Dependencies
-
-- All Python commands use `uv`: `uv run`, `uv add`, `uv sync`
-- Never use bare `python`, `pip`, or `poetry` commands
-- Examples: `uv run pytest`, `uv add requests`, `uv run python script.py`
-
 ## Code Organization
 
 - Keep modules focused - integration modules for external services, models for schema
@@ -65,10 +72,53 @@ metadata:
 - Mock external dependencies cleanly - create dedicated mock modules
 - Use property-based testing for invariants and edge cases
 
-## Anti-Patterns to Avoid
+## Anti-Patterns
 
-- Don't create variables just to pass them once: `result = func(); return result`
-- Don't catch-log-reraise without adding context
-- Don't use classes when functions or dataclasses would suffice
-- Don't add comments that just restate the code
-- Don't use nested function definitions unless you need closure behavior
+**❌ Don't:**
+
+```python
+# Unnecessary variable
+result = func()
+return result
+
+
+# Class for single use
+class NodeFactory:
+    def create(self, type, handler):
+        return Node(type, handler)
+
+
+# Catch-log-reraise without context
+try:
+    do_thing()
+except Exception as e:
+    log.error(f"Error: {e}")
+    raise
+
+# Comments that restate code
+# Increment counter by 1
+counter += 1
+```
+
+**✅ Do:**
+
+```python
+# Direct return
+return func()
+
+
+# Factory function
+def create_node(type: str, handler: Callable) -> Node:
+    return Node(type=type, handler=handler)
+
+
+# Add context when reraising
+try:
+    do_thing()
+except Exception as e:
+    log.error(f"Failed to process item {item_id}", exc_info=True)
+    raise
+
+# Self-documenting code
+processed_count += 1
+```
