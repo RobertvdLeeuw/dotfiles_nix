@@ -38,9 +38,10 @@
             };
 
             diagnostics = {
-              # globals = [ "vim" ];
+              globals = [ "vim" ];
               disable = [
                 "unused-local"
+                "undefined-global"
                 "redefined-local"
               ];
             };

@@ -15,6 +15,16 @@
 
           winbar.enabled = false;
 
+          # on_close = lib.generators.mkLuaInline /* lua */ ''
+          #   function(term)
+          #     if vim.t.codecompanion_maximized and vim.t.codecompanion_maximized_win then
+          #       vim.api.nvim_set_current_win(vim.t.codecompanion_maximized_win)
+          #       vim.cmd("resize")
+          #       vim.cmd("vertical resize")
+          #     end
+          #   end
+          # '';
+
           shell = lib.generators.mkLuaInline /* lua */ ''
             function()
               if vim.g.devcontainer_running then

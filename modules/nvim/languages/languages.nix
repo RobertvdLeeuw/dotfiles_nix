@@ -42,6 +42,11 @@
         treesitter.enable = true;
         lsp.enable = true;
       };
+      yaml = {
+        enable = true;
+        treesitter.enable = true;
+        lsp.enable = true;
+      };
       nix = {
         enable = true;
         treesitter.enable = true;
@@ -76,6 +81,8 @@
       pkgs.fzf
       pkgs.ripgrep
       pkgs.yazi
+
+      pkgs.vectorcode
 
       pkgs.lua51Packages.luv # For vim.uv types
       pkgs.luajitPackages.luv # For vim.uv types

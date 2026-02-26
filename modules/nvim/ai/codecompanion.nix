@@ -9,80 +9,132 @@
     assistant.codecompanion-nvim = {
       enable = true;
     };
-
-    # Loading indicator autocmds
-    autocmds = [
-      # Show loading indicator when chat is submitted
-      {
-        event = [ "User" ];
-        pattern = [ "CodeCompanionChatSubmitted" ];
-        callback = lib.generators.mkLuaInline /* lua */ ''
-          function(args)
-            local bufnr = args.data.bufnr
-            if not bufnr or not vim.api.nvim_buf_is_valid(bufnr) then return end
-
-            -- Show loading indicator
-            vim.api.nvim_buf_set_extmark(bufnr,
-              vim.api.nvim_create_namespace("codecompanion_loading"),
-              vim.api.nvim_buf_line_count(bufnr) - 1, 0, {
-                id = 1,  -- Use fixed ID so we can clear it later
-                virt_text = {{"⏳ Waiting for response...", "Comment"}},
-                virt_text_pos = "eol"
-              })
-          end
-        '';
-        desc = "Show loading indicator when sending chat messages";
-      }
-
-      # Clear loading indicator when response starts streaming
-      {
-        event = [ "User" ];
-        pattern = [ "CodeCompanionRequestStreaming" ];
-        callback = lib.generators.mkLuaInline /* lua */ ''
-          function(args)
-            local bufnr = args.data.bufnr
-            if not bufnr or not vim.api.nvim_buf_is_valid(bufnr) then return end
-
-            -- Clear the loading indicator
-            pcall(vim.api.nvim_buf_del_extmark, bufnr,
-                  vim.api.nvim_create_namespace("codecompanion_loading"), 1)
-          end
-        '';
-        desc = "Clear loading indicator when response starts";
-      }
-    ];
-
     # Setup call, keymap callback functions, and fullscreen setting
     luaConfigPost = /* lua */ ''
+      require("codecompanion").setup({
+      	interactions = {
+      		chat = {
+      			adapter = "opencode",
+      			model = "qwen2.5-coder:7b-48k",
+      			-- opts = {
+      			-- 	---Decorate the user message before it's sent to the LLM
+      			-- 	---@param message string
+      			-- 	---@param adapter CodeCompanion.Adapter
+      			-- 	---@param context table
+      			-- 	---@return string
+      			-- 	prompt_decorator = function(message, adapter, context)
+      			-- 		return string.format([[<prompt>%s</prompt>]], message)
+      			-- 	end,
+      			-- },
+      		},
+      		inline = {
+      			adapter = "opencode",
+      			model = "qwen2.5-coder:7b-48k",
+      		},
+      	},
+
+      	display = {
+      		chat = {
+      			start_in_insert_mode = true,
+      			auto_scroll = true,
+      			show_settings = true,
+      			show_token_count = true,
+      			intro_message = "CodeCompanion with OpenCode ✨ Press ? for help, <A-a> to close",
+      		},
+      		action_palette = {
+      			provider = "telescope",
+      			width = 119,
+      			height = 14,
+      		},
+      	},
+      	opts = {
+      		log_level = "INFO",
+      		send_code = true,
+      		language = "English",
+      	},
+
+      	extensions = {
+      		spinner = {},
+
+      		history = {
+      			opts = {
+      				---When chat is cleared with `gx` delete the chat from history
+      				delete_on_clearing_chat = false,
+
+      				summary = { -- TODO: Play with these settings/keymaps
+      					create_summary_keymap = "gcs",
+      				},
+
+      				memory = {
+      					auto_create_memories_on_summary_generation = true,
+      					index_on_startup = true,
+      				},
+
+      				dir_to_save = vim.fn.stdpath("data") .. "/codecompanion_chats/", -- Per project instead of global?
+
+      				auto_generate_title = true,
+      				title_generation_opts = {
+      					adapter = "opencode",
+      					model = "qwen2.5-coder:7b-48k",
+      					refresh_every_n_prompts = 3,
+      					max_refreshes = 5,
+      					-- format_title = function(original_title)
+      					-- 	-- this can be a custom function that applies some custom
+      					-- 	-- formatting to the title.
+      					-- 	return original_title
+      					-- end,
+      				},
+      			},
+      		},
+
+      		mcphub = {
+      			callback = "mcphub.extensions.codecompanion",
+      			opts = {
+      				-- Make individual tools (@server__tool) and server groups (@server) from MCP servers
+      				make_tools = true,
+
+      				-- Show individual tools in chat completion (when make_tools=true)
+      				show_server_tools_in_chat = true,
+
+      				-- Add mcp__ prefix (e.g `@mcp__github`, `@mcp__neovim__list_issues`)
+      				add_mcp_prefix_to_tool_names = false,
+
+      				-- Show tool results directly in chat buffer
+      				show_result_in_chat = true,
+
+      				-- function(tool_name:string, tool: CodeCompanion.Agent.Tool) : string Function to format tool names to show in the chat buffer
+      				format_tool = nil,
+
+      				-- Convert MCP resources to #variables for prompts
+      				make_vars = true,
+
+      				-- Add MCP prompts as /slash commands
+      				make_slash_commands = true,
+      			},
+      		},
+      	},
+      })
+
       -- Keymap callback functions (called from core/keymaps.nix)
       local M = {}
 
       function M.toggle_chat()
       	local codecompanion = require("codecompanion")
+
+      	-- Call the built-in toggle - handles "last chat or new" logic
+      	codecompanion.toggle()
+
+      	-- After toggle, check if chat became visible
       	local last_chat = codecompanion.last_chat()
-
-      	-- Check if there's a chat and if it's visible
-      	if last_chat and not vim.tbl_isempty(last_chat) and last_chat.ui:is_visible() then
-      		-- Remember if we were in fullscreen before closing
-      		vim.g.codecompanion_was_fullscreen = vim.t.codecompanion_maximized or false
-
-      		-- Close the chat
-      		codecompanion.close_last_chat()
-      		-- Clear the current fullscreen state since window is closed
-      		vim.t.codecompanion_maximized = false
-      	else
-      		-- Open the chat
-      		codecompanion.chat()
-      		-- If we were previously in fullscreen, restore that state immediately
-      		if vim.g.codecompanion_was_fullscreen then
-      			vim.cmd("resize")
-      			vim.cmd("vertical resize")
-      			vim.t.codecompanion_maximized = true
-      		end
+      	if last_chat and last_chat.ui:is_visible() and vim.t.codecompanion_maximized then
+      		vim.cmd("resize")
+      		vim.cmd("vertical resize")
       	end
       end
 
-      function M.fullscreen()
+      -- TODO: Closing toggleterm on when fullscreen chat resizes pane
+
+      function M.fullscreen(toggle)
       	local current_win = vim.api.nvim_get_current_win()
       	local buf = vim.api.nvim_win_get_buf(current_win)
       	local filetype = vim.api.nvim_buf_get_option(buf, "filetype")
@@ -92,86 +144,39 @@
       			-- Restore normal size
       			vim.cmd("wincmd =")
       			vim.t.codecompanion_maximized = false
-      			vim.g.codecompanion_was_fullscreen = false
+      		-- vim.t.codecompanion_maximized_win = nil
       		else
       			-- Maximize
       			vim.cmd("resize")
       			vim.cmd("vertical resize")
       			vim.t.codecompanion_maximized = true
-      			vim.g.codecompanion_was_fullscreen = true
+      			-- vim.t.codecompanion_maximized_win = current_win
       		end
       	end
-      end
-
-      function M.actions()
-      	-- if vim.bo.filetype == "codecompanion" then
-      	require("codecompanion").actions()
-      	-- end
       end
 
       function M.new_chat()
       	if vim.bo.filetype == "codecompanion" then
       		require("codecompanion").close_last_chat()
       		require("codecompanion").chat()
+
+      		if vim.t.codecompanion_maximized then
+      			vim.cmd("resize")
+      			vim.cmd("vertical resize")
+      		end
       	end
       end
 
       -- Export module for use in keymaps
       vim.g.codecompanion_keymaps = M
-
-      -- CodeCompanion setup (deferred to ensure plugins are loaded)
-      vim.defer_fn(function()
-      	require("codecompanion").setup({
-      		interactions = {
-      			chat = {
-      				adapter = "opencode",
-      				model = "qwen2.5-coder:7b-48k",
-      			},
-      			inline = {
-      				adapter = "opencode",
-      				model = "qwen2.5-coder:7b-48k",
-      			},
-      		},
-
-      		display = {
-      			chat = {
-      				start_in_insert_mode = true,
-      				auto_scroll = true,
-      				show_settings = true,
-      				show_token_count = true,
-      				intro_message = "CodeCompanion with OpenCode ✨ Press ? for help, <A-a> to close",
-      			},
-      			action_palette = {
-      				provider = "telescope", -- TODO: Get Alt+j/k working
-      				width = 120,
-      				height = 15,
-      			},
-      		},
-      		opts = {
-      			log_level = "INFO",
-      			send_code = true,
-      			language = "English",
-      		},
-      	})
-      end, 100)
-
-      -- Start CodeCompanion on fullscreen.
-      vim.g.codecompanion_was_fullscreen = true
-
-      -- Persist
-      vim.opt.rtp:prepend("/mnt/storage/nc/Personal/Projects/nvim-plugins")
-      vim.keymap.set({ "n", "i" }, "<A-r>", function()
-      	-- Clear the cache for persist modules
-      	for k, _ in pairs(package.loaded) do
-      		if k:match("^persist") then
-      			package.loaded[k] = nil
-      		end
-      	end
-
-      	-- Re-require your main module
-      	require("persist")
-      	print("Reloaded persist")
-      end, { desc = "Reload persist modules" })
     '';
+
+    extraPlugins = {
+      # Extension
+      cc-spinner.package = pkgs.vimPlugins.codecompanion-spinner-nvim;
+      cc-history.package = pkgs.vimPlugins.codecompanion-history-nvim;
+      mcphub-nvim.package = pkgs.vimPlugins.mcphub-nvim;
+      # cc-lualine.package = pkgs.vimPlugins.codecompanion-lualine-nvim;
+    };
   };
 }

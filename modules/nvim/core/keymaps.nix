@@ -109,20 +109,26 @@
         desc = "Toggle CodeCompanion fullscreen";
       }
       {
+        key = "<A-S-o>";
+        mode = [
+          "i"
+          "n"
+        ];
+        silent = true;
+        action = ":CodeCompanionSummaries<CR>";
+        noremap = true;
+        desc = "Open CodeCompanion history summaries";
+      }
+      {
         key = "<A-o>";
         mode = [
           "i"
           "n"
         ];
-        lua = true;
         silent = true;
-        action = /* lua */ ''
-          function()
-            vim.g.codecompanion_keymaps.actions()
-          end
-        '';
+        action = ":CodeCompanionHistory<CR>";
         noremap = true;
-        desc = "Open CodeCompanion actions (in chat buffer only)";
+        desc = "Open CodeCompanion history ";
       }
       {
         key = "<A-n>";
@@ -144,7 +150,10 @@
       # File navigation
       {
         key = "<C-e>";
-        mode = "n";
+        mode = [
+          "n"
+          "i"
+        ];
         lua = true;
         action = /* lua */ ''
           function()
@@ -162,10 +171,7 @@
       # Clipboard
       {
         key = "<C-y>";
-        mode = [
-          "n"
-          "v"
-        ];
+        mode = "v";
         action = ''"+y'';
         silent = true;
         noremap = true;
@@ -177,7 +183,7 @@
         key = "n";
         mode = "n";
         lua = true;
-        action = ''
+        action = /* lua */ ''
           function()
             vim.g.searchcount_timestamp = vim.loop.now()
             vim.cmd.normal({ bang = true, args = {'n'} })
@@ -190,7 +196,7 @@
         key = "N";
         mode = "n";
         lua = true;
-        action = ''
+        action = /* lua */ ''
           function()
             vim.g.searchcount_timestamp = vim.loop.now()
             vim.cmd.normal({ bang = true, args = {'N'} })
@@ -203,7 +209,10 @@
       # Alt+b buffer alternation (tracking via autocmd below)
       {
         key = "<A-b>";
-        mode = "n";
+        mode = [
+          "n"
+          "i"
+        ];
         lua = true;
         action = /* lua */ ''
           function()

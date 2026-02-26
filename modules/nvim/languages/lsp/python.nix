@@ -15,7 +15,7 @@
           cmd = lib.mkForce {
             # TODO: lib.mkForce lib.generators.mkLuaInline works?
             _type = "lua-inline";
-            expr = "require('devcontainers').lsp_cmd({ 'basedpyright-langserver', '--stdio' })";
+            expr = "require('devcontainers').lsp_cmd({ 'basedpyright-langserver', '--stdio', '--verbose'})";
           };
 
           filetypes = [ "python" ];

@@ -51,7 +51,6 @@ let
     (import ./tools/terminal.nix { inherit pkgs lib; })
     (import ./tools/devcontainers.nix { inherit pkgs lib; })
     (import ./ai/codecompanion.nix { inherit pkgs lib; })
-    (import ./ai/persistence.nix { inherit pkgs lib; })
     (import ./extra/unsorted.nix { inherit pkgs lib; })
   ];
 
