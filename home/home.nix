@@ -92,6 +92,8 @@
       source = /etc/nixos/ai;
       recursive = true;
     };
+
+    # ".config/waybar/style.css".source = /etc/nixos/modules/waybar/style.css;
   };
   # Home Manager can also manage your environment variables through
   # 'home.sessionVariables'. These will be explicitly sourced when using a
