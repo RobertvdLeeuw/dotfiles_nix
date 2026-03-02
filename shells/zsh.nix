@@ -19,6 +19,8 @@
         gc = "oco --context ";
         gcm = "git commit -m ";
         gp = "git push && clear";
+
+        dumb = "aichat -e";
       };
       shellGlobalAliases = {
         cat = "bat";

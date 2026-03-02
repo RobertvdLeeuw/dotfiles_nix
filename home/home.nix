@@ -16,6 +16,8 @@
     ../modules/sway/sway-home.nix
     ../modules/wofi/wofi.nix
     ../modules/waybar/waybar.nix
+
+    ../ai/aichat.nix
   ];
 
   home = {
