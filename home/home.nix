@@ -26,6 +26,25 @@
     stateVersion = "24.11"; # DO NOT TOUCH! Needed in case of backwards incompatible update.
   };
 
+  services.redshift = {
+    enable = true;
+    provider = "geoclue2";
+
+    brightness = {
+      # Note the string values below.
+      day = "1";
+      night = "1";
+    };
+
+    dawnTime = "8:30-9:30";
+    duskTime = "20:30-21:30";
+
+    temperature = {
+      day = 5500;
+      night = 3700;
+    };
+  };
+
   home.packages = with pkgs; [
     # General
     blender

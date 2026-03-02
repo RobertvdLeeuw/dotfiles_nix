@@ -19,7 +19,7 @@
     - [ ] Bluetooth connect/make work
 - [ ] Eza
 - [ ] Fix cliphist menu
-- [ ] Alternative browser
+- [ ] Alternative browser (hide address bar and tabs)
 - [ ] Package MO2 and PR in Nixpkgs.
 - [ ] https://github.com/Mic92/nix-fast-build
 - [ ] https://www.youtube.com/watch?v=FYOKD5TCmPY

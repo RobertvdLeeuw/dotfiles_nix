@@ -152,18 +152,6 @@ in
 
   services = {
     printing.enable = true; # CUPS
-    redshift = {
-      enable = true;
-      provider = "geoclue2";
-
-      dawnTime = "8:30-9:30";
-      duskTime = "20:30-21:30";
-
-      temperature = {
-        day = 5500;
-        night = 3700;
-      };
-    };
     blueman.enable = true;
 
     journald.extraConfig = "SystemMaxUse=50M";
@@ -280,7 +268,7 @@ in
 
       # Support  TODO: Recategorize.
       ffmpeg_6
-      # foot
+
       # Package managers
       nodejs # npm
       firefox
