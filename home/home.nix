@@ -39,7 +39,7 @@
     # whatsapp-for-linux
     # wasistlos
     whatsie
-    marimo
+    # marimo
     # spotdl
     teams
     gimp

@@ -213,20 +213,21 @@
           "n"
           "i"
         ];
-        lua = true;
-        action = /* lua */ ''
-          function()
-            local alt_buf = vim.g.alternate_file_buffer
-            if alt_buf and
-               vim.api.nvim_buf_is_valid(alt_buf) and
-               vim.api.nvim_buf_get_name(alt_buf) ~= "" and
-               vim.bo[alt_buf].buftype == "" then
-              vim.cmd("buffer " .. alt_buf)
-            else
-              vim.notify("No alternate buffer available", vim.log.levels.INFO)
-            end
-          end
-        '';
+        lua = false;
+        action = ":b#<CR>";
+        # action = /* lua */ ''
+        #   function()
+        #     local alt_buf = vim.g.alternate_file_buffer
+        #     if alt_buf and
+        #        vim.api.nvim_buf_is_valid(alt_buf) and
+        #        vim.api.nvim_buf_get_name(alt_buf) ~= "" and
+        #        vim.bo[alt_buf].buftype == "" then
+        #       vim.cmd("buffer " .. alt_buf)
+        #     else
+        #       vim.notify("No alternate buffer available", vim.log.levels.INFO)
+        #     end
+        #   end
+        # '';
         silent = true;
         noremap = true;
         desc = "Switch to alternate file buffer";

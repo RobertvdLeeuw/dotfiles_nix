@@ -95,7 +95,7 @@
       pkgs.nixfmt # Nix
       pkgs.rustfmt # Rust
       pkgs.ruff # Python (includes ruff_format and ruff linter)
-      pkgs.python311Packages.isort # Python import sorting
+      pkgs.python313Packages.isort # Python import sorting
       pkgs.python313Packages.sqlfmt # SQL
 
       # Linter packages

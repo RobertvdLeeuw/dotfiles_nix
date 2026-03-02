@@ -2,8 +2,9 @@
   description = "NixOS";
 
   inputs = {
-    # nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
-    nixpkgs.url = "github:NixOS/nixpkgs/a82ccc39b39b621151d6732718e3e250109076fa"; # TODO: Revert to unstable once ollama hipblaslt build cached.
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+    # nixpkgs.url = "github:NixOS/nixpkgs/c7b2bd8905ff2f8b2ef7c25c0dd5b468b0aad1f3";
+    # nixpkgs.url = "github:NixOS/nixpkgs/a82ccc39b39b621151d6732718e3e250109076fa"; # TODO: Revert to unstable once ollama hipblaslt build cached.
 
     home-manager = {
       url = "github:nix-community/home-manager";
@@ -40,7 +41,6 @@
             nvf.nixosModules.default
 
             home-manager.nixosModules.home-manager
-
             {
               home-manager.useGlobalPkgs = true;
               home-manager.useUserPackages = true;

@@ -1,7 +1,12 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 {
   programs.qutebrowser = {
-    enable = true;
+    enable = false;
 
     # Show tabs on Ctrl down
     # Ctrl+n tab nav
@@ -16,15 +21,15 @@
     # Bitwarden
     # Shazam
 
-
     extraConfig = ''
 
     '';
     # enableDefaultBindings = false;
-    keyBindings = {  # Key -> logic
-      normal = 
-        # builtins.listToAttrs (map 
-        #   (i: { name = "<Ctrl-${toString i}>"; value = "tab-focus ${toString i}"; }) 
+    keyBindings = {
+      # Key -> logic
+      normal =
+        # builtins.listToAttrs (map
+        #   (i: { name = "<Ctrl-${toString i}>"; value = "tab-focus ${toString i}"; })
         #   (lib.range 1 9)
         # ) //
         {
@@ -44,7 +49,8 @@
         "<Ctrl-y>" = "prompt-yes";
       };
     };
-    keyMappings = {  # Key -> other key
+    keyMappings = {
+      # Key -> other key
 
     };
 
@@ -56,7 +62,7 @@
 
     };
 
-    settings =  # https://qutebrowser.org/doc/help/settings.html
+    settings = # https://qutebrowser.org/doc/help/settings.html
       # Qutebrowser Catppuccin theme in Nix format
       # Palette
       let
@@ -90,7 +96,8 @@
         };
 
         theme = catppuccin;
-      in {
+      in
+      {
         colors = {
           completion = {
             category = {
@@ -269,7 +276,6 @@
 
         # statusbar.show = "never";
         tabs.show = "switching";
-
 
         # Optional: Add additional configuration options
         # This is based on the rest of the Python config, converted to Nix format

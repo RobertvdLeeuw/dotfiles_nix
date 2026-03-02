@@ -6,6 +6,7 @@
       shellAliases = {
         # rebuild = "sudo nixos-rebuild build --use-remote-sudo --impure && clear";
         update = "cd /etc/nixos; sudo nix flake update; sudo nixos-rebuild switch --flake --sudo --impure && clear; cd -";
+        updatev = "cd /etc/nixos; sudo nix flake update; sudo nixos-rebuild switch --show-trace --flake --sudo --impure && clear; cd -"; # Verbose
         cnfnix = "cd /etc/nixos && nvim configuration.nix && cd -";
         try = "nix-shell -p";
 

@@ -78,15 +78,27 @@ in
     };
   };
 
-  nixpkgs.config = {
-    allowUnsupportedSystem = true;
-    allowUnfree = true;
-    permittedInsecurePackages = [
-      "qtwebengine-5.15.19"
-    ];
+  nixpkgs = {
+    # overlays = [
+    #   (final: prev: {
+    #     inherit (prev.lixPackageSets.stable)
+    #       nixpkgs-review
+    #       nix-eval-jobs
+    #       nix-fast-build
+    #       ;
+    #   })
+    # ];
+    config = {
+      allowUnsupportedSystem = true;
+      allowUnfree = true;
+      permittedInsecurePackages = [
+        "qtwebengine-5.15.19"
+      ];
+    };
   };
 
   nix = {
+    package = pkgs.lixPackageSets.stable.lix;
     settings = {
       auto-optimise-store = true;
       experimental-features = [
@@ -140,7 +152,18 @@ in
 
   services = {
     printing.enable = true; # CUPS
-    redshift.enable = true;
+    redshift = {
+      enable = true;
+      provider = "geoclue2";
+
+      dawnTime = "8:30-9:30";
+      duskTime = "20:30-21:30";
+
+      temperature = {
+        day = 5500;
+        night = 3700;
+      };
+    };
     blueman.enable = true;
 
     journald.extraConfig = "SystemMaxUse=50M";
