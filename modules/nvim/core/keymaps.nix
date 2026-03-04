@@ -185,6 +185,7 @@
         lua = true;
         action = /* lua */ ''
           function()
+            -- TODO: ignore if no match foudn.
             vim.g.searchcount_timestamp = vim.loop.now()
             vim.cmd.normal({ bang = true, args = {'n'} })
           end
@@ -198,6 +199,7 @@
         lua = true;
         action = /* lua */ ''
           function()
+            -- TODO: ignore if no match found.
             vim.g.searchcount_timestamp = vim.loop.now()
             vim.cmd.normal({ bang = true, args = {'N'} })
           end

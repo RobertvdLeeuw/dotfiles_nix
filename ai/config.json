@@ -8,16 +8,8 @@
         "baseURL": "http://localhost:11434/v1"
       },
       "models": {
-        "qwen2.5-coder:7b-16k": {
-          "name": "qwen2.5-coder 16k",
-          "tools": true
-        },
-        "qwen2.5-coder:7b-32k": {
-          "name": "qwen2.5-coder 32k",
-          "tools": true
-        },
-        "qwen2.5-coder:7b-48k": {
-          "name": "qwen2.5-coder 48k",
+        "qwen3.5:9b-48k": {
+          "name": "Qwen3.5 9B (48K)",
           "tools": true
         }
       }
