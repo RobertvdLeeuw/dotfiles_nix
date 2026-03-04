@@ -30,10 +30,10 @@
     enable = true;
     provider = "geoclue2";
 
-    brightness = {
+    settings.redshift = {
       # Note the string values below.
-      day = "1";
-      night = "1";
+      brightness-day = "1";
+      brightness-night = "1";
     };
 
     dawnTime = "8:30-9:30";

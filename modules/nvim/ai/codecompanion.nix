@@ -14,7 +14,7 @@
       require("codecompanion").setup({
       	interactions = {
       		chat = {
-      			adapter = "opencode",
+      			adapter = { name = "opencode", model = "qwen3.5:9b-48k" },
       			-- opts = {
       			-- 	---Decorate the user message before it's sent to the LLM
       			-- 	---@param message string
@@ -27,7 +27,7 @@
       			-- },
       		},
       		inline = {
-      			adapter = "opencode",
+      			adapter = { name = "opencode", model = "qwen3.5:9b-48k" },
       		},
       	},
 
@@ -72,8 +72,7 @@
 
       				auto_generate_title = true,
       				title_generation_opts = {
-      					adapter = "ollama",
-      					model = "qwen3.5:9b-48k",
+      					adapter = { name = "ollama", model = "qwen3.5:9b-48k" },
       					refresh_every_n_prompts = 3,
       					max_refreshes = 5,
       					-- format_title = function(original_title)
