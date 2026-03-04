@@ -74,7 +74,7 @@
 
       				auto_generate_title = true,
       				title_generation_opts = {
-      					adapter = "opencode",
+      					adapter = "ollama",
       					model = "qwen2.5-coder:7b-48k",
       					refresh_every_n_prompts = 3,
       					max_refreshes = 5,
