@@ -7,7 +7,7 @@
 }:
 {
   imports = [
-    ../shells/zsh.nix
+    ../shells
     ../modules/system-tools.nix
 
     ../modules/everyday.nix

@@ -2,7 +2,7 @@
 
 {
   imports = [
-    ../shells/zsh.nix
+    ../shells
     ../modules/system-tools.nix
   ];
 

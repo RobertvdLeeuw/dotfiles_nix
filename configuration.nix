@@ -11,15 +11,10 @@
     ./hardware-configuration.nix
     ./modules/sway/sway.nix
 
-    # ./modules/prompt.nix
-
-    ./modules/python.nix
-    ./modules/rust.nix
+    ./modules/codelangs/python.nix
+    ./modules/codelangs/rust.nix
 
     ./modules/nvim
-
-    ./shells/bash.nix
-
   ];
 
   systemd.services = {

@@ -3,32 +3,6 @@
   programs = {
     zsh = {
       enable = true;
-      shellAliases = {
-        # rebuild = "sudo nixos-rebuild build --use-remote-sudo --impure && clear";
-        update = "cd /etc/nixos; sudo nix flake update; sudo nixos-rebuild switch --flake --sudo --impure && clear; cd -";
-        updatev = "cd /etc/nixos; sudo nix flake update; sudo nixos-rebuild switch --show-trace --flake --sudo --impure && clear; cd -"; # Verbose
-        cnfnix = "cd /etc/nixos && nvim configuration.nix && cd -";
-        try = "nix-shell -p";
-
-        todo = "nvim ~/Documents/todo.md";
-        books = "nvim ~/Documents/books.txt";
-
-        tr = "tree --gitignore -L 3 -a -I .git/";
-
-        ga = "git add . && clear";
-        gs = "git status";
-        gc = "oco --context ";
-        gcm = "git commit -m ";
-        gp = "git push && clear";
-
-        dumb = "aichat -e";
-      };
-      shellGlobalAliases = {
-        cat = "bat";
-        # nano = "nvim";
-        # surf = "GDK_BACKEND=x11 surf"; # TODO: Better fix for this, surf + xwayland = :()
-      };
-
       initContent = /* sh */ ''
         eval "$(zoxide init --cmd cd zsh)"
         eval "$(fzf --zsh)"
@@ -139,17 +113,13 @@
       enableZshIntegration = true;
     };
 
-    direnv = {
-      enable = true;
-      enableZshIntegration = true;
-      config = { };
-      silent = true;
-
-      nix-direnv.enable = true;
-    };
+    # direnv = {
+    #   enable = true;
+    #   enableZshIntegration = true;
+    #   config = { };
+    #   silent = true;
+    #
+    #   nix-direnv.enable = true;
+    # };
   };
-
-  home.packages = with pkgs; [
-    any-nix-shell # for nix-shell in zsh. I don't like bash. No. Stop it.
-  ];
 }
