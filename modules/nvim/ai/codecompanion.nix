@@ -13,18 +13,11 @@
     luaConfigPost = /* lua */ ''
       require("codecompanion").setup({
       	interactions = {
+      		background = {
+      			adapter = { name = "opencode", model = "qwen3.5:9b-48k" },
+      		},
       		chat = {
       			adapter = { name = "opencode", model = "qwen3.5:9b-48k" },
-      			-- opts = {
-      			-- 	---Decorate the user message before it's sent to the LLM
-      			-- 	---@param message string
-      			-- 	---@param adapter CodeCompanion.Adapter
-      			-- 	---@param context table
-      			-- 	---@return string
-      			-- 	prompt_decorator = function(message, adapter, context)
-      			-- 		return string.format([[<prompt>%s</prompt>]], message)
-      			-- 	end,
-      			-- },
       		},
       		inline = {
       			adapter = { name = "opencode", model = "qwen3.5:9b-48k" },
@@ -153,6 +146,7 @@
       end
 
       function M.new_chat()
+      	-- TODO: Fix the stupid goddamn bullshit secret default to copilot no matter how deep and often I have to ram qwen3.5 into the asshole of codecompanion.
       	if vim.bo.filetype == "codecompanion" then
       		require("codecompanion").close_last_chat()
       		require("codecompanion").chat()

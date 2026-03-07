@@ -8,6 +8,7 @@ modules/docs/config/sources/
 .ai/
 ai/comparisons.txt
 
+.env
 
 # secrets.nix
 

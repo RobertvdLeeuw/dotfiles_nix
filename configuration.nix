@@ -1,6 +1,7 @@
 {
   config,
   pkgs,
+  pkgs-ollama,
   lib,
   inputs,
   ...
@@ -8,7 +9,7 @@
 let
   user = "robert";
 
-  config_dir = "/mnt/storage/nc/Personal/nixos";
+  # config_dir = "/mnt/storage/nc/Personal/nixos";
 
   # workspaces = (builtins.getFlake "${config_dir}/modules/waybar/modules/workspaces").packages.x86_64-linux.default;
 
@@ -30,7 +31,13 @@ in
 
   ];
 
-  systemd.services.NetworkManager-wait-online.wantedBy = lib.mkForce [ ];
+  systemd.services = {
+    nix-daemon.serviceConfig = {
+      MemoryMax = "24G";
+      MemoryHigh = "20G";
+    };
+    NetworkManager-wait-online.wantedBy = lib.mkForce [ ];
+  };
 
   networking = {
     # TODO: secrets = builtins.fromJSON (builtins.readFile "${self}/secrets/secrets.json");
@@ -74,7 +81,7 @@ in
     stateVersion = "24.11"; # DO NOT TOUCH! Needed in case of backwards incompatible update.
     autoUpgrade = {
       enable = true;
-      channel = "https://nixos.org/channels/nixos-VERSION";
+      channel = "https://nixos.org/channels/nixos-VERSION"; # TODO: Change?
     };
   };
 
@@ -100,6 +107,9 @@ in
   nix = {
     package = pkgs.lixPackageSets.stable.lix;
     settings = {
+      max-jobs = 1;
+      cores = 12;
+
       auto-optimise-store = true;
       experimental-features = [
         "nix-command"
@@ -193,7 +203,7 @@ in
 
     ollama = {
       enable = true;
-      package = pkgs.ollama-rocm;
+      package = pkgs-ollama.ollama-rocm;
     };
 
     # postgresql = {
@@ -220,8 +230,8 @@ in
         "networkmanager"
         "wheel"
         "docker"
-        "video"
-      ]; # Added video group for GPU access
+        "video" # For GPU access
+      ];
     };
   };
 
@@ -240,48 +250,9 @@ in
       docker
       # nix-fast-build
 
-      gst_all_1.gstreamer
-      gst_all_1.gst-plugins-base
-      gst_all_1.gst-plugins-good
-      gst_all_1.gst-plugins-bad
-      gst_all_1.gst-plugins-ugly
-      gst_all_1.gst-libav
-
-      # Additional audio libraries
-      pulseaudio # Even with pipewire, some games need PA libs
-      alsa-lib
-      ffmpeg-full
-
-      git-crypt
-      # surf
-
-      # wikiman
-
       dust
-      zstd
-
-      flatpak
-      time
-      pciutils
-      usbutils
-      lm_sensors
-
-      # Support  TODO: Recategorize.
-      ffmpeg_6
-
-      # Package managers
-      nodejs # npm
-      firefox
-      git-lfs
-      git-lfs-transfer
-
-      # workspaces
-
-      # To categorize
       git
-      gcc
-      ninja
-      any-nix-shell # for nix-shell in zsh. In don't like bash. No. Stop it.
+      any-nix-shell # for nix-shell in zsh. I don't like bash. No. Stop it.
     ];
 
     plasma6.excludePackages = with pkgs.kdePackages; [
@@ -297,9 +268,8 @@ in
 
     variables = {
       SHELL = "${pkgs.zsh}/bin/zsh";
-      AMD_DEBUG = "nodma"; # Disable DMA, can help with stability
-      RADV_PERFTEST = "nggc"; # NGG culling
-      # GDK_BACKEND = "x11";  # For surf.
+      # AMD_DEBUG = "nodma"; # Disable DMA, can help with stability
+      # RADV_PERFTEST = "nggc"; # NGG culling
     };
   };
 
@@ -309,23 +279,6 @@ in
       interactiveShellInit = ''
         any-nix-shell zsh --info-right | source /dev/stdin
       '';
-    };
-    nix-ld = {
-      # For minecraft AT launcher.
-      enable = false;
-      libraries = with pkgs; [
-        # Common libraries needed for Minecraft/Java applications
-        libGL
-        libGLU
-        xorg.libX11
-        xorg.libXcursor
-        xorg.libXrandr
-        xorg.libXxf86vm
-        xorg.libXi
-        pulseaudio
-        alsa-lib
-        openal
-      ];
     };
   };
 }

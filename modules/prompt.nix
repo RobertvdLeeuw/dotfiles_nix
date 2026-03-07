@@ -18,6 +18,7 @@
       character = {
         success_symbol = "└─";
         error_symbol = "└─";
+        vimcmd_symbol = "└─";
       };
 
       username = {

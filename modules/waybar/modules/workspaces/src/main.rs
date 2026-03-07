@@ -2,7 +2,6 @@
 // : Os { code: 11, kind: WouldBlock, message: "Resource temporarily unavailable" }
 // note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
 
-
 use std::collections::HashMap;
 use std::env;
 use std::io::{self, Write};
@@ -12,13 +11,11 @@ use std::thread::sleep;
 use std::time::Duration;
 use std::vec;
 
-
 fn build_workspace_reprs() -> HashMap<String, String> {
     let mut data = HashMap::new();
     // Nonempty first
     // let open_workspaces: Vec<(String, bool, String)>;
     let open_workspaces = get_open_workspaces();
-
 
     for (open_ws_id, visible, repr) in open_workspaces {
         data.insert(open_ws_id, format_as_icon(&repr, visible));
@@ -26,7 +23,8 @@ fn build_workspace_reprs() -> HashMap<String, String> {
 
     // Then pad with empty
     for ws_id in (1..=4).chain(11..=14).chain(20..=24) {
-        data.entry(ws_id.to_string()).or_insert_with(|| "".to_string());
+        data.entry(ws_id.to_string())
+            .or_insert_with(|| "".to_string());
     }
 
     data
@@ -51,12 +49,11 @@ fn format_as_icon(repr: &str, visible: bool) -> String {
                 "libreoffice-calc" => "󰧷 ",
                 "steam" => " ",
                 "wasistlos" => " ",
-                _ if app.contains("steam_app") => "󰊗 ",  // TODO: This only works for a handful of games.
+                _ if app.contains("steam_app") => "󰊗 ", // TODO: This only works for a handful of games.
                 // TEST NAMES FROM BELOW
                 "teams" => "󰊻 ",
                 // "Blender" => "",
                 // "Discord" => "",
-
                 _ => "󱗼 ",
             }
             .to_string()
@@ -75,7 +72,10 @@ fn get_open_workspaces() -> Vec<(String, bool, String)> {
         .expect("Failed to spawn swaymsg command");
 
     // Take ownership of stdout before spawning jq
-    let stdout = open_workspaces.stdout.take().expect("Failed to get stdout from swaymsg");
+    let stdout = open_workspaces
+        .stdout
+        .take()
+        .expect("Failed to get stdout from swaymsg");
 
     // Use the taken stdout for jq's stdin
     let jq_child = Command::new("jq")

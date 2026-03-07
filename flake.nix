@@ -3,8 +3,8 @@
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
-    # nixpkgs.url = "github:NixOS/nixpkgs/c7b2bd8905ff2f8b2ef7c25c0dd5b468b0aad1f3";
-    # nixpkgs.url = "github:NixOS/nixpkgs/a82ccc39b39b621151d6732718e3e250109076fa"; # TODO: Revert to unstable once ollama hipblaslt build cached.
+
+    nixpkgs-ollama.url = "github:NixOS/nixpkgs/8c809a146a140c5c8806f13399592dbcb1bb5dc4"; # Avoid rebuilding hipblaslt constantly.
 
     home-manager = {
       url = "github:nix-community/home-manager";
@@ -28,6 +28,7 @@
     {
       self,
       nixpkgs,
+      nixpkgs-ollama,
       home-manager,
       nvf,
       ...
@@ -42,17 +43,23 @@
 
             home-manager.nixosModules.home-manager
             {
-              home-manager.useGlobalPkgs = true;
-              home-manager.useUserPackages = true;
-              home-manager.extraSpecialArgs = {
-                inherit inputs;
+              home-manager = {
+                useGlobalPkgs = true;
+                useUserPackages = true;
+                extraSpecialArgs = {
+                  inherit inputs;
+                };
+                users.robert = import ./home/home.nix;
+                users.root = import ./home/home-root.nix;
               };
-              home-manager.users.robert = import ./home/home.nix;
-              home-manager.users.root = import ./home/home-root.nix;
             }
           ];
           specialArgs = {
             inherit inputs;
+            pkgs-ollama = import nixpkgs-ollama {
+              system = "x86_64-linux";
+              config.allowUnfree = true;
+            };
           };
         };
       };

@@ -26,21 +26,23 @@
     stateVersion = "24.11"; # DO NOT TOUCH! Needed in case of backwards incompatible update.
   };
 
-  services.redshift = {
+  services.gammastep = {
     enable = true;
     provider = "geoclue2";
 
-    settings.redshift = {
-      # Note the string values below.
-      brightness-day = "1";
-      brightness-night = "1";
-    };
+    # TODO: Get this working. (https://discourse.nixos.org/t/sys-class-backlight-empty/57892)
+    # settings = {
+    #   general = {
+    #     brightness-day = "0.5"; # Brightness as a string
+    #     brightness-night = "0.5"; # Brightness as a string
+    #   };
+    # };
 
     dawnTime = "8:30-9:30";
     duskTime = "20:30-21:30";
 
     temperature = {
-      day = 5500;
+      day = 6500;
       night = 3700;
     };
   };
@@ -49,17 +51,14 @@
     # General
     blender
     jupyter
-    # blender-hip  # GPU accel
+
     # teams
     brave
     loupe
     libreoffice-qt
     spotify
-    # whatsapp-for-linux
-    # wasistlos
     whatsie
     # marimo
-    # spotdl
     teams
     gimp
 
@@ -76,28 +75,13 @@
     lutris
 
     steam-run
-    libtheora # This provides libtheoradec.so.1
-
-    # You may also need these for ScummVM:
-    alsa-lib
-    pulseaudio
-    SDL2
-    zlib
-    libpng
-    libjpeg
-    freetype
 
     p7zip
 
-    # Support
-    nurl
-    nix-init
-    # Misc
-
-    # # It is sometimes useful to fine-tune packages, for example, by applying
-    # # overrides. You can do that directly here, just don't forget the
-    # # parentheses. Maybe you want to install Nerd Fonts with a limited number of
-    # # fonts?
+    # It is sometimes useful to fine-tune packages, for example, by applying
+    # overrides. You can do that directly here, just don't forget the
+    # parentheses. Maybe you want to install Nerd Fonts with a limited number of
+    # fonts?
     # (pkgs.nerdfonts.override { fonts = [ "FantasqueSansMono" ]; })
 
     # # You can also create simple shell scripts directly inside your
@@ -113,9 +97,8 @@
       source = /etc/nixos/ai;
       recursive = true;
     };
-
-    # ".config/waybar/style.css".source = /etc/nixos/modules/waybar/style.css;
   };
+
   # Home Manager can also manage your environment variables through
   # 'home.sessionVariables'. These will be explicitly sourced when using a
   # shell provided by Home Manager. If you don't want to manage your shell

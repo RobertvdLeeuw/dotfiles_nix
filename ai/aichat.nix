@@ -9,7 +9,7 @@
   programs.aichat = {
     enable = true;
     settings = {
-      model = "ollama:qwen2.5-coder:7b-48k";
+      model = "ollama:qwen3.5:9b-48k";
       clients = [
         {
           type = "openai-compatible";
@@ -17,7 +17,7 @@
           api_base = "http://localhost:11434/v1";
           models = [
             {
-              name = "qwen2.5-coder:7b-48k";
+              name = "qwen3.5:9b-48k";
               supports_function_calling = true;
             }
           ];

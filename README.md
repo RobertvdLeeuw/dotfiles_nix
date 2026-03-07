@@ -25,8 +25,6 @@
 - [ ] https://www.youtube.com/watch?v=FYOKD5TCmPY
   - [ ] Static IP
 - [ ] Look into snowfall
-- [ ] Base (probably not nix) for non-nix configs.
-  - Stuff like global colors file
 - [ ] Something against those incessant ' files.
 - [ ] Fix starship prompt and alacritty cursor on vi mode
 - [ ] Something instant prompt too like power10k? Might have to PR

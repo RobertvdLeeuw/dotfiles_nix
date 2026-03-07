@@ -106,6 +106,7 @@
               	sql = { "sqls" },
               	json = { "jsonls" },
               	nix = { "nil" },
+              	markdown = { "render-markdown" },
               }
             '';
           in

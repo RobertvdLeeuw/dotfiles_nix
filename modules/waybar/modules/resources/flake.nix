@@ -25,10 +25,22 @@
             makeWrapper
           ];
 
-          postInstall = ''
-            wrapProgram $out/bin/resources \
-              --prefix PATH : ${pkgs.lib.makeBinPath [ pkgs.rocmPackages.rocm-smi ]}
-          '';
+          buildInputs = with pkgs; [
+            rocmPackages.rocm-smi
+            lm_sensors
+          ];
+
+          postInstall =
+            let
+              binPath = pkgs.lib.makeBinPath [
+                pkgs.rocmPackages.rocm-smi
+                pkgs.lm_sensors
+              ];
+            in
+            ''
+              wrapProgram $out/bin/resources \
+                --prefix PATH : "${binPath}"
+            '';
         };
       in
       {
@@ -41,7 +53,8 @@
           packages = with pkgs; [
             rust-analyzer
             clippy
-            rocmPackages.rocm-smi # Also available in dev shell
+            rocmPackages.rocm-smi
+            lm_sensors
           ];
         };
       }

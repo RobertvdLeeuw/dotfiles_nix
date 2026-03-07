@@ -5,6 +5,9 @@
   ...
 }:
 let
+  workspaces = inputs.waybar-workspaces.packages.x86_64-linux.default;
+  resources = inputs.waybar-resources.packages.x86_64-linux.default;
+
   base_config = {
     height = 30;
     spacing = 4; # Gaps between modules (4px)
@@ -53,50 +56,51 @@ let
         screen
         // {
           "custom/workspaces" = {
-            exec = "workspaces ${screen.output}";
+            exec = "${workspaces}/bin/workspaces ${screen.output}";
             return-type = "json";
             format = "{}";
             tooltip = false;
             escape = false;
           };
         }
-        // (
-          if screen.bar_id != "3" then
-            {
-              # Horizontal only
-              network = {
-                format-wifi = "{essid} ({signalStrength}%) 󰤨 ";
-                format-ethernet = " 󰌘 ";
-                format-linked = "{ifname} (No IP) 󰤩 ";
-                format-disconnected = " 󰌙 ";
-                # format-alt = "{ifname}: {ipaddr}/{cidr}";
-                tooltip = false;
-              };
-              "custom/cpu_info" = {
-                exec = "resources CPU";
-                return-type = "json";
-                format = "{}";
-                tooltip = false;
-                escape = false;
-              };
-              "custom/gpu_info" = {
-                exec = "resources GPU";
-                return-type = "json";
-                format = "{}";
-                tooltip = false;
-                escape = false;
-              };
-              modules-right = [
-                "network"
-                "custom/cpu_info"
-                "custom/gpu_info"
-              ];
-            }
-          else
-            {
-              # Vertical only
-            }
-        )
+        //
+          # (
+          #   if screen.bar_id != "3" then
+          {
+            # Horizontal only
+            network = {
+              format-wifi = "{essid} ({signalStrength}%) 󰤨 ";
+              format-ethernet = " 󰌘 ";
+              format-linked = "{ifname} (No IP) 󰤩 ";
+              format-disconnected = " 󰌙 ";
+              # format-alt = "{ifname}: {ipaddr}/{cidr}";
+              tooltip = false;
+            };
+            "custom/cpu_info" = {
+              exec = "${resources}/bin/resources CPU";
+              return-type = "json";
+              format = "{}";
+              tooltip = false;
+              escape = false;
+            };
+            "custom/gpu_info" = {
+              exec = "${resources}/bin/resources GPU";
+              return-type = "json";
+              format = "{}";
+              tooltip = false;
+              escape = false;
+            };
+            modules-right = [
+              "network"
+              "custom/cpu_info"
+              "custom/gpu_info"
+            ];
+          }
+        # else
+        #   {
+        #     # Vertical only
+        #   }
+        # )
       )
       [
         {
