@@ -12,8 +12,7 @@
 # What else?
 
 let
-  workspaces = inputs.waybar-workspaces.packages.x86_64-linux.default;
-  resources = inputs.waybar-resources.packages.x86_64-linux.default;
+  inherit (inputs.waybar-modules.packages.x86_64-linux) workspaces resources;
 
   base_config = {
     height = 30;
@@ -43,7 +42,7 @@ let
           "󰓃"
         ];
       };
-      on-click = "/etc/nixos/modules/waybar/modules/swap_audio_output.sh";
+      on-click = "/etc/nixos/modules/waybar/swap_audio_output.sh";
       on-click-right = "pavucontrol";
       tooltip = false;
     };
@@ -118,11 +117,12 @@ in
       settings = configs;
       style = ./style.css;
     };
-    eww = {
-      enable = true;
-      enableZshIntegration = true;
-
-      configDir = ./modules/eww;
-    };
+    # TODO: Implement EWW.
+    # eww = {
+    #   enable = true;
+    #   enableZshIntegration = true;
+    #
+    #   configDir = ./modules/eww;
+    # };
   };
 }

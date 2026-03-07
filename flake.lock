@@ -2,26 +2,11 @@
   "nodes": {
     "crane": {
       "locked": {
-        "lastModified": 1771438068,
-        "narHash": "sha256-nGBbXvEZVe/egCPVPFcu89RFtd8Rf6J+4RFoVCFec0A=",
+        "lastModified": 1772560058,
+        "narHash": "sha256-NuVKdMBJldwUXgghYpzIWJdfeB7ccsu1CC7B+NfSoZ8=",
         "owner": "ipetkov",
         "repo": "crane",
-        "rev": "b5090e53e9d68c523a4bb9ad42b4737ee6747597",
-        "type": "github"
-      },
-      "original": {
-        "owner": "ipetkov",
-        "repo": "crane",
-        "type": "github"
-      }
-    },
-    "crane_2": {
-      "locked": {
-        "lastModified": 1770419512,
-        "narHash": "sha256-o8Vcdz6B6bkiGUYkZqFwH3Pv1JwZyXht3dMtS7RchIo=",
-        "owner": "ipetkov",
-        "repo": "crane",
-        "rev": "2510f2cbc3ccd237f700bb213756a8f35c32d8d7",
+        "rev": "db590d9286ed5ce22017541e36132eab4e8b3045",
         "type": "github"
       },
       "original": {
@@ -70,24 +55,6 @@
     "flake-utils": {
       "inputs": {
         "systems": "systems_2"
-      },
-      "locked": {
-        "lastModified": 1731533236,
-        "narHash": "sha256-l0KFg5HjrsfsO/JpG+r7fRrqm12kzFHyUHqHCVpMMbI=",
-        "owner": "numtide",
-        "repo": "flake-utils",
-        "rev": "11707dc2f618dd54ca8739b309ec4fc024de578b",
-        "type": "github"
-      },
-      "original": {
-        "owner": "numtide",
-        "repo": "flake-utils",
-        "type": "github"
-      }
-    },
-    "flake-utils_2": {
-      "inputs": {
-        "systems": "systems_3"
       },
       "locked": {
         "lastModified": 1731533236,
@@ -237,8 +204,7 @@
         "nixpkgs": "nixpkgs",
         "nixpkgs-ollama": "nixpkgs-ollama",
         "nvf": "nvf",
-        "waybar-resources": "waybar-resources",
-        "waybar-workspaces": "waybar-workspaces"
+        "waybar-modules": "waybar-modules"
       }
     },
     "systems": {
@@ -271,22 +237,7 @@
         "type": "github"
       }
     },
-    "systems_3": {
-      "locked": {
-        "lastModified": 1681028828,
-        "narHash": "sha256-Vy1rq5AaRuLzOxct8nz4T6wlgyUR7zLU309k9mBC768=",
-        "owner": "nix-systems",
-        "repo": "default",
-        "rev": "da67096a3b9bf56a91d16901293e51ba5b49a27e",
-        "type": "github"
-      },
-      "original": {
-        "owner": "nix-systems",
-        "repo": "default",
-        "type": "github"
-      }
-    },
-    "waybar-resources": {
+    "waybar-modules": {
       "inputs": {
         "crane": "crane",
         "flake-utils": "flake-utils",
@@ -295,33 +246,17 @@
         ]
       },
       "locked": {
-        "lastModified": 1772915518,
-        "narHash": "sha256-gmGcoOH+wuuqf4C78WCNIx/xPtO56Cnoa8UKeBPaf1A=",
-        "path": "/mnt/storage/nc/Personal/nixos/modules/waybar/modules/resources",
-        "type": "path"
+        "lastModified": 1772924553,
+        "narHash": "sha256-TFGULATDv/pHQGt+SO4UKimnKU9TuIY+AIjJNnlP4Bs=",
+        "owner": "RobertVDLeeuw",
+        "repo": "waybar-modules",
+        "rev": "402c2fb53bddc2ed9ce4e7227ff3300fd0319c6f",
+        "type": "github"
       },
       "original": {
-        "path": "/mnt/storage/nc/Personal/nixos/modules/waybar/modules/resources",
-        "type": "path"
-      }
-    },
-    "waybar-workspaces": {
-      "inputs": {
-        "crane": "crane_2",
-        "flake-utils": "flake-utils_2",
-        "nixpkgs": [
-          "nixpkgs"
-        ]
-      },
-      "locked": {
-        "lastModified": 1772915271,
-        "narHash": "sha256-aCIcC56qEcUWud5I+XOTvsRzpt1bQxMi1ljL5q7yBgo=",
-        "path": "/mnt/storage/nc/Personal/nixos/modules/waybar/modules/workspaces",
-        "type": "path"
-      },
-      "original": {
-        "path": "/mnt/storage/nc/Personal/nixos/modules/waybar/modules/workspaces",
-        "type": "path"
+        "owner": "RobertVDLeeuw",
+        "repo": "waybar-modules",
+        "type": "github"
       }
     }
   },

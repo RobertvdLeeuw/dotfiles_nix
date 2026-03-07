@@ -6,6 +6,7 @@
     # Dolphin is installed auto via KDE
 
     libreoffice-qt
+    pavucontrol
 
     spotify
 

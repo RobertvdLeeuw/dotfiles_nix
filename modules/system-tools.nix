@@ -10,6 +10,7 @@
     wget
     jq
     which
+    bluetuith
 
     gettext
     unzip
@@ -23,7 +24,5 @@
     # nix-fast-build
 
     p7zip
-
-    git
   ];
 }

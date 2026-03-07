@@ -100,6 +100,7 @@
         source /etc/nixos/.env
         set +o allexport
 
+        any-nix-shell zsh --info-right | source /dev/stdin
         export NIXPKGS_ALLOW_UNFREE=1
       '';
 

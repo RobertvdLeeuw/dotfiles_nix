@@ -5,9 +5,7 @@
   inputs,
   ...
 }:
-let
-  user = "robert";
-in
+
 {
   imports = [
     ./hardware-configuration.nix
@@ -182,9 +180,9 @@ in
 
   users = {
     defaultUserShell = pkgs.zsh;
-    users.${user} = {
+    users.robert = {
       isNormalUser = true;
-      description = "${user}";
+      description = "robert";
       extraGroups = [
         "networkmanager"
         "wheel"
@@ -205,7 +203,6 @@ in
     pathsToLink = [ "/share/zsh" ];
 
     plasma6.excludePackages = with pkgs.kdePackages; [
-      # kwrite
       elisa
       kate
       konsole
@@ -220,13 +217,5 @@ in
     };
   };
 
-  programs = {
-    zsh = {
-      enable = true;
-      # TODO: Integrate with shells/zsh.nix? (that's manager by homemanager)
-      interactiveShellInit = ''
-        any-nix-shell zsh --info-right | source /dev/stdin
-      '';
-    };
-  };
+  programs.zsh.enable = true;
 }

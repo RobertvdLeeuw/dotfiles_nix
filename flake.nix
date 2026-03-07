@@ -11,13 +11,8 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    waybar-workspaces = {
-      url = "path:/mnt/storage/nc/Personal/nixos/modules/waybar/modules/workspaces";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
-    waybar-resources = {
-      url = "path:/mnt/storage/nc/Personal/nixos/modules/waybar/modules/resources";
+    waybar-modules = {
+      url = "github:RobertVDLeeuw/waybar-modules";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
