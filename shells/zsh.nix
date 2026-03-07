@@ -147,4 +147,8 @@
       nix-direnv.enable = true;
     };
   };
+
+  home.packages = with pkgs; [
+    any-nix-shell # for nix-shell in zsh. I don't like bash. No. Stop it.
+  ];
 }

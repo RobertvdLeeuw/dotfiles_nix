@@ -1,26 +1,19 @@
 {
   config,
   pkgs,
-  pkgs-ollama,
   lib,
   inputs,
   ...
 }:
 let
   user = "robert";
-
-  # config_dir = "/mnt/storage/nc/Personal/nixos";
-
-  # workspaces = (builtins.getFlake "${config_dir}/modules/waybar/modules/workspaces").packages.x86_64-linux.default;
-
-  # secrets = import ./secrets.nix;
 in
 {
   imports = [
     ./hardware-configuration.nix
     ./modules/sway/sway.nix
 
-    ./modules/prompt.nix
+    # ./modules/prompt.nix
 
     ./modules/python.nix
     ./modules/rust.nix
@@ -33,14 +26,13 @@ in
 
   systemd.services = {
     nix-daemon.serviceConfig = {
-      MemoryMax = "24G";
-      MemoryHigh = "20G";
+      MemoryMax = "28G";
+      MemoryHigh = "24G";
     };
     NetworkManager-wait-online.wantedBy = lib.mkForce [ ];
   };
 
   networking = {
-    # TODO: secrets = builtins.fromJSON (builtins.readFile "${self}/secrets/secrets.json");
     hostName = "nixos";
     networkmanager.enable = true;
     useDHCP = lib.mkDefault true;
@@ -57,24 +49,7 @@ in
         443
         12567
       ];
-      # allowedUDPPortRanges = [
-      #   { from = 4000; to = 4007; }
-      #   { from = 8000; to = 8010; }
-      # ];
     };
-    # interfaces.eno1 = {
-    #   useDHCP = false;
-    #   ipv4.addresses = [{
-    #     address = secrets.ip_address;
-    #     prefixLength = 24;
-    #   }];
-    # };
-
-    # defaultGateway = secrets.ip_gateway;
-    # defaultGateway = [{
-    #   address = secrets.ip_gateway;
-    #   interface = "eno1";
-    # }];
   };
 
   system = {
@@ -107,9 +82,6 @@ in
   nix = {
     package = pkgs.lixPackageSets.stable.lix;
     settings = {
-      max-jobs = 1;
-      cores = 12;
-
       auto-optimise-store = true;
       experimental-features = [
         "nix-command"
@@ -161,7 +133,6 @@ in
   location.provider = "geoclue2"; # For redshift.
 
   services = {
-    printing.enable = true; # CUPS
     blueman.enable = true;
 
     journald.extraConfig = "SystemMaxUse=50M";
@@ -184,13 +155,6 @@ in
       };
     };
 
-    hardware.openrgb = {
-      # enable = true;
-      package = pkgs.openrgb-with-all-plugins;
-      motherboard = "amd";
-      server.port = 6742;
-    };
-
     pipewire = {
       enable = true;
       pulse.enable = true;
@@ -199,11 +163,6 @@ in
         enable = true;
         support32Bit = true;
       };
-    };
-
-    ollama = {
-      enable = true;
-      package = pkgs-ollama.ollama-rocm;
     };
 
     # postgresql = {
@@ -244,16 +203,6 @@ in
 
   environment = {
     pathsToLink = [ "/share/zsh" ];
-    systemPackages = with pkgs; [
-      discord
-      docker-compose
-      docker
-      # nix-fast-build
-
-      dust
-      git
-      any-nix-shell # for nix-shell in zsh. I don't like bash. No. Stop it.
-    ];
 
     plasma6.excludePackages = with pkgs.kdePackages; [
       # kwrite
@@ -268,14 +217,13 @@ in
 
     variables = {
       SHELL = "${pkgs.zsh}/bin/zsh";
-      # AMD_DEBUG = "nodma"; # Disable DMA, can help with stability
-      # RADV_PERFTEST = "nggc"; # NGG culling
     };
   };
 
   programs = {
     zsh = {
       enable = true;
+      # TODO: Integrate with shells/zsh.nix? (that's manager by homemanager)
       interactiveShellInit = ''
         any-nix-shell zsh --info-right | source /dev/stdin
       '';

@@ -1,4 +1,3 @@
-
 { config, pkgs, ... }:
 {
   environment = {
@@ -6,8 +5,6 @@
     systemPackages = with pkgs; [
       rustc
       cargo
-
-      #  TODO: Cargo2Nix
     ];
   };
 }

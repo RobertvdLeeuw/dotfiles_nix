@@ -1,6 +1,3 @@
-# modules/waybar/modules/workspaces/
-# modules/waybar/modules/resources/
-
 modules/docs/config/sources/
 
 **/target/
@@ -9,6 +6,4 @@ modules/docs/config/sources/
 ai/comparisons.txt
 
 .env
-
-# secrets.nix
 

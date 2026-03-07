@@ -25,9 +25,8 @@
         # Screenshots
         grim
         slurp
-
-        # kdePackages.dolphin
       ];
     };
   };
+
 }

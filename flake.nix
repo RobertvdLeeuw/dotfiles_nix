@@ -48,6 +48,10 @@
                 useUserPackages = true;
                 extraSpecialArgs = {
                   inherit inputs;
+                  pkgs-ollama = import nixpkgs-ollama {
+                    system = "x86_64-linux";
+                    config.allowUnfree = true;
+                  };
                 };
                 users.robert = import ./home/home.nix;
                 users.root = import ./home/home-root.nix;
@@ -56,10 +60,6 @@
           ];
           specialArgs = {
             inherit inputs;
-            pkgs-ollama = import nixpkgs-ollama {
-              system = "x86_64-linux";
-              config.allowUnfree = true;
-            };
           };
         };
       };

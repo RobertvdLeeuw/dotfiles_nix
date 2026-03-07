@@ -1,11 +1,23 @@
 {
   config,
   pkgs,
+  pkgs-ollama,
   inputs,
   ...
 }:
 
 {
+  home.packages = with pkgs; [
+    opencommit
+    oterm
+    opencode
+  ];
+
+  services.ollama = {
+    enable = true;
+    package = pkgs-ollama.ollama-rocm;
+  };
+
   programs.aichat = {
     enable = true;
     settings = {

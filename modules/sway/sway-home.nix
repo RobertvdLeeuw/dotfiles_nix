@@ -90,4 +90,26 @@
 
     DBUS_SESSION_BUS_ADDRESS = "unix:path=/run/user/1000/bus"; # This old bandaid still needed?
   };
+
+  services.gammastep = {
+    enable = true;
+    provider = "geoclue2";
+
+    # TODO: Get this working. (https://discourse.nixos.org/t/sys-class-backlight-empty/57892)
+    # settings = {
+    #   general = {
+    #     brightness-day = "0.5"; # Brightness as a string
+    #     brightness-night = "0.5"; # Brightness as a string
+    #   };
+    # };
+
+    dawnTime = "8:30-9:30";
+    duskTime = "20:30-21:30";
+
+    temperature = {
+      day = 6500;
+      night = 3700;
+    };
+  };
+
 }

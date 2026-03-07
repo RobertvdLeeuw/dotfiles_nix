@@ -4,6 +4,13 @@
   inputs,
   ...
 }:
+
+# TODO: Diagnostics widget
+# Homelab unresponsive to ping
+# >80% on any disk
+# Bluetooth device battery <20% (mouse, headset, controller)
+# What else?
+
 let
   workspaces = inputs.waybar-workspaces.packages.x86_64-linux.default;
   resources = inputs.waybar-resources.packages.x86_64-linux.default;
@@ -14,7 +21,6 @@ let
     modules-left = [
       "clock"
       "pulseaudio"
-      "bluetooth"
     ];
     modules-center = [ "custom/workspaces" ];
     modules-right = [ ];
@@ -41,12 +47,6 @@ let
       on-click-right = "pavucontrol";
       tooltip = false;
     };
-    bluetooth = {
-      format = "󰂯";
-      format-off = "󰂲";
-      format-connected = "{count} 󰂰";
-      tooltip = false;
-    };
   };
 
   screens =
@@ -63,44 +63,33 @@ let
             escape = false;
           };
         }
-        //
-          # (
-          #   if screen.bar_id != "3" then
-          {
-            # Horizontal only
-            network = {
-              format-wifi = "{essid} ({signalStrength}%) 󰤨 ";
-              format-ethernet = " 󰌘 ";
-              format-linked = "{ifname} (No IP) 󰤩 ";
-              format-disconnected = " 󰌙 ";
-              # format-alt = "{ifname}: {ipaddr}/{cidr}";
-              tooltip = false;
-            };
-            "custom/cpu_info" = {
-              exec = "${resources}/bin/resources CPU";
-              return-type = "json";
-              format = "{}";
-              tooltip = false;
-              escape = false;
-            };
-            "custom/gpu_info" = {
-              exec = "${resources}/bin/resources GPU";
-              return-type = "json";
-              format = "{}";
-              tooltip = false;
-              escape = false;
-            };
-            modules-right = [
-              "network"
-              "custom/cpu_info"
-              "custom/gpu_info"
-            ];
-          }
-        # else
-        #   {
-        #     # Vertical only
-        #   }
-        # )
+        // (
+          if screen.bar_id != "3" then
+            {
+              "custom/cpu_info" = {
+                exec = "${resources}/bin/resources CPU";
+                return-type = "json";
+                format = "{}";
+                tooltip = false;
+                escape = false;
+              };
+              "custom/gpu_info" = {
+                exec = "${resources}/bin/resources GPU";
+                return-type = "json";
+                format = "{}";
+                tooltip = false;
+                escape = false;
+              };
+              modules-right = [
+                "custom/cpu_info"
+                "custom/gpu_info"
+              ];
+            }
+          else
+            {
+              # Vertical only
+            }
+        )
       )
       [
         {
@@ -136,15 +125,4 @@ in
       configDir = ./modules/eww;
     };
   };
-
-  home.packages =
-    let
-      workspaces = inputs.waybar-workspaces.packages.x86_64-linux.default;
-      resources = inputs.waybar-resources.packages.x86_64-linux.default;
-    in
-    [
-      workspaces
-      resources
-    ];
-
 }

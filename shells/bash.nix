@@ -10,15 +10,17 @@
         books = "nvim ~/Documents/books.txt";
       };
 
-      shellInit = ''
-        bindkey '^I'   complete-word       # tab
+      shellInit = /* sh */ ''
+        # bindkey '^I' complete-word # tab
 
-        clear-terminal() { tput reset; zle redisplay; }
-        zle -N clear-terminal
-        bindkey '^[l' clear-terminal
+        # clear-terminal() { tput reset; zle redisplay; }
+        # zle -N clear-terminal
+        # bindkey '^[l' clear-terminal
+        #
+        # bindkey '^[k' history-search-backward
+        # bindkey '^[j' history-search-forward
 
-        bindkey '^[k' history-search-backward
-        bindkey '^[j' history-search-forward
+        eval "$(starship init bash)"
       '';
     };
   };

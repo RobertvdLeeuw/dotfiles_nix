@@ -5,8 +5,8 @@
     systemPackages = with pkgs; [
       python313
       jupyter
+      # marimo
       uv
-      #  TODO: UV2Nix
     ];
   };
 }
