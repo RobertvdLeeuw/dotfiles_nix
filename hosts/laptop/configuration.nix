@@ -7,6 +7,10 @@
 {
   imports = [
     ./hardware-configuration.nix
+    ../common-config.nix
+
+    ../../modules/wm/sway/sway.nix
+    ../../modules/wm/kde.nix
   ];
 
   boot.loader = {
@@ -21,22 +25,18 @@
       networks.Ridderstraat2.psk = builtins.getEnv "WIFI_HOME_PW";
     };
   };
-  time.timeZone = "Europe/Amsterdam";
 
-  users.users.robert = {
-    isNormalUser = true;
-    extraGroups = [ "wheel" ];
-    packages = with pkgs; [
-      tree
-    ];
+  users = {
+    defaultUserShell = pkgs.zsh;
+    users.robert = {
+      isNormalUser = true;
+      description = "robert";
+      extraGroups = [
+        "networkmanager"
+        "wheel"
+        "docker"
+        "video" # For GPU access
+      ];
+    };
   };
-
-  # environment.systemPackages = with pkgs; [
-  #   neovim
-  #   wget
-  #   git
-  #   wpa_supplicant
-  # ];
-
-  system.stateVersion = "24.11"; # DON'T TOUCH!
 }

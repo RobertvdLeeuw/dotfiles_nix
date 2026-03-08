@@ -100,4 +100,6 @@ in
     ]
     ++ cleanedModules
   );
+
+  home.packages = [ pkgs.devcontainer ];
 }
