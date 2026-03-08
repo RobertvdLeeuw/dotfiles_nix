@@ -25,6 +25,7 @@
 
   networking = {
     hostName = "nixos";
+    networkmanager.enable = true;
   };
 
   users = {
