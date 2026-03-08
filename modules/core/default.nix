@@ -7,6 +7,7 @@
     ./system-tools.nix
     ./terminal.nix
     ./nvim
+    ./shells
     ./gaming.nix
   ];
 }

@@ -42,7 +42,7 @@ let
           "󰓃"
         ];
       };
-      on-click = "/etc/nixos/modules/waybar/swap_audio_output.sh";
+      on-click = "/etc/nixos/modules/wm/waybar/swap_audio_output.sh";
       on-click-right = "pavucontrol";
       tooltip = false;
     };

@@ -31,12 +31,12 @@
     ];
   };
 
-  environment.systemPackages = with pkgs; [
-    neovim
-    wget
-    git
-    wpa_supplicant
-  ];
+  # environment.systemPackages = with pkgs; [
+  #   neovim
+  #   wget
+  #   git
+  #   wpa_supplicant
+  # ];
 
   system.stateVersion = "24.11"; # DON'T TOUCH!
 }

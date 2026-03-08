@@ -12,8 +12,8 @@
 
         waybar
 
-        pick
         playerctl
+        pulseaudio # For pactl
 
         wofi
 

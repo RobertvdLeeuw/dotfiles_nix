@@ -7,10 +7,8 @@
 }:
 {
   imports = [
-    ../../shells
     ../../modules/core
-
-    ../../modules/laptop
+    ../../modules/wm/sway/sway-home.nix
   ];
 
   home = {

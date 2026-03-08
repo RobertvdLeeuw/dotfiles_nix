@@ -2,7 +2,7 @@
 
 {
   imports = [
-    ../../shells
+    ../../modules/core/shells
     ../../modules/core/system-tools.nix
   ];
 

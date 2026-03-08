@@ -9,7 +9,7 @@
 {
   imports = [
     ./hardware-configuration.nix
-    ../../modules/desktop/sway/sway.nix
+    ../../modules/wm/sway/sway.nix
   ];
 
   systemd.services = {

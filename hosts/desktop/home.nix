@@ -7,10 +7,9 @@
 }:
 {
   imports = [
-    ../../shells
     ../../modules/core
-
-    ../../modules/desktop
+    ../../modules/ai/aitools.nix
+    ../../modules/wm/sway/sway-home.nix
   ];
 
   home = {
@@ -36,7 +35,7 @@
 
   home.file = {
     ".config/opencode" = {
-      source = /etc/nixos/modules/desktop/ai;
+      source = /etc/nixos/modules/ai;
       recursive = true;
     };
   };

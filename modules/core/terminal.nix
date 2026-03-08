@@ -136,9 +136,9 @@
   home.packages = with pkgs; [
     bat
     dust
-    fastfetch
     fd
     fzf
+    # pick
     tree
     zoxide
   ];

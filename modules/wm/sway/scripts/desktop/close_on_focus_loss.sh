@@ -1,5 +1,6 @@
 #!/bin/bash
 
+# TODO: Rework this
 while true; do
   # Get the currently focused window's title
   focused_title=$(swaymsg -t get_tree | jq -r '.. | select(.focused? == true).name')

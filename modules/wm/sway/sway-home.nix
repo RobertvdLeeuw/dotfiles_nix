@@ -2,14 +2,21 @@
   config,
   pkgs,
   inputs,
+  lib,
+  hostType,
   ...
 }:
 {
+  imports = [
+    ../waybar/waybar.nix
+    ./config/movement.nix
+  ];
+
   wayland.windowManager.sway = {
     enable = true;
     wrapperFeatures.gtk = true;
 
-    # Already installed via conf (for extraPackages), this is just for conf.
+    # Already installed via bare nixos (for extraPackages), this is just for conf.
     package = null;
 
     config = {
@@ -24,42 +31,34 @@
       ];
       startup = [
         {
-          command = "swaymsg 'output DP-1 bg /etc/nixos/modules/sway/backgrounds/busy-people/Top.png fill'
-";
-          always = true;
-        }
-        {
-          command = "swaymsg 'output HDMI-A-1 bg /etc/nixos/modules/sway/backgrounds/busy-people/Bottom.png fill'
-";
-          always = true;
-        }
-        {
-          command = "swaymsg 'output DP-3 bg /etc/nixos/modules/sway/backgrounds/busy-people/Right.png fill'";
-          always = true;
-        }
-        {
           command = "mako";
           always = true;
         }
+        # {
+        #   command = "copyq --start-server";
+        #   always = true;
+        # }
+      ]
+      ++ lib.optionals (hostType == "desktop") [
+        # TODO: Fix this (bg not setting).
         {
-          command = "copyq --start-server";
+          command = "swaymsg 'output DP-1 bg /etc/nixos/modules/wm/sway/backgrounds/desktop/busy-people/Top.png fill'";
           always = true;
         }
         {
-          command = "redshift";
+          command = "swaymsg 'output HDMI-A-1 bg /etc/nixos/modules/wm/sway/backgrounds/desktop/busy-people/Bottom.png fill'";
           always = true;
         }
         {
-          command = "sudo systemctl enable ydotool && sudo systemctl start ydotool";
+          command = "swaymsg 'output DP-3 bg /etc/nixos/modules/wm/sway/backgrounds/desktop/busy-people/Right.png fill'";
           always = true;
         }
-        # { command = "";
-        #   always = true; }
-      ];
+        { command = "wl-paste -t text --watch clipman store"; }
+        { command = "wl-paste -p -t image --watch clipman store"; }
 
-      keybindings = {
-        # TODO: Nixify these too?
-      };
+      ]
+      ++ lib.optionals (hostType == "laptop") [
+      ];
 
       terminal = "alacritty";
 
@@ -70,14 +69,14 @@
       };
     };
 
-    extraConfig = ''
-      set $mod Mod4
-
-      ${builtins.readFile ./config/media.conf}
-      ${builtins.readFile ./config/monitor.conf}
-      ${builtins.readFile ./config/controls.conf}
-      ${builtins.readFile ./config/movement.conf}
-    '';
+    extraConfig =
+      ""
+      + lib.optionalString (hostType == "desktop") ''
+        ${builtins.readFile ./config/desktop/monitor.conf}
+      ''
+      + lib.optionalString (hostType == "laptop") ''
+        ${builtins.readFile ./config/laptop/monitor.conf}
+      '';
 
     extraSessionCommands = ''
 
@@ -87,8 +86,6 @@
   home.sessionVariables = {
     XDG_CURRENT_DESKTOP = "sway";
     XDG_SESSION_TYPE = "wayland";
-
-    DBUS_SESSION_BUS_ADDRESS = "unix:path=/run/user/1000/bus"; # This old bandaid still needed?
   };
 
   services.gammastep = {
