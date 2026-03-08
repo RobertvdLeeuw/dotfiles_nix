@@ -3,7 +3,6 @@ modules/docs/config/sources/
 **/target/
 **/.direnv/
 .ai/
-ai/comparisons.txt
 
 .env
 

@@ -7,14 +7,10 @@
 }:
 {
   imports = [
-    ../shells
-    ../modules/core
+    ../../shells
+    ../../modules/core
 
-    ../modules/desktop/sway/sway-home.nix
-    ../modules/desktop/wofi/wofi.nix
-    ../modules/desktop/waybar/waybar.nix
-
-    ../ai/aitools.nix
+    ../../modules/desktop
   ];
 
   home = {
@@ -23,25 +19,24 @@
     stateVersion = "24.11"; # DO NOT TOUCH! Needed in case of backwards incompatible update.
   };
 
-  home.packages = with pkgs; [
+  # home.packages = with pkgs; [
+  # It is sometimes useful to fine-tune packages, for example, by applying
+  # overrides. You can do that directly here, just don't forget the
+  # parentheses. Maybe you want to install Nerd Fonts with a limited number of
+  # fonts?
+  # (pkgs.nerdfonts.override { fonts = [ "FantasqueSansMono" ]; })
 
-    # It is sometimes useful to fine-tune packages, for example, by applying
-    # overrides. You can do that directly here, just don't forget the
-    # parentheses. Maybe you want to install Nerd Fonts with a limited number of
-    # fonts?
-    # (pkgs.nerdfonts.override { fonts = [ "FantasqueSansMono" ]; })
-
-    # # You can also create simple shell scripts directly inside your
-    # # configuration. For example, this adds a command 'my-hello' to your
-    # # environment:
-    # (pkgs.writeShellScriptBin "my-hello" ''
-    #   echo "Hello, ${config.home.username}!"
-    # '')
-  ];
+  # # You can also create simple shell scripts directly inside your
+  # # configuration. For example, this adds a command 'my-hello' to your
+  # # environment:
+  # (pkgs.writeShellScriptBin "my-hello" ''
+  #   echo "Hello, ${config.home.username}!"
+  # '')
+  # ];
 
   home.file = {
     ".config/opencode" = {
-      source = /etc/nixos/ai;
+      source = /etc/nixos/modules/desktop/ai;
       recursive = true;
     };
   };

@@ -2,8 +2,8 @@
 
 {
   imports = [
-    ../shells
-    ../modules/core/system-tools.nix
+    ../../shells
+    ../../modules/core/system-tools.nix
   ];
 
   home = {

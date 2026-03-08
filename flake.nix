@@ -4,7 +4,8 @@
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
 
-    nixpkgs-ollama.url = "github:NixOS/nixpkgs/8c809a146a140c5c8806f13399592dbcb1bb5dc4"; # Avoid rebuilding hipblaslt constantly.
+    # Avoid rebuilding hipblaslt constantly.
+    nixpkgs-ollama.url = "github:NixOS/nixpkgs/8c809a146a140c5c8806f13399592dbcb1bb5dc4";
 
     home-manager = {
       url = "github:nix-community/home-manager";
@@ -33,8 +34,7 @@
         nixos = nixpkgs.lib.nixosSystem {
           system = "x86_64-linux";
           modules = [
-            ./configuration.nix
-            # nvf.nixosModules.default
+            ./hosts/desktop/configuration.nix
 
             home-manager.nixosModules.home-manager
             {
@@ -49,8 +49,8 @@
                   };
                 };
                 users = {
-                  robert = import ./home/home.nix;
-                  root = import ./home/home-root.nix;
+                  robert = import ./hosts/desktop/home.nix;
+                  root = import ./hosts/desktop/home-root.nix;
                 };
                 sharedModules = [ nvf.homeManagerModules.default ];
               };

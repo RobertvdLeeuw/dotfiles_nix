@@ -35,7 +35,7 @@
         bindkey -M viins '^[k' history-search-backward
         bindkey -M viins '^[j' history-search-forward
 
-        eval "$(direnv hook zsh)"
+        # eval "$(direnv hook zsh)"
 
         # Devcontainer exec helper
         forth() {

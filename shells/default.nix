@@ -9,7 +9,7 @@
     shellAliases = {
       update = "cd /etc/nixos; sudo nix flake update; sudo nixos-rebuild switch --flake --sudo --impure && clear; cd -";
       updatev = "cd /etc/nixos; sudo nix flake update; sudo nixos-rebuild switch --show-trace --flake --sudo --impure && clear; cd -"; # Verbose
-      cnfnix = "cd /etc/nixos && nvim configuration.nix && cd -";
+      cnfnix = "cd /etc/nixos && nvim flake.nix && cd -";
       try = "nix-shell -p";
 
       todo = "nvim ~/Documents/todo.md";
