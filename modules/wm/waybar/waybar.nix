@@ -5,14 +5,8 @@
   ...
 }:
 
-# TODO: Diagnostics widget
-# Homelab unresponsive to ping
-# >80% on any disk
-# Bluetooth device battery <20% (mouse, headset, controller)
-# What else?
-
 let
-  inherit (inputs.waybar-modules.packages.x86_64-linux) workspaces resources;
+  inherit (inputs.waybar-modules.packages.x86_64-linux) workspaces resources diagnostics;
 
   base_config = {
     height = 30;
@@ -87,6 +81,16 @@ let
           else
             {
               # Vertical only
+              "custom/diagnostics" = {
+                exec = "${diagnostics}/bin/diagnostics desktop";
+                return-type = "json";
+                format = "{}";
+                tooltip = false;
+                escape = false;
+              };
+              modules-right = [
+                "custom/diagnostics"
+              ];
             }
         )
       )

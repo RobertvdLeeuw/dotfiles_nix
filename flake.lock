@@ -246,11 +246,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1772924553,
-        "narHash": "sha256-TFGULATDv/pHQGt+SO4UKimnKU9TuIY+AIjJNnlP4Bs=",
+        "lastModified": 1773000032,
+        "narHash": "sha256-b/nebpOrcf7K8GJ7BfoGFgFPQmReGx1194ux/ZCTiRc=",
         "owner": "RobertVDLeeuw",
         "repo": "waybar-modules",
-        "rev": "402c2fb53bddc2ed9ce4e7227ff3300fd0319c6f",
+        "rev": "8cd02f053b133a1e4722dd34c51b532cbcd0e793",
         "type": "github"
       },
       "original": {
