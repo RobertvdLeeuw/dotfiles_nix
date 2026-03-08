@@ -34,7 +34,7 @@
           system = "x86_64-linux";
           modules = [
             ./configuration.nix
-            nvf.nixosModules.default
+            # nvf.nixosModules.default
 
             home-manager.nixosModules.home-manager
             {
@@ -48,8 +48,11 @@
                     config.allowUnfree = true;
                   };
                 };
-                users.robert = import ./home/home.nix;
-                users.root = import ./home/home-root.nix;
+                users = {
+                  robert = import ./home/home.nix;
+                  root = import ./home/home-root.nix;
+                };
+                sharedModules = [ nvf.homeManagerModules.default ];
               };
             }
           ];

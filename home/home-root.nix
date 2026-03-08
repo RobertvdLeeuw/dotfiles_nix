@@ -3,7 +3,7 @@
 {
   imports = [
     ../shells
-    ../modules/system-tools.nix
+    ../modules/core/system-tools.nix
   ];
 
   home = {

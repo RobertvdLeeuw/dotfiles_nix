@@ -30,9 +30,6 @@
         bindkey '^[l' clear-terminal
         bindkey -M viins '^[l' clear-terminal
 
-        # bindkey '^[[1;5A' history-search-backward
-        # bindkey '^[[1;5B' history-search-forward
-
         bindkey '^[k' history-search-backward
         bindkey '^[j' history-search-forward
         bindkey -M viins '^[k' history-search-backward

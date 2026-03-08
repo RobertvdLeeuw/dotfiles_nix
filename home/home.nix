@@ -8,15 +8,11 @@
 {
   imports = [
     ../shells
-    ../modules/system-tools.nix
+    ../modules/core
 
-    ../modules/everyday.nix
-    ../modules/gaming.nix
-    ../modules/terminal.nix
-
-    ../modules/sway/sway-home.nix
-    ../modules/wofi/wofi.nix
-    ../modules/waybar/waybar.nix
+    ../modules/desktop/sway/sway-home.nix
+    ../modules/desktop/wofi/wofi.nix
+    ../modules/desktop/waybar/waybar.nix
 
     ../ai/aitools.nix
   ];

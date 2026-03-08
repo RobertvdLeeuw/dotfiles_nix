@@ -10,7 +10,7 @@
         enable = true;
 
         setupOpts = {
-          config_home = "/etc/nixos/modules/nvim/plugin/yazi/";
+          config_home = "/etc/nixos/modules/core/nvim/plugin/yazi/";
 
           open_for_directories = true;
           yazi_floating_window_border = "none";

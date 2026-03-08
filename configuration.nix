@@ -9,12 +9,7 @@
 {
   imports = [
     ./hardware-configuration.nix
-    ./modules/sway/sway.nix
-
-    ./modules/codelangs/python.nix
-    ./modules/codelangs/rust.nix
-
-    ./modules/nvim
+    ./modules/desktop/sway/sway.nix
   ];
 
   systemd.services = {
@@ -197,6 +192,7 @@
   environment = {
     pathsToLink = [ "/share/zsh" ];
 
+    systemPackages = [ pkgs.devcontainer ];
     plasma6.excludePackages = with pkgs.kdePackages; [
       elisa
       kate

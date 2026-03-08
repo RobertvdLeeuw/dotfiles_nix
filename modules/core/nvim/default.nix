@@ -100,5 +100,4 @@ in
     ]
     ++ cleanedModules
   );
-  environment.systemPackages = [ pkgs.devcontainer ];
 }
