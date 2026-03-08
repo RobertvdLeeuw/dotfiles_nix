@@ -2,6 +2,7 @@
   config,
   pkgs,
   lib,
+  hostType,
   ...
 }:
 {
@@ -30,11 +31,11 @@
         cat = "bat";
       }
 
-      (lib.mkIf (config.networking.hostName == "nixos") {
+      (lib.mkIf (hostType == "desktop") {
         update = /* sh */ ''
           cd /etc/nixos
           sudo nix flake update
-          sudo nixos-rebuild switch --flake /etc/nixos#desktop --sudo --impure && clear
+          sudo nixos-rebuild switch --flake .#desktop --sudo --impure && clear
           cd -
         '';
 
@@ -42,7 +43,7 @@
         updatev = /* sh */ ''
           cd /etc/nixos
           sudo nix flake update
-          sudo nixos-rebuild switch --show-trace --flake /etc/nixos#desktop --sudo --impure && clear
+          sudo nixos-rebuild switch --show-trace --flake .#desktop --sudo --impure && clear
           cd -
         '';
 
@@ -50,11 +51,11 @@
         gc = "oco --context ";
       })
 
-      (lib.mkIf (config.networking.hostName == "nixos-lt") {
+      (lib.mkIf (hostType == "laptop") {
         update = /* sh */ ''
           cd /etc/nixos
           sudo nix flake update
-          sudo nixos-rebuild switch --flake /etc/nixos#laptop --sudo --impure && clear
+          sudo nixos-rebuild switch --flake .#laptop --sudo --impure && clear
           cd -
         '';
 
@@ -62,7 +63,7 @@
         updatev = /* sh */ ''
           cd /etc/nixos
           sudo nix flake update
-          sudo nixos-rebuild switch --show-trace --flake /etc/nixos#laptop --sudo --impure && clear
+          sudo nixos-rebuild switch --show-trace --flake .#laptop --sudo --impure && clear
           cd -
         '';
 

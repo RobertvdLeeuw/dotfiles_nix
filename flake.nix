@@ -31,7 +31,7 @@
     }@inputs:
     {
       nixosConfigurations = {
-        nixos = nixpkgs.lib.nixosSystem {
+        desktop = nixpkgs.lib.nixosSystem {
           system = "x86_64-linux";
           modules = [
             ./hosts/desktop/configuration.nix
@@ -47,6 +47,7 @@
                     system = "x86_64-linux";
                     config.allowUnfree = true;
                   };
+                  hostType = "desktop";
                 };
                 users = {
                   robert = import ./hosts/desktop/home.nix;
@@ -60,10 +61,42 @@
             inherit inputs;
           };
         };
+
+        laptop = nixpkgs.lib.nixosSystem {
+          system = "x86_64-linux";
+          modules = [
+            ./hosts/laptop/configuration.nix
+
+            home-manager.nixosModules.home-manager
+            {
+              home-manager = {
+                useGlobalPkgs = true;
+                useUserPackages = true;
+                extraSpecialArgs = {
+                  inherit inputs;
+                  pkgs-ollama = import nixpkgs-ollama {
+                    system = "x86_64-linux";
+                    config.allowUnfree = true;
+                  };
+                  hostType = "laptop";
+                };
+                users = {
+                  robert = import ./hosts/laptop/home.nix;
+                  root = import ./hosts/laptop/home-root.nix;
+                };
+                sharedModules = [ nvf.homeManagerModules.default ];
+              };
+            }
+          ];
+          specialArgs = {
+            inherit inputs;
+          };
+        };
       };
 
       checks.x86_64-linux = {
-        nixos = self.nixosConfigurations.nixos.config.system.build.toplevel;
+        desktop = self.nixosConfigurations.desktop.config.system.build.toplevel;
+        laptop = self.nixosConfigurations.laptop.config.system.build.toplevel;
       };
     };
 }
