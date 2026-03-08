@@ -10,7 +10,10 @@ let
   mod = "Mod4"; # Windows key
 
   get_workspace =
-    if hostType == "desktop" then "/etc/nixos/modules/wm/sway/scripts/desktop/get_workspace.sh" else "";
+    if hostType == "desktop" then
+      "/etc/nixos/modules/wm/sway/scripts/desktop/get_workspace.sh"
+    else
+      "/etc/nixos/modules/wm/sway/scripts/laptop/get_workspace.sh";
 
   navKeys = [
     {
