@@ -22,10 +22,14 @@
     content = ''
       network={
         ssid="${config.sops.placeholder."wifi/home/ssid"}"
-        psk=${config.sops.placeholder."wifi/home/psk"}
+        psk="${config.sops.placeholder."wifi/home/psk"}"
       }
     '';
   };
+
+  systemd.services.wpa_supplicant.serviceConfig.BindReadOnlyPaths = [
+    "/run/secrets/rendered/wpa_supplicant"
+  ];
 
   networking = {
     hostName = "nixos-lt";
