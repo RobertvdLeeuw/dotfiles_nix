@@ -23,6 +23,8 @@
     docker
     # nix-fast-build
 
+    sops
+
     p7zip
   ];
 }

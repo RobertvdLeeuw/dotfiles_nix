@@ -2,9 +2,16 @@
   config,
   lib,
   pkgs,
+  inputs,
   ...
 }:
 {
+  imports = [ inputs.sops-nix.nixosModules.sops ];
+  sops = {
+    defaultSopsFile = ../secrets.yaml;
+    age.keyFile = "/var/lib/sops-nix/key.txt";
+  };
+
   nix = {
     package = pkgs.lixPackageSets.stable.lix;
     settings = {
@@ -143,6 +150,7 @@
 
     variables = {
       SHELL = "${pkgs.zsh}/bin/zsh";
+      EDITOR = "nvim"; # For SOPS.
     };
   };
 
