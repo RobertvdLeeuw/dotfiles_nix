@@ -28,5 +28,6 @@
     ]
     ++ (lib.optionals (hostType == "laptop") [
       brightnessctl
+      bluez
     ]);
 }

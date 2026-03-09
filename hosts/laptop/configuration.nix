@@ -27,6 +27,8 @@
     };
   };
 
+  services.libinput.touchpad.naturalScrolling = true;
+
   users = {
     defaultUserShell = pkgs.zsh;
     users.robert = {
