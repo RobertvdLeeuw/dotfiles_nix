@@ -2,6 +2,7 @@
   config,
   pkgs,
   inputs,
+  hostType,
   ...
 }:
 
@@ -111,7 +112,37 @@ let
         } # Ver
       ];
 
-  configs = map (extra: base_config // extra) screens;
+  configs =
+    if hostType == "desktop" then
+      map (extra: base_config // extra) screens
+    else
+      [
+        (
+          base_config
+          // {
+            ipc = true;
+            output = "eDP-1";
+
+            "custom/workspaces" = {
+              exec = "${workspaces}/bin/workspaces eDP-1";
+              return-type = "json";
+              format = "{}";
+              tooltip = false;
+              escape = false;
+            };
+            "custom/diagnostics" = {
+              exec = "${diagnostics}/bin/diagnostics desktop";
+              return-type = "json";
+              format = "{}";
+              tooltip = false;
+              escape = false;
+            };
+            modules-right = [
+              "custom/diagnostics"
+            ];
+          }
+        )
+      ];
 in
 {
   programs = {

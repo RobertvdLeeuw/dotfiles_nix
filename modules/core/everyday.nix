@@ -1,21 +1,33 @@
-{ config, pkgs, ... }:
 {
-  home.packages = with pkgs; [
-    brave
+  config,
+  pkgs,
+  lib,
+  hostType,
+  ...
+}:
+{
+  home.packages =
+    with pkgs;
+    [
+      brave
 
-    # Dolphin is installed auto via KDE
+      # Dolphin is installed auto via KDE
 
-    libreoffice-qt
-    pavucontrol
+      libreoffice-qt
+      pavucontrol
 
-    spotify
+      spotify
 
-    whatsie
-    discord
-    teams
+      whatsie
+      discord
+      teams
 
-    loupe # Image viewer
-    gimp
-    vlc
-  ];
+      loupe # Image viewer
+      gimp
+      vlc
+    ]
+    ++ (lib.optionals (hostType == "laptop") [
+      brightnessctl
+      bluez
+    ]);
 }

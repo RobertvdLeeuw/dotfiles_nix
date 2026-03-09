@@ -10,14 +10,8 @@ focused_monitor=$(swaymsg -t get_outputs | jq -r '.[] | select(.focused==true).n
 
 # Define workspace numbers based on monitor names
 case $focused_monitor in
-  "HDMI-A-1")
+  "eDP-1")
     workspace=$(($1))
-    ;;
-  "DP-1")
-    workspace=$(($1 + 10))
-    ;;
-  "DP-3")
-    workspace=$(($1 + 20))
     ;;
   *)
     echo "Unknown monitor: $focused_monitor"

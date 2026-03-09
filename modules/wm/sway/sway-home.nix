@@ -60,7 +60,7 @@
       ]
       ++ lib.optionals (hostType == "laptop") [
         {
-          command = "swaymsg 'output eDP-1 bg /etc/nixos/modules/wm/sway/backgrounds/laptlaptop/Waldo1.png fill'";
+          command = "swaymsg 'output eDP-1 bg /etc/nixos/modules/wm/sway/backgrounds/laptop/Waldo1.png fill'";
           always = true;
         }
       ];
