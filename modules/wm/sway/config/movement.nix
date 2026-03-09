@@ -59,6 +59,7 @@ in
         # Nav workspaces 1-4
         (map (n: {
           "${mod}+${toString n}" = "exec swaymsg workspace number $(${get_workspace} ${toString n})";
+          # TODO: Fix shift 'carry'
           "${mod}+Shift+${toString n}" =
             "swaymsg move container to workspace number $(${get_workspace} ${toString n}) && swaymsg workspace number $(${get_workspace} ${toString n})";
         }) (lib.range 1 4))

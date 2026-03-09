@@ -39,6 +39,8 @@
         #   command = "copyq --start-server";
         #   always = true;
         # }
+        { command = "wl-paste -t text --watch clipman store"; }
+        { command = "wl-paste -p -t image --watch clipman store"; }
       ]
       ++ lib.optionals (hostType == "desktop") [
         # TODO: Fix this (bg not setting).
@@ -54,9 +56,6 @@
           command = "swaymsg 'output DP-3 bg /etc/nixos/modules/wm/sway/backgrounds/desktop/busy-people/Right.png fill'";
           always = true;
         }
-        { command = "wl-paste -t text --watch clipman store"; }
-        { command = "wl-paste -p -t image --watch clipman store"; }
-
       ]
       ++ lib.optionals (hostType == "laptop") [
         {

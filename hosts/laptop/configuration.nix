@@ -18,17 +18,24 @@
     efi.canTouchEfiVariables = true;
   };
 
+  sops.templates."wpa_supplicant" = {
+    content = ''
+      network={
+        ssid="${config.sops.placeholder."wifi/home/ssid"}"
+        psk=${config.sops.placeholder."wifi/home/psk"}
+      }
+    '';
+  };
+
   networking = {
     hostName = "nixos-lt";
     wireless = {
       enable = true;
-      # secretsFile = "/etc/nixos/.env";
-      networks.Ridderstraat2.pskRaw = config.sops.placeholder."wifi/home/psk";
-      # networks.Ridderstraat2.psk = "freewifi";
+      extraConfigFiles = [ config.sops.templates."wpa_supplicant".path ];
     };
   };
 
-  services.libinput.touchpad.naturalScrolling = true;
+  services.libinput.touchpad.naturalScrolling = false;
 
   users = {
     defaultUserShell = pkgs.zsh;

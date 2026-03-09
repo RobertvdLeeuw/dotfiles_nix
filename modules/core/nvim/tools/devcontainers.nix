@@ -13,7 +13,7 @@
           version = "2026-02-14";
           src = pkgs.fetchFromGitHub {
             owner = "RobertvdLeeuw";
-            repo = "devcontainers.nvim-permium-edition";
+            repo = "devcontainers.nvim-premium-edition";
             rev = "master";
             hash = "sha256-CSN14dd5FPcrZPEEvQTA+318PTQp8HHF2ZkAYdvt/tA=";
           };

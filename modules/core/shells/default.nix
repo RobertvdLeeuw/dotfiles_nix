@@ -17,6 +17,10 @@
         cnfnix = "cd /etc/nixos && nvim flake.nix && cd -";
         try = "nix-shell -p";
 
+        tryupdate = "sudo nixos-rebuild test --flake /etc/nixos#${hostType} --sudo --impure --show-trace";
+        update = "sudo nixos-rebuild switch --flake /etc/nixos#${hostType} --update --sudo --impure && clear";
+        updatev = "sudo nixos-rebuild switch --flake /etc/nixos#${hostType} --update --sudo --impure --show-trace";
+
         todo = "nvim ~/Documents/todo.md";
         books = "nvim ~/Documents/books.txt";
 
@@ -32,41 +36,11 @@
       }
 
       (lib.mkIf (hostType == "desktop") {
-        update = /* sh */ ''
-          cd /etc/nixos
-          sudo nix flake update
-          sudo nixos-rebuild switch --flake .#desktop --sudo --impure && clear
-          cd -
-        '';
-
-        # Verbose
-        updatev = /* sh */ ''
-          cd /etc/nixos
-          sudo nix flake update
-          sudo nixos-rebuild switch --show-trace --flake .#desktop --sudo --impure
-          cd -
-        '';
-
         dumb = "aichat -e";
         gc = "oco --context ";
       })
 
       (lib.mkIf (hostType == "laptop") {
-        update = /* sh */ ''
-          cd /etc/nixos
-          sudo nix flake update
-          sudo nixos-rebuild switch --flake .#laptop --sudo --impure && clear
-          cd -
-        '';
-
-        # Verbose
-        updatev = /* sh */ ''
-          cd /etc/nixos
-          sudo nix flake update
-          sudo nixos-rebuild switch --show-trace --flake .#laptop --sudo --impure
-          cd -
-        '';
-
         gc = "echo 'Opencommit not set up.'";
       })
     ];
