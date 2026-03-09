@@ -43,7 +43,7 @@
         updatev = /* sh */ ''
           cd /etc/nixos
           sudo nix flake update
-          sudo nixos-rebuild switch --show-trace --flake .#desktop --sudo --impure && clear
+          sudo nixos-rebuild switch --show-trace --flake .#desktop --sudo --impure
           cd -
         '';
 
@@ -63,7 +63,7 @@
         updatev = /* sh */ ''
           cd /etc/nixos
           sudo nix flake update
-          sudo nixos-rebuild switch --show-trace --flake .#laptop --sudo --impure && clear
+          sudo nixos-rebuild switch --show-trace --flake .#laptop --sudo --impure
           cd -
         '';
 

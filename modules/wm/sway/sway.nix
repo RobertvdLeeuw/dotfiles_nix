@@ -6,16 +6,12 @@
       enable = true;
       wrapperFeatures.gtk = true;
       extraPackages = with pkgs; [
-        # Notification daemon  TODO: Don't I just need 1, not both?
-        libnotify
-        mako
-
-        waybar
+        # Notification daemon
+        # libnotify  # X11
+        mako # Wayland
 
         playerctl
         pulseaudio # For pactl
-
-        wofi
 
         # Clipboard
         wl-clipboard

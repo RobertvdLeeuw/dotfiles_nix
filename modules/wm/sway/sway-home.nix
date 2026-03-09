@@ -9,6 +9,7 @@
 {
   imports = [
     ../waybar/waybar.nix
+    ../wofi/wofi.nix
     ./config/movement.nix
   ];
 
