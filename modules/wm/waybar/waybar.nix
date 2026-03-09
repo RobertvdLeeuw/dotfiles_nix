@@ -41,6 +41,14 @@ let
       on-click-right = "pavucontrol";
       tooltip = false;
     };
+
+    "custom/cpu_info" = {
+      exec = "${resources}/bin/resources CPU";
+      return-type = "json";
+      format = "{}";
+      tooltip = false;
+      escape = false;
+    };
   };
 
   screens =
@@ -60,13 +68,6 @@ let
         // (
           if screen.bar_id != "3" then
             {
-              "custom/cpu_info" = {
-                exec = "${resources}/bin/resources CPU";
-                return-type = "json";
-                format = "{}";
-                tooltip = false;
-                escape = false;
-              };
               "custom/gpu_info" = {
                 exec = "${resources}/bin/resources GPU";
                 return-type = "json";
@@ -130,15 +131,35 @@ let
               tooltip = false;
               escape = false;
             };
+
             "custom/diagnostics" = {
-              exec = "${diagnostics}/bin/diagnostics desktop";
+              exec = "${diagnostics}/bin/diagnostics laptop";
               return-type = "json";
               format = "{}";
               tooltip = false;
               escape = false;
             };
+
+            "battery" = {
+              format = "{icon} {capacity}%";
+              states = {
+                critical = 15;
+                low = 30;
+                good = 80;
+                full = 100;
+              };
+              format-icons = {
+                critical = "󰂃";
+                low = "󰁼";
+                good = "󰂀";
+                full = "󰁹";
+                charging = "󰂄";
+              };
+            };
             modules-right = [
               "custom/diagnostics"
+              "custom/cpu_info"
+              "battery"
             ];
           }
         )

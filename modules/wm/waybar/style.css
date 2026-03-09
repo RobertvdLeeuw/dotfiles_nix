@@ -46,6 +46,7 @@ window#waybar {
 #custom-diagnostics,
 #network,
 #bluetooth,
+#battery,
 #clock {
   color: @text;
   margin-top: 6px;
@@ -76,9 +77,9 @@ window#waybar {
   background-color: #ff6961;
 }
 
-/* #network { */
-/*   background-color: #dea364; */
-/* } */
+#battery {
+  background-color: #dea364;
+}
 
 /* #bluetooth { */
 /*   background-color: #7777f4; */

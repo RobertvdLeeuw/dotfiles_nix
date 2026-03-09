@@ -25,6 +25,8 @@
         psk="${config.sops.placeholder."wifi/home/psk"}"
       }
     '';
+    owner = "wpa_supplicant";
+    mode = "0440";
   };
 
   systemd.services.wpa_supplicant.serviceConfig.BindReadOnlyPaths = [
