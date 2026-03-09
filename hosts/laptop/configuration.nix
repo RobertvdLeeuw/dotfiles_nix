@@ -22,8 +22,9 @@
     hostName = "nixos-lt";
     wireless = {
       enable = true;
-      secretsFile = "/etc/nixos/.env";
-      networks.Ridderstraat2.pskRaw = "ext:WIFI_HOME_PSK";
+      # secretsFile = "/etc/nixos/.env";
+      networks.Ridderstraat2.pskRaw = config.sops.placeholder."wifi/home/psk";
+      # networks.Ridderstraat2.psk = "freewifi";
     };
   };
 
