@@ -18,10 +18,12 @@
         try = "nix-shell -p";
 
         update = ''
-          sudo nix flake update -I /etc/nixos
+          cd /etc/nixos
+          sudo nix flake update
           sudo nixos-rebuild switch \
-            --flake /etc/nixos#${hostType} \
+            --flake .#${hostType} \
             --sudo --impure --show-trace && clear
+          cd -
         '';
 
         todo = "nvim ~/Documents/todo.md";

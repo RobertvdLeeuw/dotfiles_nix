@@ -215,11 +215,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1772944399,
-        "narHash": "sha256-xTzsSd3r5HBeufSZ3fszAn0ldfKctvsYG7tT2YJg5gY=",
+        "lastModified": 1773096132,
+        "narHash": "sha256-M3zEnq9OElB7zqc+mjgPlByPm1O5t2fbUrH3t/Hm5Ag=",
         "owner": "Mic92",
         "repo": "sops-nix",
-        "rev": "c8e69670b316d6788e435a3aa0bda74eb1b82cc0",
+        "rev": "d1ff3b1034d5bab5d7d8086a7803c5a5968cd784",
         "type": "github"
       },
       "original": {
@@ -267,11 +267,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1773095528,
-        "narHash": "sha256-KrGey6pNFIzm/i0T28PwJ6by0ldflQxTgQsyHjXlP0k=",
+        "lastModified": 1773097806,
+        "narHash": "sha256-Lq0MWpdAonOaEZhHD8ydHFxMSPX3LVHCgpO+It8raUs=",
         "owner": "RobertVDLeeuw",
         "repo": "waybar-modules",
-        "rev": "1cfdbd60e1e2a92f414ba8b525cb1048234c37b5",
+        "rev": "8784683890b8e45019e7fbc787f4ed41947ebfa2",
         "type": "github"
       },
       "original": {
