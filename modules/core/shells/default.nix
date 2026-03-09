@@ -17,9 +17,12 @@
         cnfnix = "cd /etc/nixos && nvim flake.nix && cd -";
         try = "nix-shell -p";
 
-        tryupdate = "sudo nixos-rebuild test --flake /etc/nixos#${hostType} --sudo --impure --show-trace";
-        update = "sudo nixos-rebuild switch --flake /etc/nixos#${hostType} --update --sudo --impure && clear";
-        updatev = "sudo nixos-rebuild switch --flake /etc/nixos#${hostType} --update --sudo --impure --show-trace";
+        update = ''
+          sudo nix flake update -I /etc/nixos
+          sudo nixos-rebuild switch \
+            --flake /etc/nixos#${hostType} \
+            --sudo --impure --show-trace && clear
+        '';
 
         todo = "nvim ~/Documents/todo.md";
         books = "nvim ~/Documents/books.txt";

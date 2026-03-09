@@ -61,7 +61,7 @@ in
           "${mod}+${toString n}" = "exec swaymsg workspace number $(${get_workspace} ${toString n})";
           # TODO: Fix shift 'carry'
           "${mod}+Shift+${toString n}" =
-            "swaymsg move container to workspace number $(${get_workspace} ${toString n}) && swaymsg workspace number $(${get_workspace} ${toString n})";
+            "exec swaymsg move container to workspace number $(${get_workspace} ${toString n}) && swaymsg workspace number $(${get_workspace} ${toString n})";
         }) (lib.range 1 4))
         # Nav containers hjkl+arrows
         ++ (map (binding: {
@@ -75,7 +75,7 @@ in
             "${mod}+Shift+w" = "kill";
             "${mod}+Shift+c" = "reload";
             "${mod}+b" = "exec brave --password-store=basic";
-            "${mod}+s" = "exec spofity";
+            "${mod}+s" = "exec spotify";
             "${mod}+e" = "exec dolphin";
             "${mod}+Return" = "exec alacritty";
             "${mod}+space" = "exec wofi run --show drun";
