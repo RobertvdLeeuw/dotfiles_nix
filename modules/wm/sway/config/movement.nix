@@ -103,6 +103,11 @@ in
               "XF86AudioRaiseVolume" = "exec /etc/nixos/modules/wm/sway/scripts/volume_clamp.sh ${increment}";
               "XF86AudioLowerVolume" = "exec pactl set-sink-volume @DEFAULT_SINK@ -${increment}%";
               "XF86AudioMute" = "exec pactl set-sink-mute @DEFAULT_SINK@ toggle";
+
+              "${mod}+XF86AudioRaiseVolume" =
+                "exec /etc/nixos/modules/wm/sway/scripts/volume_clamp.sh ${increment}";
+              "${mod}+XF86AudioLowerVolume" = "exec pactl set-sink-volume @DEFAULT_SINK@ -${increment}%";
+              "${mod}+XF86AudioMute" = "exec pactl set-sink-mute @DEFAULT_SINK@ toggle";
             }
           )
 
