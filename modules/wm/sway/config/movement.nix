@@ -87,18 +87,30 @@ in
 
             "${mod}+Shift+s" = "exec grim -g \"$(slurp)\" - | wl-copy"; # Area screenshot
             "${mod}+v" = "exec clipman pick -t wofi";
-          }
-          (lib.optionalAttrs (hostType == "desktop") {
-            # Volume controls
-            "XF86AudioRaiseVolume" = "exec /etc/nixos/modules/wm/sway/scripts/volume_clamp.sh";
-            "XF86AudioLowerVolume" = "exec pactl set-sink-volume @DEFAULT_SINK@ -1%";
-            "XF86AudioMute" = "exec pactl set-sink-mute @DEFAULT_SINK@ toggle";
 
             # Media playback controls
             "XF86AudioPlay" = "exec playerctl play-pause";
             "XF86AudioStop" = "exec playerctl stop";
             "XF86AudioNext" = "exec playerctl next";
             "XF86AudioPrev" = "exec playerctl previous";
+          }
+          (
+            let
+              increment = if (hostType == "desktop") then "1" else "5";
+            in
+            {
+              # Volume controls
+              "XF86AudioRaiseVolume" = "exec /etc/nixos/modules/wm/sway/scripts/volume_clamp.sh ${increment}";
+              "XF86AudioLowerVolume" = "exec pactl set-sink-volume @DEFAULT_SINK@ -${increment}%";
+              "XF86AudioMute" = "exec pactl set-sink-mute @DEFAULT_SINK@ toggle";
+            }
+          )
+
+          (lib.optionalAttrs (hostType == "desktop") {
+          })
+          (lib.optionalAttrs (hostType == "laptop") {
+            "XF86MonBrightnessUp" = "exec brightnessctl set 10+%";
+            "XF86MonBrightnessDown" = "exec brightnessctl set 10-%";
           })
         ]
       );
