@@ -24,6 +24,7 @@
     };
     kernelModules = [ "kvm-amd" ];
     extraModulePackages = [ ];
+    loader.timeout = 1;
   };
 
   fileSystems."/" = {
