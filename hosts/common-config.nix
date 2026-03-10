@@ -112,10 +112,6 @@
 
     journald.extraConfig = "SystemMaxUse=50M";
     displayManager = {
-      autoLogin = {
-        enable = true;
-        user = "robert";
-      };
       sddm.enable = true;
       defaultSession = "sway";
     };

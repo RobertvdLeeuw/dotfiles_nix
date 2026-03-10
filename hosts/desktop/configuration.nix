@@ -28,6 +28,11 @@
     networkmanager.enable = true;
   };
 
+  services.displayManager.autoLogin = {
+    enable = true;
+    user = "robert";
+  };
+
   users = {
     defaultUserShell = pkgs.zsh;
     users.robert = {
