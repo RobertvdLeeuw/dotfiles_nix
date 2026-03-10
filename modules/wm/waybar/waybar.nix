@@ -171,7 +171,11 @@ in
       enable = true;
 
       settings = configs;
-      style = ./style.css;
+      style =
+        builtins.replaceStrings
+          [ "font-size: 15px" ]
+          [ "font-size: ${if hostType == "desktop" then "15" else "16"}px" ]
+          (builtins.readFile ./style.css);
     };
     # TODO: Implement EWW.
     # eww = {

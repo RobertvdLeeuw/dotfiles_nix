@@ -41,7 +41,10 @@
     };
   };
 
-  services.libinput.touchpad.naturalScrolling = false;
+  services = {
+    logind.settings.Login.HandleLidSwitch = "hibernate";
+    libinput.touchpad.naturalScrolling = false;
+  };
 
   users = {
     defaultUserShell = pkgs.zsh;
