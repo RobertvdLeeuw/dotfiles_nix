@@ -54,7 +54,7 @@
               "server"
               "desktop"
             ];
-            type = "receiveonly";
+            type = "sendreceive";
             ignorePerms = false;
           };
         };
