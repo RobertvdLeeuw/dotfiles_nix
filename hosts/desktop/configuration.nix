@@ -33,14 +33,18 @@
       enable = true;
       user = "robert";
     };
+
     syncthing = {
       settings = {
         folders = {
           "nc-storage" = {
             path = "/mnt/storage/nc";
-            devices = [ "server" ];
-            type = "sendonly"; # Desktop sends, server receives
-            ignorePerms = false; # Preserve file permissions
+            devices = [
+              "server"
+              "laptop"
+            ];
+            type = "sendreceive";
+            ignorePerms = false;
           };
         };
       };

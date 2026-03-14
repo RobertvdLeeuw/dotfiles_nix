@@ -44,6 +44,22 @@
   services = {
     logind.settings.Login.HandleLidSwitch = "hibernate";
     libinput.touchpad.naturalScrolling = false;
+
+    syncthing = {
+      settings = {
+        folders = {
+          "nc-storage" = {
+            path = "/mnt/storage/nc";
+            devices = [
+              "server"
+              "desktop"
+            ];
+            type = "receiveonly";
+            ignorePerms = false;
+          };
+        };
+      };
+    };
   };
 
   users = {
