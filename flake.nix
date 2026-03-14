@@ -108,8 +108,8 @@
           ];
 
           my = {
-            noGUI = false;
-            noAI = false;
+            noGUI = true;
+            noAI = true;
           };
         };
 
