@@ -28,9 +28,23 @@
     networkmanager.enable = true;
   };
 
-  services.displayManager.autoLogin = {
-    enable = true;
-    user = "robert";
+  services = {
+    displayManager.autoLogin = {
+      enable = true;
+      user = "robert";
+    };
+    syncthing = {
+      settings = {
+        folders = {
+          "nc-storage" = {
+            path = "/mnt/storage/nc";
+            devices = [ "server" ];
+            type = "sendonly"; # Desktop sends, server receives
+            ignorePerms = false; # Preserve file permissions
+          };
+        };
+      };
+    };
   };
 
   users = {

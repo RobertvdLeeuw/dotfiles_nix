@@ -18,6 +18,7 @@
     file
 
     git
+    gnumake
 
     docker-compose
     docker
