@@ -104,13 +104,13 @@
           imports = [
             nvf.homeManagerModules.default
 
-            ./modules/core/nvim
-            ./modules/core/shells
-            ./modules/core/system-tools.nix
-            ./modules/core/terminal.nix
+            ./modules/core
           ];
 
-          my.enableGUI = false;
+          my = {
+            noGUI = false;
+            noAI = false;
+          };
         };
 
       checks.x86_64-linux = {
