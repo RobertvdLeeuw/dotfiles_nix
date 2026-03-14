@@ -9,7 +9,7 @@
 {
   programs = {
     alacritty = {
-      enable = !config.my.noGUI;
+      enable = !config.my.noGUI && !config.my.sudoTools;
 
       settings = {
         colors = {

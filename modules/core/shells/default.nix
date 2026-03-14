@@ -7,54 +7,56 @@
 }:
 {
   imports = [ ./zsh.nix ];
-  home = {
-    packages = with pkgs; [
-      any-nix-shell # for nix-shell in zsh. I don't like bash. No. Stop it.
-    ];
+  config = {
+    home = {
+      packages = with pkgs; [
+        any-nix-shell # for nix-shell in zsh. I don't like bash. No. Stop it.
+      ];
 
-    shellAliases = lib.mkMerge [
-      {
-        cnfnix = "cd /etc/nixos && nvim flake.nix && cd -";
-        try = "nix-shell -p";
+      shellAliases = lib.mkMerge [
+        {
+          cnfnix = "cd /etc/nixos && nvim flake.nix && cd -";
+          try = "nix-shell -p";
 
-        update = ''
-          cd /etc/nixos
-          sudo nix flake update
-          sudo nixos-rebuild switch \
-            --flake .#${hostType} \
-            --sudo --impure --show-trace && clear
-          cd -
-        '';
+          update = ''
+            cd /etc/nixos
+            sudo nix flake update
+            sudo nixos-rebuild switch \
+              --flake .#${hostType} \
+              --sudo --impure --show-trace && clear
+            cd -
+          '';
 
-        todo = "nvim ~/Documents/todo.md";
-        books = "nvim ~/Documents/books.txt";
+          todo = "nvim ~/Documents/todo.md";
+          books = "nvim ~/Documents/books.txt";
 
-        tr = "tree --gitignore -L 3 -a -I .git/ -I __pycache__/ -I target/";
+          tr = "tree --gitignore -L 3 -a -I .git/ -I __pycache__/ -I target/";
 
-        ga = "git add . && clear";
-        gs = "git status";
+          ga = "git add . && clear";
+          gs = "git status";
 
-        gcm = "git commit -m ";
-        gp = "git push && clear";
+          gcm = "git commit -m ";
+          gp = "git push && clear";
 
-        cat = "bat";
-      }
+          cat = "bat";
+        }
 
-      (lib.mkIf (!config.my.noAI) {
-        dumb = "aichat -e";
-        gc = "oco --context ";
-      })
+        (lib.mkIf (!config.my.noAI) {
+          dumb = "aichat -e";
+          gc = "oco --context ";
+        })
 
-      (lib.mkIf config.my.noAI {
-        gc = "echo 'Opencommit not set up.'";
-        dumb = "echo 'Aichat not set up.'";
-      })
-    ];
-  };
-  programs.bash = {
-    enable = true;
-    initExtra = /* sh */ ''
-      eval "$(starship init bash)"
-    '';
+        (lib.mkIf config.my.noAI {
+          gc = "echo 'Opencommit not set up.'";
+          dumb = "echo 'Aichat not set up.'";
+        })
+      ];
+    };
+    programs.bash = {
+      enable = true;
+      initExtra = /* sh */ ''
+        eval "$(starship init bash)"
+      '';
+    };
   };
 }

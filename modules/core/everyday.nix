@@ -6,28 +6,31 @@
   ...
 }:
 {
-  home.packages =
-    with pkgs;
-    [
-      brave
+  config = lib.mkIf (!config.my.noGUI && !config.my.sudoTools) {
+    home.packages =
+      with pkgs;
+      [
+        brave
 
-      # Dolphin is installed auto via KDE
+        # Dolphin is installed auto via KDE
 
-      libreoffice-qt
-      pavucontrol
+        libreoffice-qt
+        pavucontrol
 
-      spotify
+        spotify
 
-      whatsie
-      discord
-      teams
+        whatsie
+        discord
+        teams
 
-      loupe # Image viewer
-      gimp
-      vlc
-    ]
-    ++ (lib.optionals (hostType == "laptop") [
-      brightnessctl
-      bluez
-    ]);
+        loupe # Image viewer
+        gimp
+        vlc
+      ]
+      ++ (lib.optionals (hostType == "laptop") [
+        # TODO: Move to options in default.nix
+        brightnessctl
+        bluez
+      ]);
+  };
 }

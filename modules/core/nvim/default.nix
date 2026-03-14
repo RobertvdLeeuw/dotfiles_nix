@@ -36,7 +36,7 @@ let
   # Import all modules as a list
   modules = [
     (import ./core/options.nix { inherit pkgs lib; })
-    (import ./core/keymaps.nix { inherit pkgs lib; })
+    (import ./core/keymaps.nix { inherit pkgs lib config; })
     (import ./core/extra.nix { inherit pkgs lib; })
     (import ./ui/visuals.nix { inherit pkgs lib; })
     (import ./ui/statusline.nix { inherit pkgs lib; })
@@ -53,7 +53,7 @@ let
     (import ./tools/devcontainers.nix { inherit pkgs lib; })
     (import ./extra/unsorted.nix { inherit pkgs lib; })
   ]
-  + lib.optionals (!config.my.noAI) [
+  ++ lib.optionals (!config.my.noAI) [
     (import ./ai/codecompanion.nix { inherit pkgs lib; })
   ];
 

@@ -2,9 +2,10 @@
 
 {
   imports = [
-    ../../modules/core/shells
-    ../../modules/core/system-tools.nix
+    ../../modules/core
   ];
+
+  my.sudoTools = true;
 
   home = {
     username = "root";
