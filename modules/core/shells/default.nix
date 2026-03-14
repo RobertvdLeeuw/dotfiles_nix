@@ -40,13 +40,14 @@
         cat = "bat";
       }
 
-      (lib.mkIf (hostType == "desktop") {
+      (lib.mkIf (!config.my.noAI) {
         dumb = "aichat -e";
         gc = "oco --context ";
       })
 
-      (lib.mkIf (hostType == "laptop") {
+      (lib.mkIf config.my.noAI {
         gc = "echo 'Opencommit not set up.'";
+        dumb = "echo 'Aichat not set up.'";
       })
     ];
   };

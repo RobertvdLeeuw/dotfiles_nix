@@ -50,8 +50,8 @@ let
     (import ./tools/filenav.nix { inherit pkgs lib; })
     (import ./tools/terminal.nix { inherit pkgs lib; })
     (import ./tools/devcontainers.nix { inherit pkgs lib; })
-    (import ./ai/codecompanion.nix { inherit pkgs lib; })
     (import ./extra/unsorted.nix { inherit pkgs lib; })
+    (import ./ai/codecompanion.nix { inherit pkgs lib; })
   ];
 
   # Extract and concatenate lua configs from all modules

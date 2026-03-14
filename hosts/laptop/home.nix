@@ -11,6 +11,8 @@
     ../../modules/wm/sway/sway-home.nix
   ];
 
+  my.noAI = true;
+
   home = {
     username = "robert";
     homeDirectory = "/home/robert";

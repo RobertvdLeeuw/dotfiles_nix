@@ -82,10 +82,6 @@
                 useUserPackages = true;
                 extraSpecialArgs = {
                   inherit inputs;
-                  pkgs-ollama = import nixpkgs-ollama {
-                    system = "x86_64-linux";
-                    config.allowUnfree = true;
-                  };
                   hostType = "laptop";
                 };
                 users = {
@@ -102,18 +98,20 @@
         };
       };
 
-      shellEnv = {
-        imports = [
-          nvf.homeManagerModules.default
+      shellEnv =
+        { hostType }:
+        {
+          imports = [
+            nvf.homeManagerModules.default
 
-          ./modules/core/nvim
-          ./modules/core/shells
-          ./modules/core/system-tools.nix
-          ./modules/core/terminal.nix
-        ];
+            ./modules/core/nvim
+            ./modules/core/shells
+            ./modules/core/system-tools.nix
+            ./modules/core/terminal.nix
+          ];
 
-        my.enableAlacritty = false;
-      };
+          my.enableGUI = false;
+        };
 
       checks.x86_64-linux = {
         desktop = self.nixosConfigurations.desktop.config.system.build.toplevel;
