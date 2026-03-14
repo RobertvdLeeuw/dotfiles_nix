@@ -49,7 +49,7 @@
       settings = {
         folders = {
           "nc-storage" = {
-            path = "/mnt/storage/nc";
+            path = "/home/robert/nc";
             devices = [
               "server"
               "desktop"
