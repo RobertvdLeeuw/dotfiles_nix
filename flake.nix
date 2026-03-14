@@ -102,6 +102,19 @@
         };
       };
 
+      shellEnv = {
+        imports = [
+          nvf.homeManagerModules.default
+
+          ./modules/core/nvim
+          ./modules/core/shells
+          ./modules/core/system-tools.nix
+          ./modules/core/terminal.nix
+        ];
+
+        my.enableAlacritty = false;
+      };
+
       checks.x86_64-linux = {
         desktop = self.nixosConfigurations.desktop.config.system.build.toplevel;
         laptop = self.nixosConfigurations.laptop.config.system.build.toplevel;

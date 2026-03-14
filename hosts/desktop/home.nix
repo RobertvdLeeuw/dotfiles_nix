@@ -65,5 +65,17 @@
       name = "RobertVDLeeuw";
       email = "robert.van.der.leeuw@gmail.com";
     };
+    ssh = {
+      enable = true;
+
+      matchBlocks = {
+        "homelab" = {
+          hostname = "192.168.2.111";
+          port = 8022;
+          user = "robert";
+        };
+      };
+    };
+
   };
 }
