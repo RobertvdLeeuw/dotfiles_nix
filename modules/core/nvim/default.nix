@@ -1,6 +1,7 @@
 {
   pkgs,
   lib,
+  config,
   ...
 }:
 
@@ -51,6 +52,8 @@ let
     (import ./tools/terminal.nix { inherit pkgs lib; })
     (import ./tools/devcontainers.nix { inherit pkgs lib; })
     (import ./extra/unsorted.nix { inherit pkgs lib; })
+  ]
+  + lib.optionals (!config.my.noAI) [
     (import ./ai/codecompanion.nix { inherit pkgs lib; })
   ];
 

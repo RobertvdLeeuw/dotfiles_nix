@@ -9,7 +9,7 @@
 {
   programs = {
     alacritty = {
-      enable = config.my.enableAlacritty;
+      enable = !config.my.noGUI;
 
       settings = {
         colors = {

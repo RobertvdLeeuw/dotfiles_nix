@@ -6,9 +6,9 @@
 }:
 {
   options.my = {
-    enableAlacritty = lib.mkOption {
+    noGUI = lib.mkOption {
       type = lib.types.bool;
-      default = true;
+      default = false;
       description = "Enable Alacritty (GUI terminal editor)";
     };
     noAI = lib.mkOption {
@@ -22,12 +22,14 @@
     imports = [
       ./codelangs/python.nix
       ./codelangs/rust.nix
-      ./everyday.nix
       ./system-tools.nix
       ./terminal.nix
       ./nvim
       ./shells
+    ]
+    ++ lib.optionals (!config.my.noGUI) [
       ./gaming.nix
+      ./everyday.nix
     ];
   };
 }
