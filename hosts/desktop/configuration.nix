@@ -43,7 +43,8 @@
               "server"
               "laptop"
             ];
-            type = "sendreceive";
+            # type = "sendreceive";
+            type = "sendonly";
             ignorePerms = false;
           };
         };
