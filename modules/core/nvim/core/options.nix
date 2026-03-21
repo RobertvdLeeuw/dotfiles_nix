@@ -13,13 +13,13 @@
       shiftwidth = 2;
     };
 
-    autocmds = [
-      {
-        event = [ "BufReadPost" ];
-        pattern = [ "*" ];
-        command = "normal zR";
-        desc = "Open all folds when reading a file";
-      }
-    ];
+    # autocmds = [
+    #   {
+    #     event = [ "BufReadPost" ];
+    #     pattern = [ "*" ];
+    #     command = "normal zR";
+    #     desc = "Open all folds when reading a file";
+    #   }
+    # ];
   };
 }
