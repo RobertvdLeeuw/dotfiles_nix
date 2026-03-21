@@ -1,6 +1,7 @@
 {
   pkgs,
   lib,
+  config,
   ...
 }:
 {
@@ -82,8 +83,6 @@
       pkgs.ripgrep
       pkgs.yazi
 
-      pkgs.vectorcode
-
       pkgs.lua51Packages.luv # For vim.uv types
       pkgs.luajitPackages.luv # For vim.uv types
 
@@ -106,6 +105,9 @@
       pkgs.sqlfluff # SQL linter
       pkgs.nodePackages.markdownlint-cli # Markdown linter
       pkgs.yamllint # YAML linter
+    ]
+    ++ lib.optionals (!config.my.noAI) [
+      pkgs.vectorcode
     ];
   };
 }

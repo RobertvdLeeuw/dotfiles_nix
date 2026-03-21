@@ -41,7 +41,7 @@ let
     (import ./ui/visuals.nix { inherit pkgs lib; })
     (import ./ui/statusline.nix { inherit pkgs lib; })
     (import ./ui/extra.nix { inherit pkgs lib; })
-    (import ./languages/languages.nix { inherit pkgs lib; })
+    (import ./languages/languages.nix { inherit pkgs lib config; })
     (import ./languages/completion.nix { inherit pkgs lib; })
     (import ./languages/formatting.nix { inherit pkgs lib; })
     (import ./languages/diagnostics.nix { inherit pkgs lib; })

@@ -41,6 +41,12 @@
           port = 8022;
           user = "robert";
         };
+
+        "rpi" = {
+          hostname = "192.168.2.59";
+          port = 22;
+          user = "root";
+        };
       };
     };
 
