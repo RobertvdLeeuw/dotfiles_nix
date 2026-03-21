@@ -18,6 +18,8 @@
     efi.canTouchEfiVariables = true;
   };
 
+  security.pam.services.swaylock = { };
+
   sops.templates."wpa_supplicant" = {
     content = ''
       network={

@@ -136,6 +136,11 @@
       };
     };
 
+    tailscale = {
+      enable = true;
+      useRoutingFeatures = "client";
+    };
+
     # postgresql = {
     #   enable = true;
     #   package = pkgs.postgresql_16;

@@ -92,24 +92,36 @@
     XDG_SESSION_TYPE = "wayland";
   };
 
-  services.gammastep = {
-    enable = true;
-    provider = "geoclue2";
+  services = {
+    gammastep = {
+      enable = true;
+      provider = "geoclue2";
 
-    # TODO: Get this working. (https://discourse.nixos.org/t/sys-class-backlight-empty/57892)
-    # settings = {
-    #   general = {
-    #     brightness-day = "0.5"; # Brightness as a string
-    #     brightness-night = "0.5"; # Brightness as a string
-    #   };
-    # };
+      # TODO: Get this working. (https://discourse.nixos.org/t/sys-class-backlight-empty/57892)
+      # settings = {
+      #   general = {
+      #     brightness-day = "0.5"; # Brightness as a string
+      #     brightness-night = "0.5"; # Brightness as a string
+      #   };
+      # };
 
-    dawnTime = "8:30-9:30";
-    duskTime = "20:30-21:30";
+      dawnTime = "8:30-9:30";
+      duskTime = "20:30-21:30";
 
-    temperature = {
-      day = 6500;
-      night = 3700;
+      temperature = {
+        day = 6500;
+        night = 3700;
+      };
+    };
+
+    swayidle = lib.mkIf (hostType == "laptop") {
+      enable = true;
+      events = [
+        {
+          event = "before-sleep";
+          command = "${pkgs.swaylock}/bin/swaylock -f";
+        }
+      ];
     };
   };
 }
