@@ -24,6 +24,7 @@
         teams
 
         loupe # Image viewer
+        pinta # Linux equiv of paint.net
         gimp
         vlc
       ]
