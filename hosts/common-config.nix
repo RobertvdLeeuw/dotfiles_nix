@@ -98,6 +98,7 @@
     useDHCP = lib.mkDefault true;
 
     nameservers = [
+      # Tailscale DNS override - Adguard without delay if down.
       "1.1.1.1"
       "1.0.0.1"
     ];
