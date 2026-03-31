@@ -53,6 +53,11 @@
         treesitter.enable = true;
         lsp.enable = true;
       };
+      toml = {
+        enable = true;
+        treesitter.enable = true;
+        lsp.enable = true;
+      };
       markdown = {
         enable = true;
         treesitter.enable = true;
