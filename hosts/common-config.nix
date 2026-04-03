@@ -194,7 +194,8 @@
     stateVersion = "24.11"; # DO NOT TOUCH! Needed in case of backwards incompatible update.
     autoUpgrade = {
       enable = true;
-      channel = "https://nixos.org/channels/nixos-unstable";
+      flake = "/etc/nixos/flake.nix";
+      # channel = "https://nixos.org/channels/nixos-unstable";
     };
   };
 }

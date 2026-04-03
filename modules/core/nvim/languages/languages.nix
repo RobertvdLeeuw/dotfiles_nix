@@ -94,7 +94,7 @@
       # Formatter packages
       pkgs.stylua # Lua
       pkgs.shfmt # Shell/Bash
-      pkgs.nodePackages.prettier # JSON, Markdown
+      pkgs.prettier # JSON, Markdown
       pkgs.jq # JSON fallback
       pkgs.nixfmt # Nix
       pkgs.rustfmt # Rust
@@ -108,7 +108,7 @@
       pkgs.shellcheck # Shell script linter
       pkgs.statix # Nix static analyzer
       pkgs.sqlfluff # SQL linter
-      pkgs.nodePackages.markdownlint-cli # Markdown linter
+      pkgs.markdownlint-cli # Markdown linter
       pkgs.yamllint # YAML linter
     ]
     ++ lib.optionals (!config.my.noAI) [
