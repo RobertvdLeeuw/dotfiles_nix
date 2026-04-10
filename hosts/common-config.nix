@@ -179,7 +179,12 @@
 
   location.provider = "geoclue2"; # For gammastep.
 
+  hardware.keyboard.zsa.enable = true;
+
   environment = {
+    systemPackages = with pkgs; [
+      keymapp
+    ];
     pathsToLink = [ "/share/zsh" ];
 
     variables = {

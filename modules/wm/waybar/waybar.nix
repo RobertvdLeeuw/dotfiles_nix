@@ -58,7 +58,7 @@ let
         screen
         // {
           "custom/workspaces" = {
-            exec = "${workspaces}/bin/workspaces ${screen.output}";
+            exec = "${workspaces}/bin/workspaces ${screen.workspaces}";
             return-type = "json";
             format = "{}";
             tooltip = false;
@@ -101,15 +101,18 @@ let
           bar_id = "1";
           ipc = true;
           output = "DP-1";
+          workspaces = "11 12 13 14";
         } # UW
         {
           bar_id = "2";
           ipc = true;
           output = "HDMI-A-1";
+          workspaces = "1 2 3 4";
         } # Top
         {
           bar_id = "3";
           output = "DP-3";
+          workspaces = "21 22 23 24";
         } # Ver
       ];
 
@@ -125,7 +128,7 @@ let
             output = "eDP-1";
 
             "custom/workspaces" = {
-              exec = "${workspaces}/bin/workspaces eDP-1";
+              exec = "${workspaces}/bin/workspaces 1 2 3 4";
               return-type = "json";
               format = "{}";
               tooltip = false;
