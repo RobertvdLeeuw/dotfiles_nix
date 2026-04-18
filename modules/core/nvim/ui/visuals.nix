@@ -44,6 +44,10 @@
         enable = true;
         setupOpts = { };
       };
+      nvim-ufo = {
+        enable = true;
+        setupOpts = { };
+      };
     };
 
     # Autocmd to attach colorizer to relevant file types
@@ -66,6 +70,8 @@
           "*.conf"
           "*.config"
           "*.nix"
+          "*.py"
+          "*.rs"
         ];
         command = "ColorizerAttachToBuffer";
         desc = "Auto-attach nvim-colorizer to color-relevant file types";
