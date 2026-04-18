@@ -44,10 +44,6 @@
         enable = true;
         setupOpts = { };
       };
-      nvim-ufo = {
-        enable = true;
-        setupOpts = { };
-      };
     };
 
     # Autocmd to attach colorizer to relevant file types

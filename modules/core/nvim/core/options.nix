@@ -6,8 +6,9 @@
 {
   settings.vim = {
     options = {
-      foldlevel = 20;
-      foldlevelstart = 20;
+      foldtext = ""; # For some reason this is the way to enable highlighted folds.
+      foldlevel = 99;
+      foldlevelstart = 99;
       foldnestmax = 8;
       tabstop = 2;
       shiftwidth = 2;
