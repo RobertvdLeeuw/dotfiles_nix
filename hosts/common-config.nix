@@ -12,6 +12,12 @@
       secretPaths = [
         "wifi/home/ssid"
         "wifi/home/psk"
+        "wifi/3b/ssid"
+        "wifi/3b/psk"
+        "wifi/BvdB/ssid"
+        "wifi/BvdB/psk"
+        "wifi/RD/ssid"
+        "wifi/RD/psk"
         "services/syncthing-pw"
       ];
     in

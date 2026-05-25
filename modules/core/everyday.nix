@@ -20,6 +20,7 @@
         libreoffice-qt
         pavucontrol
 
+        blender
         spotify
 
         whatsie

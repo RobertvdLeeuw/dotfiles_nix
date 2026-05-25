@@ -73,14 +73,15 @@
       };
     };
 
-    extraConfig =
-      ""
-      + lib.optionalString (hostType == "desktop") ''
-        ${builtins.readFile ./config/desktop/monitor.conf}
-      ''
-      + lib.optionalString (hostType == "laptop") ''
-        ${builtins.readFile ./config/laptop/monitor.conf}
-      '';
+    extraConfig = ''
+      for_window [app_id="chimp"] floating enable
+    ''
+    + lib.optionalString (hostType == "desktop") ''
+      ${builtins.readFile ./config/desktop/monitor.conf}
+    ''
+    + lib.optionalString (hostType == "laptop") ''
+      ${builtins.readFile ./config/laptop/monitor.conf}
+    '';
 
     extraSessionCommands = ''
 

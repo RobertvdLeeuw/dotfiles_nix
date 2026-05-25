@@ -21,10 +21,23 @@
   security.pam.services.swaylock = { };
 
   sops.templates."wpa_supplicant" = {
+    # TODO: Rollup
     content = ''
       network={
         ssid="${config.sops.placeholder."wifi/home/ssid"}"
         psk="${config.sops.placeholder."wifi/home/psk"}"
+      }
+      network={
+        ssid="${config.sops.placeholder."wifi/3b/ssid"}"
+        psk="${config.sops.placeholder."wifi/3b/psk"}"
+      }
+      network={
+        ssid="${config.sops.placeholder."wifi/BvdB/ssid"}"
+        psk="${config.sops.placeholder."wifi/BvdB/psk"}"
+      }
+      network={
+        ssid="${config.sops.placeholder."wifi/RD/ssid"}"
+        psk="${config.sops.placeholder."wifi/RD/psk"}"
       }
     '';
     owner = "wpa_supplicant";
