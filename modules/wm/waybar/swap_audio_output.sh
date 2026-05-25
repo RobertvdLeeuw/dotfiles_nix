@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-HEADPHONES="bluez_output.80:C3:BA:65:D6:34"
+HEADPHONES="bluez_output.80_C3_BA_65_D6_34.1"
 HEADPHONES_MAC="80:C3:BA:65:D6:34"
 SPEAKERS="alsa_output.pci-0000_0b_00.4.analog-stereo"
 

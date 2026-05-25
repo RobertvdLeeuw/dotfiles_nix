@@ -78,7 +78,7 @@ in
             "${mod}+s" = "exec spotify";
             "${mod}+e" = "exec dolphin";
             "${mod}+Return" = "exec alacritty";
-            "${mod}+space" = "exec wofi run --show drun";
+            "${mod}+Tab" = "exec wofi run --show drun";
 
             "${mod}+r" = "mode resize";
 

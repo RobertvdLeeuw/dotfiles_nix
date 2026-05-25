@@ -66,6 +66,8 @@
           "*.conf"
           "*.config"
           "*.nix"
+          "*.py"
+          "*.rs"
         ];
         command = "ColorizerAttachToBuffer";
         desc = "Auto-attach nvim-colorizer to color-relevant file types";
