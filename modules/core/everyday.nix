@@ -31,6 +31,8 @@
         pinta # Linux equiv of paint.net
         gimp
         vlc
+
+        obsidian
       ]
       ++ (lib.optionals (hostType == "laptop") [
         # TODO: Move to options in default.nix

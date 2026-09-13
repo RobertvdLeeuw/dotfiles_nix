@@ -8,7 +8,7 @@
 {
   config = lib.mkIf (!config.my.noGUI && !config.my.sudoTools) {
     home.packages = with pkgs; [
-      steam
+      # steam
 
       # For MO2 modding
       steamtinkerlaunch

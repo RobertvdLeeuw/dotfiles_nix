@@ -39,6 +39,16 @@
         ssid="${config.sops.placeholder."wifi/RD/ssid"}"
         psk="${config.sops.placeholder."wifi/RD/psk"}"
       }
+      network={
+        ssid="eduroam"
+        key_mgmt=WPA-EAP
+        eap=PEAP
+        phase2="auth=MSCHAPV2"
+        identity="${config.sops.placeholder."wifi/eduroam/email"}"
+        anonymous_identity="anonymous@ru.nl"
+        domain_suffix_match="RU.nl"
+        password="${config.sops.placeholder."wifi/eduroam/psk"}"
+      }
     '';
     owner = "wpa_supplicant";
     mode = "0440";

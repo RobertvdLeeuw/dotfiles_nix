@@ -20,7 +20,7 @@
         "sd_mod"
         "sdhci_pci"
       ];
-      kernelModules = [ ];
+      kernelModules = [ "amdgpu" ];
     };
     kernelModules = [ "kvm-amd" ];
     extraModulePackages = [ ];
@@ -61,6 +61,10 @@
     cpu.amd = {
       updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
       ryzen-smu.enable = true;
+    };
+    graphics = {
+      enable = true;
+      enable32Bit = true;
     };
   };
 }

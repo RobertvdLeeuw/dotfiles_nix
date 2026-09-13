@@ -18,6 +18,10 @@
         "wifi/BvdB/psk"
         "wifi/RD/ssid"
         "wifi/RD/psk"
+        "wifi/eduroam/email"
+        "wifi/eduroam/psk"
+        "wifi/anke/ssid"
+        "wifi/anke/psk"
         "services/syncthing-pw"
       ];
     in
@@ -51,7 +55,7 @@
     gc = {
       automatic = true;
       dates = "daily";
-      options = "--delete-older-than 3d";
+      options = "--delete-older-than 5d";
     };
   };
 
@@ -199,7 +203,10 @@
     };
   };
 
-  programs.zsh.enable = true;
+  programs = {
+    steam.enable = true;
+    zsh.enable = true;
+  };
 
   system = {
     stateVersion = "24.11"; # DO NOT TOUCH! Needed in case of backwards incompatible update.
