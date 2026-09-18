@@ -82,14 +82,6 @@
           })
         '';
       };
-
-      comfy-line-numbers-nvim = {
-        package = pkgs.vimPlugins.comfy-line-numbers-nvim;
-        setup = /* lua */ ''
-          require("comfy-line-numbers").setup()
-        '';
-      };
-
     };
   };
 }
