@@ -124,7 +124,7 @@
   services = {
     blueman.enable = true;
 
-    journald.extraConfig = "SystemMaxUse=50M";
+    journald.settings.Journal.SystemMaxUse = "50M";
     displayManager = {
       sddm.enable = true;
       defaultSession = "sway";
