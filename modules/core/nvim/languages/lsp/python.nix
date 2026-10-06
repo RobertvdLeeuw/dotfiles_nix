@@ -13,14 +13,14 @@
       servers = {
         basedpyright = {
           cmd = lib.mkForce (
-            lib.generators.mkLuaInline ''
-              require('devcontainers').lsp_cmd(function(config)
-                local manager = require('devcontainers.manager')
-                if manager.is_workspace_dir(config.root_dir) then
-                  return { 'basedpyright-langserver', '--stdio', '--verbose' }
-                else
-                  return { '${lib.getExe' pkgs.basedpyright "basedpyright-langserver"}', '--stdio', '--verbose' }
-                end
+            lib.mkLuaInline /* lua */ ''
+              require("devcontainers").lsp_cmd(function(config)
+              	local manager = require("devcontainers.manager")
+              	if manager.is_workspace_dir(config.root_dir) then
+              		return { "basedpyright-langserver", "--stdio", "--verbose" }
+              	else
+              		return { "${lib.getExe' pkgs.basedpyright "basedpyright-langserver"}", "--stdio" }
+              	end
               end)
             ''
           );
@@ -39,6 +39,7 @@
               diagnosticSeverityOverrides = {
                 reportAny = "none";
                 reportUnknownMemberType = "none";
+                reportUnusedCallResult = "none";
                 reportUnknownVariableType = "none";
                 reportMissingImports = "none"; # Handled by ty.
               };
@@ -48,14 +49,14 @@
 
         ty = {
           cmd = lib.mkForce (
-            lib.generators.mkLuaInline ''
-              require('devcontainers').lsp_cmd(function(config)
-                local manager = require('devcontainers.manager')
-                if manager.is_workspace_dir(config.root_dir) then
-                  return { 'ty', 'server' }
-                else
-                  return { '${lib.getExe pkgs.ty}', 'server' }
-                end
+            lib.mkLuaInline /* lua */ ''
+              require("devcontainers").lsp_cmd(function(config)
+              	local manager = require("devcontainers.manager")
+              	if manager.is_workspace_dir(config.root_dir) then
+              		return { "ty", "server" }
+              	else
+              		return { "${lib.getExe pkgs.ty}", "server" }
+              	end
               end)
             ''
           );

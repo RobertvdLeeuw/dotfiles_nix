@@ -12,6 +12,17 @@
       secretPaths = [
         "wifi/home/ssid"
         "wifi/home/psk"
+        "wifi/3b/ssid"
+        "wifi/3b/psk"
+        "wifi/BvdB/ssid"
+        "wifi/BvdB/psk"
+        "wifi/RD/ssid"
+        "wifi/RD/psk"
+        "wifi/eduroam/email"
+        "wifi/eduroam/psk"
+        "wifi/anke/ssid"
+        "wifi/anke/psk"
+        "wifi/bieb/ssid"
         "services/syncthing-pw"
       ];
     in
@@ -45,7 +56,7 @@
     gc = {
       automatic = true;
       dates = "daily";
-      options = "--delete-older-than 3d";
+      options = "--delete-older-than 5d";
     };
   };
 
@@ -191,7 +202,10 @@
     };
   };
 
-  programs.zsh.enable = true;
+  programs = {
+    steam.enable = true;
+    zsh.enable = true;
+  };
 
   system = {
     stateVersion = "24.11"; # DO NOT TOUCH! Needed in case of backwards incompatible update.

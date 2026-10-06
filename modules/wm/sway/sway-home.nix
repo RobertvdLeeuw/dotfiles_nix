@@ -66,6 +66,17 @@
 
       terminal = "alacritty";
 
+      input = {
+        "1267:12734:ELAN06FA:00_04F3:31BE_Touchpad" = {
+          pointer_accel = "-0.3"; # Adjust as needed, range is -1.0 to 1.0
+          natural_scroll = "disabled";
+        };
+        "1267:12734:ELAN06FA:00_04F3:31BE_Mouse" = {
+          pointer_accel = "-0.3";
+          accel_profile = "flat";
+        };
+      };
+
       floating.titlebar = false;
       window = {
         titlebar = false;
@@ -75,6 +86,14 @@
 
     extraConfig = ''
       for_window [app_id="chimp"] floating enable
+
+      input type:pointer {
+        pointer_accel 0.5
+      }
+
+      input type:touchpad {
+        natural_scroll disabled
+      }
     ''
     + lib.optionalString (hostType == "desktop") ''
       ${builtins.readFile ./config/desktop/monitor.conf}

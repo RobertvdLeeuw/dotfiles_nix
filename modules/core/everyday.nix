@@ -20,6 +20,7 @@
         libreoffice-qt
         pavucontrol
 
+        blender
         spotify
         blender
 
@@ -31,8 +32,6 @@
         pinta # Linux equiv of paint.net
         gimp
         vlc
-        remmina
-
         obsidian
       ]
       ++ (lib.optionals (hostType == "laptop") [
