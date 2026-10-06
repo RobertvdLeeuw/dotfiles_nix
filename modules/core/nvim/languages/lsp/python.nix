@@ -39,6 +39,7 @@
               diagnosticSeverityOverrides = {
                 reportAny = "none";
                 reportUnknownMemberType = "none";
+                reportUnusedCallResult = "none";
                 reportUnknownVariableType = "none";
                 reportMissingImports = "none"; # Handled by ty.
               };

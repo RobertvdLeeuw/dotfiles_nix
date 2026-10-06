@@ -22,6 +22,7 @@
         "wifi/eduroam/psk"
         "wifi/anke/ssid"
         "wifi/anke/psk"
+        "wifi/bieb/ssid"
         "services/syncthing-pw"
       ];
     in

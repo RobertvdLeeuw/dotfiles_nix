@@ -49,6 +49,9 @@
         domain_suffix_match="RU.nl"
         password="${config.sops.placeholder."wifi/eduroam/psk"}"
       }
+      network={
+        ssid="${config.sops.placeholder."wifi/bieb/ssid"}"
+      }
     '';
     owner = "wpa_supplicant";
     mode = "0440";
