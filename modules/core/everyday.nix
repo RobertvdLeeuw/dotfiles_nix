@@ -21,6 +21,7 @@
         pavucontrol
 
         spotify
+        blender
 
         whatsie
         discord
@@ -30,6 +31,9 @@
         pinta # Linux equiv of paint.net
         gimp
         vlc
+        remmina
+
+        obsidian
       ]
       ++ (lib.optionals (hostType == "laptop") [
         # TODO: Move to options in default.nix

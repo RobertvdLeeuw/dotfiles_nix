@@ -13,7 +13,7 @@
         virtual_text = {
           spacing = 4;
           prefix = "■";
-          format = lib.generators.mkLuaInline ''
+          format = lib.generators.mkLuaInline /* lua */ ''
             function(diagnostic)
               return diagnostic.message
             end
@@ -47,8 +47,8 @@
 
           lua = [ "luacheck" ];
 
-          # Rust - use clippy for advanced linting (beyond LSP)
-          rust = [ "clippy" ];
+          # Rust - Clippy handled by rust-analyzer
+          rust = [ ];
 
           # Shell/Bash - use shellcheck for shell script analysis
           bash = [ "shellcheck" ];

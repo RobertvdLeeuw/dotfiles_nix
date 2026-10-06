@@ -23,6 +23,7 @@
     docker-compose
     docker
     # nix-fast-build
+    flyctl
 
     sops
 

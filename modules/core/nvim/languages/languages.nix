@@ -24,9 +24,7 @@
       python = {
         enable = true;
         treesitter.enable = true;
-        lsp = {
-          enable = true;
-        };
+        lsp.enable = true;
       };
       rust = {
         enable = true;

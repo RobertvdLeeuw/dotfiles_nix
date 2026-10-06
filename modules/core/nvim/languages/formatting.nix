@@ -63,13 +63,11 @@
           };
         };
 
-        # Default format options
         default_format_opts = {
           lsp_format = "fallback";
           timeout_ms = 3000;
         };
 
-        # Format on save configuration
         format_on_save = lib.generators.mkLuaInline /* lua */ ''
           function()
             if not vim.g.formatsave or vim.b.disableFormatSave then
@@ -80,13 +78,11 @@
           end
         '';
 
-        # Notify settings
         notify_on_error = true;
         notify_no_formatters = false;
       };
     };
 
-    # Diagnostic merger (from luaConfigPost)
     luaConfigPost = /* lua */ ''
       local function setup_diagnostic_merger()
       	local orig_virtual_text_handler = vim.diagnostic.handlers.virtual_text
