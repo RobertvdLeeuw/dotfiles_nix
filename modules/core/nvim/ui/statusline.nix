@@ -28,49 +28,48 @@
 
         sections = {
           lualine_a = [
-            /* lua */ ''
-              {
-                "mode",
-                icons_enabled = true,
-                color = { gui = "bold" },
-                separator = {
-                  right = ''
-                }
-              }
-            ''
+            {
+              "@1" = "mode";
+              icons_enabled = true;
+              color = {
+                gui = "bold";
+              };
+              separator.right = "";
+            }
           ];
-          b = [
-            /* lua */ ''
-              {
-                "branch",
-                color = { bg='#111111', fg='#b4befe', gui = "bold" },
-                icon = "",
-              }
-            ''
-            /* lua */ ''
-              {
-                "",
-                draw_empty = true,
-                color = { bg='#333333' },
-                separator = {left = '', right = ""}
-              }
-            ''
+          lualine_b = [
+            {
+              "@1" = "branch";
+              color = {
+                bg = "#111111";
+                fg = "#b4befe";
+                gui = "bold";
+              };
+              icon = "";
+            }
+            {
+              "@1" = "";
+              draw_empty = true;
+              color.bg = "#333333";
+              separator.left = "";
+            }
           ];
-          c = [
-            /* lua */ ''
-              {
-                "filename",
-                color = {bg='#111111'},
-                symbols = {modified = ' ', readonly = ' '},
-              }
-            ''
+          lualine_c = [
+            {
+              "@1" = "filename";
+              color.bg = "#111111";
+              symbols = {
+                modified = " ";
+                readonly = " ";
+              };
+            }
           ];
 
-          x = [
-            /* lua */ ''
-              {
-                'searchcount',
-                fmt = function(str)
+          lualine_x = [
+            {
+              "@1" = "searchcount";
+              fmt = lib.mkLuaInline /* lua */ ''
+                function(str)
                   if not vim.g.searchcount_timestamp then
                     vim.g.searchcount_timestamp = vim.loop.now()
                   end
@@ -87,14 +86,15 @@
                   else
                     return text
                   end
-                end,
-                maxcount = 99,
-                timeout = 10,
-                color = {bg='#111111'},
-              }
-            ''
+                end
+              '';
+              maxcount = 99;
+              timeout = 10;
+              color.bg = "#111111";
+            }
           ];
-          y =
+
+          lualine_y =
             let
               expected-lsps = /* lua */ ''
                 local expected_lsps = {
@@ -110,15 +110,13 @@
               '';
             in
             [
-              /* lua */ ''
-                {
-                "",
-                  draw_empty = true,
-                  color = { bg='#333333' },
-                  separator = {left = "", right = ''}
-                }
-              ''
-              /* lua */ ''
+              {
+                "@1" = "";
+                draw_empty = true;
+                color.bg = "#333333";
+                separator.right = "";
+              }
+              (lib.mkLuaInline /* lua */ ''
                 {
                   function()
                     local buf_ft = vim.bo.filetype
@@ -204,7 +202,7 @@
                     local excluded_buf_ft = { toggleterm = true, NvimTree = true, ["neo-tree"] = true, TelescopePrompt = true }
 
                     if excluded_buf_ft[buf_ft] then
-                      return { bg='#111111', fg = "white" }
+                      return { bg="#111111", fg = "white" }
                     end
 
                     ${expected-lsps}
@@ -236,7 +234,7 @@
                     end
 
                     if has_unexpected then
-                      return { bg='#111111', fg = "purple" }
+                      return { bg="#111111", fg = "purple" }
                     end
 
                     -- Check for missing LSPs
@@ -259,45 +257,57 @@
                       local grace_start = vim.b.lsp_grace_start
 
                       if grace_start and (current_time - grace_start) < 3 then
-                        return { bg='#111111', fg = "yellow" }
+                        return { bg="#111111", fg = "yellow" }
                       else
-                        return { bg='#111111', fg = "red" }
+                        return { bg="#111111", fg = "red" }
                       end
                     end
 
                     -- No LSPs
                     if #current_lsps == 0 then
-                      return { bg='#111111', fg = "gray" }
+                      return { bg="#111111", fg = "gray" }
                     end
 
                     -- All good
-                    return { bg='#111111', fg = "white" }
+                    return { bg="#111111", fg = "white" }
                   end,
                   padding = { left = 1, right = 0 },
                   icon = "",
                 }
-              ''
-              /* lua */ ''
-                {
-                  "diagnostics",
-                  sources = {"nvim_lsp", "nvim_diagnostic", "nvim_diagnostic", "vim_lsp", "coc"},
-                  symbols = {error = '󰅙 ', warn = ' ', info = ' ', hint = '󰌵'},
-                  colored = true,
-                  update_in_insert = false,
-                  always_visible = false,
-                  diagnostics_color = {
-                    color_error = { fg = "red" },
-                    color_warn = { fg = "yellow" },
-                    color_info = { fg = "cyan" },
-                  },
-                  color = {bg='#11111'},
-                  padding = { left = 0, right = 1 },
-                }
-              ''
+              '')
+              {
+                "@1" = "diagnostics";
+                sources = [
+                  "nvim_lsp"
+                  "nvim_diagnostic"
+                  "nvim_diagnostic"
+                  "vim_lsp"
+                  "coc"
+                ];
+                symbols = {
+                  error = "󰅙 ";
+                  warn = " ";
+                  info = " ";
+                  hint = "󰌵";
+                };
+                colored = true;
+                update_in_insert = false;
+                always_visible = false;
+                diagnostics_color = {
+                  color_error.fg = "red";
+                  color_warn.fg = "yellow";
+                  color_info.fg = "cyan";
+                };
+                color.bg = "#111111";
+                padding = {
+                  left = 0;
+                  right = 1;
+                };
+              }
             ];
 
-          z = [
-            /* lua */ ''
+          lualine_z = [
+            (lib.mkLuaInline /* lua */ ''
               {
                 function() return " " end,
                 color = function ()
@@ -305,6 +315,8 @@
                   local manager = require('devcontainers.manager')
 
                   local workspace_dir = manager.find_workspace_dir()
+
+                  -- TODO: Mix nix shell info into this too (green if only shell, purple if shell + devcontainer?)
 
                   if not workspace_dir then
                     -- TODO: Check for unexpected container (purple)
@@ -337,7 +349,7 @@
                 icon = '',
                 separator = {left = ''}
               }
-            ''
+            '')
           ];
         };
       };
