@@ -66,6 +66,5 @@
       enable = true;
       enable32Bit = true;
     };
-    openrgb.enable = true;
   };
 }

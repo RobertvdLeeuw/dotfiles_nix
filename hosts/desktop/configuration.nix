@@ -34,6 +34,11 @@
       user = "robert";
     };
 
+    hardware.openrgb = {
+      enable = true;
+      motherboard = "amd";
+    };
+
     syncthing = {
       settings = {
         folders = {
@@ -62,6 +67,7 @@
         "wheel"
         "docker"
         "video" # For GPU access
+        "i2c"
       ];
     };
   };
