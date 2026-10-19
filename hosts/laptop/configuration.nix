@@ -40,6 +40,10 @@
         psk="${config.sops.placeholder."wifi/RD/psk"}"
       }
       network={
+        ssid="${config.sops.placeholder."wifi/anke/ssid"}"
+        psk="${config.sops.placeholder."wifi/anke/psk"}"
+      }
+      network={
         ssid="eduroam"
         key_mgmt=WPA-EAP
         eap=PEAP

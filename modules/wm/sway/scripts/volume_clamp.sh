@@ -10,6 +10,7 @@ INCREMENT=${1:-1}
 if [ "$CURRENT_VOLUME" -lt 100 ]; then
   # Calculate the new volume
   NEW_VOLUME=$(($CURRENT_VOLUME + $INCREMENT))
+  # TODO: Just clamp the darn value! Now 98 vol -> 103 vol goes through.
 
   # Set the new volume
   pactl set-sink-volume @DEFAULT_SINK@ ${NEW_VOLUME}%
