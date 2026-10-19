@@ -28,6 +28,7 @@
     kernelParams = [
       "amdgpu.ppfeaturemask=0xffffffff" # Enable all power features
       "amdgpu.gpu_recovery=1" # Enable GPU recovery
+      "acpi_enforce_resources=lax" # For RGB for RAM and GPU
       # OR try limiting power state transitions:
       # "amdgpu.dpm=0"  # Disable dynamic power management (test only)
     ];
@@ -89,5 +90,7 @@
       enable32Bit = true;
       extraPackages = with pkgs; [ rocmPackages.clr.icd ];
     };
+
+    i2c.enable = true;
   };
 }

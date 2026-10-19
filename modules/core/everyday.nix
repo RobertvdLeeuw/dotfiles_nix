@@ -22,6 +22,7 @@
 
         blender
         spotify
+        blender
 
         whatsie
         discord
@@ -31,9 +32,11 @@
         pinta # Linux equiv of paint.net
         gimp
         vlc
-
         obsidian
       ]
+      ++ (lib.optionals (hostType == "desktop") [
+        openrgb
+      ])
       ++ (lib.optionals (hostType == "laptop") [
         # TODO: Move to options in default.nix
         brightnessctl

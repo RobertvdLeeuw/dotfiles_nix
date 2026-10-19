@@ -10,7 +10,7 @@
     ../common-config.nix
 
     ../../modules/wm/sway/sway.nix
-    ../../modules/wm/kde.nix
+    # ../../modules/wm/kde.nix
   ];
 
   boot.loader = {

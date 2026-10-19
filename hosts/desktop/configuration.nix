@@ -12,7 +12,7 @@
     ../common-config.nix
 
     ../../modules/wm/sway/sway.nix
-    ../../modules/wm/kde.nix
+    # ../../modules/wm/kde.nix
   ];
 
   systemd.services = {
@@ -32,6 +32,11 @@
     displayManager.autoLogin = {
       enable = true;
       user = "robert";
+    };
+
+    hardware.openrgb = {
+      enable = true;
+      motherboard = "amd";
     };
 
     syncthing = {
@@ -62,6 +67,7 @@
         "wheel"
         "docker"
         "video" # For GPU access
+        "i2c"
       ];
     };
   };
