@@ -162,11 +162,10 @@
     #       pgvector
     #     ];
     # };
-  };
 
-  services.syncthing = {
+  syncthing = {
     enable = true;
-    user = "robert"; # Your desktop user
+    user = "robert";
     dataDir = "/home/robert";
     configDir = "/home/robert/.config/syncthing";
     openDefaultPorts = true;
@@ -184,6 +183,8 @@
     };
   };
 
+  users.defaultUserShell = pkgs.zsh;
+
   security.rtkit.enable = true;
 
   location.provider = "geoclue2"; # For gammastep.
@@ -198,7 +199,7 @@
 
     variables = {
       SHELL = "${pkgs.zsh}/bin/zsh";
-      EDITOR = "nvim"; # For SOPS.
+      EDITOR = "nvim";
     };
   };
 
