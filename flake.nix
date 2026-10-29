@@ -27,18 +27,18 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    zen-browser = {
-      url = "github:0xc000022070/zen-browser-flake";
-      inputs = {
-        # IMPORTANT: To ensure compatibility with the latest Firefox version, use nixpkgs-unstable.
-        nixpkgs.follows = "nixpkgs";
-        home-manager.follows = "home-manager";
-      };
-    };
-    firefox-addons = {
-      url = "gitlab:rycee/nur-expressions?dir=pkgs/firefox-addons";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
+    # zen-browser = {
+    #   url = "github:0xc000022070/zen-browser-flake";
+    #   inputs = {
+    #     # IMPORTANT: To ensure compatibility with the latest Firefox version, use nixpkgs-unstable.
+    #     nixpkgs.follows = "nixpkgs";
+    #     home-manager.follows = "home-manager";
+    #   };
+    # };
+    # firefox-addons = {
+    #   url = "gitlab:rycee/nur-expressions?dir=pkgs/firefox-addons";
+    #   inputs.nixpkgs.follows = "nixpkgs";
+    # };
   };
 
   outputs =
@@ -47,8 +47,8 @@
       nixpkgs,
       nixpkgs-ollama,
       home-manager,
-      zen-browser,
-      firefox-addons,
+      # zen-browser,
+      # firefox-addons,
       sops-nix,
       nvf,
       ...

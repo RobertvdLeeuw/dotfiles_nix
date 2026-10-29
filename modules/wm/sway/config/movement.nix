@@ -116,6 +116,10 @@ in
           (lib.optionalAttrs (hostType == "laptop") {
             "XF86MonBrightnessUp" = "exec brightnessctl set 10+%";
             "XF86MonBrightnessDown" = "exec brightnessctl set 10-%";
+
+            "${mod}+F1" = "exec pactl set-sink-mute @DEFAULT_SINK@ toggle";
+            "${mod}+F2" = "exec pactl set-sink-volume @DEFAULT_SINK@ -5%";
+            "${mod}+F3" = "exec /etc/nixos/modules/wm/sway/scripts/volume_clamp.sh 5";
           })
         ]
       );
