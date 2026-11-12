@@ -110,7 +110,7 @@
       pkgs.yamllint # YAML linter
     ]
     ++ lib.optionals (!config.my.noAI) [
-      pkgs.vectorcode
+      # pkgs.vectorcode
     ];
   };
 }

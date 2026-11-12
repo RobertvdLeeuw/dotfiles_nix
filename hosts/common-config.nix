@@ -166,22 +166,23 @@
     #     ];
     # };
 
-  syncthing = {
-    enable = true;
-    user = "robert";
-    dataDir = "/home/robert";
-    configDir = "/home/robert/.config/syncthing";
-    openDefaultPorts = true;
+    syncthing = {
+      enable = true;
+      user = "robert";
+      dataDir = "/home/robert";
+      configDir = "/home/robert/.config/syncthing";
+      openDefaultPorts = true;
 
-    guiPasswordFile = config.sops.secrets."services/syncthing-pw".path;
+      guiPasswordFile = config.sops.secrets."services/syncthing-pw".path;
 
-    settings = {
-      gui.user = "robert";
+      settings = {
+        gui.user = "robert";
 
-      devices = {
-        "server".id = "J2TMKWI-DQJY6VG-LJQD4QP-D4XKLPB-CKD4KMJ-7J5E5TO-EEGS5UW-E6C2BAH";
-        "desktop".id = "24PKA7Z-UWYQM46-UORQCZS-TKM3Z3F-YP2CL7Z-A5PTLI5-6EH5OKX-HZLMQAV";
-        "laptop".id = "J267XXP-JPQEOP7-D23EIG5-QU25QS2-Y2KLCBT-NSLSG4A-UWDAU5X-54S4UAV";
+        devices = {
+          "server".id = "J2TMKWI-DQJY6VG-LJQD4QP-D4XKLPB-CKD4KMJ-7J5E5TO-EEGS5UW-E6C2BAH";
+          "desktop".id = "24PKA7Z-UWYQM46-UORQCZS-TKM3Z3F-YP2CL7Z-A5PTLI5-6EH5OKX-HZLMQAV";
+          "laptop".id = "J267XXP-JPQEOP7-D23EIG5-QU25QS2-Y2KLCBT-NSLSG4A-UWDAU5X-54S4UAV";
+        };
       };
     };
   };
