@@ -26,6 +26,7 @@
             "path"
             "snippets"
             "buffer"
+            # "obsidian-nvim"
           ];
           providers = {
             lazydev = {

@@ -8,79 +8,35 @@
 
 {
   programs = {
-    alacritty = {
-      enable = !config.my.noGUI && !config.my.sudoTools;
+    kitty = {
+      enable = config.my.GUI && !config.my.sudoTools;
+
+      font = {
+        name = "JetBrainsMono Nerd Font";
+        size = 12;
+      };
 
       settings = {
-        colors = {
-          cursor = {
-            background = "#ccdbe0";
-            foreground = "#0d0f18";
-          };
-          normal = {
-            black = "#282828";
-            blue = "#b9aeda";
-            cyan = "#aca1cf";
-            green = "#90b99f";
-            magenta = "#cb6fa1";
-            red = "#ca1444";
-            white = "#ccdbe0";
-            yellow = "#e8a831";
-          };
-          primary = {
-            background = "#0d0d16";
-            foreground = "#c9c7cd";
-          };
+        background = "#0d0d16";
+        foreground = "#c9c7cd";
+        cursor = "#ccdbe0";
+        cursor_text_color = "#0d0f18";
 
-          vi_mode_cursor = {
-            background = "#161617";
-            foreground = "#c9c7cd";
-          };
-        };
+        color0 = "#282828";
+        color1 = "#ca1444";
+        color2 = "#90b99f";
+        color3 = "#e8a831";
+        color4 = "#b9aeda";
+        color5 = "#cb6fa1";
+        color6 = "#aca1cf";
+        color7 = "#ccdbe0";
 
-        font = {
-          size = 12;
-
-          bold = {
-            family = "JetBrainsMono Nerd Font";
-            style = "Bold";
-          };
-
-          bold_italic = {
-            family = "JetBrainsMono Nerd Font";
-            style = "BoldItalic";
-          };
-
-          glyph_offset = {
-            x = 0;
-            y = 0;
-          };
-
-          italic = {
-            family = "JetBrainsMono Nerd Font";
-            style = "Italic";
-          };
-
-          normal = {
-            family = "JetBrainsMono Nerd Font";
-            style = "Regular";
-          };
-
-          offset = {
-            x = 0;
-            y = 0;
-          };
-        };
-
-        window = {
-          opacity = 0.97;
-
-          padding = {
-            x = 0;
-            y = 0;
-          };
-        };
+        background_opacity = "0.97";
+        window_padding_width = 0;
+        enable_audio_bell = false;
       };
+
+      shellIntegration.mode = "no-cursor";
     };
 
     starship = {

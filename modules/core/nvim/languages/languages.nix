@@ -16,10 +16,10 @@
         enable = true;
         treesitter.enable = true;
         lsp = {
-          lazydev.enable = true;
           enable = true;
           # servers = [ ];
         };
+        extensions.lazydev.enable = true;
       };
       python = {
         enable = true;
@@ -70,6 +70,8 @@
               "markdown"
               "codecompanion"
             ];
+
+            latex.enabled = false;
           };
         };
       };

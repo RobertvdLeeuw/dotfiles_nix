@@ -30,7 +30,7 @@
           todo = "nvim ~/Documents/todo.md";
           books = "nvim ~/Documents/books.txt";
 
-          tr = "tree --gitignore -L 3 -a -I .git/ -I __pycache__/ -I target/";
+          tre = "tree --gitignore -L 3 -a -I .git/ -I __pycache__/ -I target/";
 
           ga = "git add . && clear";
           gs = "git status";
