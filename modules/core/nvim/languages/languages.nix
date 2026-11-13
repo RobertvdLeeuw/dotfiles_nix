@@ -71,7 +71,7 @@
               "codecompanion"
             ];
 
-            latex.enabled = false;
+            latex.enabled = lib.mkForce true; # TODO: without force
           };
         };
       };
