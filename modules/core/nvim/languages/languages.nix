@@ -70,8 +70,6 @@
               "markdown"
               "codecompanion"
             ];
-
-            latex.enabled = lib.mkForce true; # TODO: without force
           };
         };
       };
@@ -80,6 +78,7 @@
     treesitter = {
       enable = true;
       fold = true;
+      grammars = [ pkgs.vimPlugins.nvim-treesitter.grammarPlugins.latex ];
     };
 
     extraPackages = [

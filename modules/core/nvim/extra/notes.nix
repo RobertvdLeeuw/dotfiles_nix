@@ -10,7 +10,6 @@
       setupOpts = { };
     };
 
-    # snacks.nvim image module replaces image.nvim, diagram.nvim and render-latex.nvim:
     # mermaid ($ mmdc) + $$...$$ + inline $...$ all rendered as images via the kitty protocol.
     utility.snacks-nvim = {
       enable = true;
@@ -22,8 +21,9 @@
           float = false;
           max_width = 80;
           max_height = 40;
+
           # hide source for math and mermaid ("chart" is marked experimental upstream)
-          conceal = lib.generators.mkLuaInline ''
+          conceal = lib.generators.mkLuaInline /* lua */ ''
             function(_, type)
               return type == "math" or type == "chart"
             end
@@ -41,26 +41,23 @@
             ];
           };
         };
-        convert.mermaid = lib.generators.mkLuaInline /* lua */ ''
-          function()
-            return { "-i", "{src}",
-                     "-o", "{file}",
-                     "-b", "transparent",
-                     "-t", "redux-dark-color",
-                     "-s", "{scale}" }
-          end
-        '';
+        convert = {
+          mermaid = lib.generators.mkLuaInline /* lua */ ''
+            function()
+              return { "-i", "{src}",
+                       "-o", "{file}",
+                       "-b", "transparent",
+                       "-t", "redux-dark-color",
+                       "-s", "{scale}" }
+            end
+          '';
+        };
       };
     };
 
     # render-markdown keeps doing plain markdown, but must not touch math anymore.
     # (option path inferred from nvf conventions - check with nvf-print-config)
     languages.markdown.extensions.render-markdown-nvim.setupOpts.latex.enabled = false;
-
-    options = {
-      conceallevel = 2;
-      concealcursor = "nc";
-    };
 
     extraPackages = with pkgs; [
       imagemagick
