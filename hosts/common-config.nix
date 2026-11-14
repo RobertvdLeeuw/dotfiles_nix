@@ -93,6 +93,13 @@
           doCheck = false;
         });
       })
+      (final: prev: {
+        pythonPackagesExtensions = prev.pythonPackagesExtensions ++ [
+          (pyFinal: pyPrev: {
+            diff-cover = pyPrev.diff-cover.overridePythonAttrs { doCheck = false; };
+          })
+        ];
+      })
     ];
     config = {
       allowUnsupportedSystem = true;

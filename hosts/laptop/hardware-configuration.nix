@@ -60,7 +60,7 @@
     };
     cpu.amd = {
       updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
-      ryzen-smu.enable = true;
+      ryzen-smu.enable = false; # TODO: Re-enable once stable again.
     };
     graphics = {
       enable = true;
