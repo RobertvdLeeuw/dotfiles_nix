@@ -9,7 +9,7 @@
 {
   # imports = [ inputs.zen-browser.homeModules.twilight ];
 
-  config = lib.mkIf (!config.my.noGUI && !config.my.sudoTools) {
+  config = lib.mkIf (config.my.GUI && !config.my.sudoTools) {
     home.packages =
       with pkgs;
       [
@@ -33,7 +33,6 @@
         pinta # Linux equiv of paint.net
         gimp
         vlc
-        obsidian
       ]
       ++ (lib.optionals (hostType == "desktop") [
         openrgb

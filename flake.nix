@@ -126,7 +126,7 @@
           ];
 
           my = {
-            noGUI = true;
+            GUI = false;
             noAI = true;
           };
         };

@@ -64,7 +64,7 @@
         }
       ];
 
-      terminal = "alacritty";
+      terminal = "kitty";
 
       input = {
         "1267:12734:ELAN06FA:00_04F3:31BE_Touchpad" = {

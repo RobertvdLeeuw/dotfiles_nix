@@ -9,7 +9,7 @@
 {
   home.packages = with pkgs; [
     opencommit
-    oterm
+    # oterm
     opencode
   ];
 

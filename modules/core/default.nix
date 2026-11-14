@@ -17,10 +17,10 @@
   ];
 
   options.my = {
-    noGUI = lib.mkOption {
+    GUI = lib.mkOption {
       type = lib.types.bool;
-      default = false;
-      description = "Enable Alacritty (GUI terminal editor)";
+      default = true;
+      description = "Enable Kitty (GUI terminal editor)";
     };
     noAI = lib.mkOption {
       type = lib.types.bool;

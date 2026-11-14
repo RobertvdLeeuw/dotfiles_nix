@@ -57,7 +57,6 @@
   };
 
   users = {
-    defaultUserShell = pkgs.zsh;
     users.robert = {
       isNormalUser = true;
       description = "robert";

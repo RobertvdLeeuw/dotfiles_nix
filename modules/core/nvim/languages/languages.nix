@@ -78,6 +78,7 @@
     treesitter = {
       enable = true;
       fold = true;
+      grammars = [ pkgs.vimPlugins.nvim-treesitter.grammarPlugins.latex ];
     };
 
     extraPackages = [
@@ -110,7 +111,7 @@
       pkgs.yamllint # YAML linter
     ]
     ++ lib.optionals (!config.my.noAI) [
-      pkgs.vectorcode
+      # pkgs.vectorcode
     ];
   };
 }

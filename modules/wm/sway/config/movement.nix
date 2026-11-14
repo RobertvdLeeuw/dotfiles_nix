@@ -77,7 +77,7 @@ in
             "${mod}+b" = "exec brave --password-store=basic";
             "${mod}+s" = "exec spotify";
             "${mod}+e" = "exec dolphin";
-            "${mod}+Return" = "exec alacritty";
+            "${mod}+Return" = "exec kitty";
             "${mod}+Tab" = "exec wofi run --show drun";
 
             "${mod}+r" = "mode resize";
