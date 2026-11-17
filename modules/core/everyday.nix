@@ -16,6 +16,7 @@
         brave
         # inputs.zen-browser.packages."${system}".specific
         # Dolphin is installed auto via KDE
+        kdePackages.dolphin
 
         libreoffice-qt
         pavucontrol
@@ -40,6 +41,9 @@
         # TODO: Move to options in default.nix
         brightnessctl
         bluez
+
+        fwupd
+        innoextract
       ]);
 
     # xdg.configFile."zen/profiles.ini".force = true;
