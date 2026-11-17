@@ -35,7 +35,7 @@
     ssh = {
       enable = true;
 
-      matchBlocks = {
+      settings = {
         "homelab" = {
           hostname = "192.168.2.111";
           port = 8022;

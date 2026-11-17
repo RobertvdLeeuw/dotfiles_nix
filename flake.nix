@@ -78,7 +78,7 @@
                   robert = import ./hosts/desktop/home.nix;
                   root = import ./hosts/desktop/home-root.nix;
                 };
-                sharedModules = [ nvf.homeManagerModules.default ];
+                sharedModules = [ nvf.homeModules.default ];
               };
             }
           ];
@@ -106,7 +106,7 @@
                   robert = import ./hosts/laptop/home.nix;
                   root = import ./hosts/laptop/home-root.nix;
                 };
-                sharedModules = [ nvf.homeManagerModules.default ];
+                sharedModules = [ nvf.homeModules.default ];
               };
             }
           ];

@@ -7,7 +7,7 @@
 }:
 
 {
-  services.desktopManager.plasma6.enable = true;
+  services.desktopManager.plasma6.enable = false;
   environment = {
     plasma6.excludePackages = with pkgs.kdePackages; [
       # https://github.com/NixOS/nixpkgs/blob/7e495b747b51f95ae15e74377c5ce1fe69c1765f/nixos/modules/services/desktop-managers/plasma6.nix#L150-L170
