@@ -42,13 +42,13 @@
         {
           "homelab" = {
             hostname = facts.hosts.server.lan;
-            port = facts.hosts.server.sshPort;
+            port = facts.hosts.server.ssh-port;
             user = "robert";
           };
 
           "rpi" = {
             hostname = facts.hosts.rpi.lan;
-            port = facts.hosts.rpi.sshPort;
+            port = facts.hosts.rpi.ssh-port;
             user = "root";
           };
         };

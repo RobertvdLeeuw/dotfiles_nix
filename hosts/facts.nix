@@ -12,11 +12,11 @@
     server = {
       lan = "192.168.2.111";
       tailscale = "100.79.157.102";
-      sshPort = 8022;
+      ssh-port = 8022;
     };
     rpi = {
       lan = "192.168.2.59";
-      sshPort = 8022;
+      ssh-port = 8022;
     };
   };
 }
