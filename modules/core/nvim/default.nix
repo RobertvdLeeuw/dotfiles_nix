@@ -54,7 +54,7 @@ let
     (import ./extra/notes.nix { inherit pkgs lib; })
     (import ./extra/unsorted.nix { inherit pkgs lib; })
   ]
-  ++ lib.optionals (!config.my.noAI) [
+  ++ lib.optionals config.my.AI-tools [
     (import ./ai/codecompanion.nix { inherit pkgs lib; })
   ];
 

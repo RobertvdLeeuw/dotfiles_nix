@@ -10,7 +10,7 @@
     ../../modules/wm/sway/sway-home.nix
   ];
 
-  my.noAI = true;
+  my.AI-tools = true;
 
   home = {
     username = "robert";

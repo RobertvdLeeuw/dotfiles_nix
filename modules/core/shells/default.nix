@@ -41,12 +41,12 @@
           cat = "bat";
         }
 
-        (lib.mkIf (!config.my.noAI) {
+        (lib.mkIf config.my.AI-tools {
           dumb = "aichat -e";
           gc = "oco --context ";
         })
 
-        (lib.mkIf config.my.noAI {
+        (lib.mkIf (!config.my.AI-tools) {
           gc = "echo 'Opencommit not set up.'";
           dumb = "echo 'Aichat not set up.'";
         })

@@ -20,12 +20,12 @@
     GUI = lib.mkOption {
       type = lib.types.bool;
       default = true;
-      description = "Enable Kitty (GUI terminal editor)";
+      description = "Enable GUI tools.";
     };
-    noAI = lib.mkOption {
+    AI-tools = lib.mkOption {
       type = lib.types.bool;
-      default = false;
-      description = "Disable AI tools.";
+      default = true;
+      description = "Enable AI tools.";
     };
     sudoTools = lib.mkOption {
       type = lib.types.bool;

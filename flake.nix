@@ -122,14 +122,14 @@
         { hostType }:
         {
           imports = [
-            nvf.homeManagerModules.default
+            nvf.homeModules.default
 
             ./modules/core
           ];
 
           my = {
             GUI = false;
-            noAI = true;
+            AI-tools = false;
           };
         };
 

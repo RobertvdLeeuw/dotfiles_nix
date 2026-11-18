@@ -151,7 +151,7 @@
         desc = "Switch to alternate file buffer";
       }
     ]
-    ++ lib.optionals (!config.my.noAI) [
+    ++ lib.optionals config.my.AI-tools [
       # CodeCompanion (calling functions from ai/codecompanion.nix)
       {
         key = "<A-a>";

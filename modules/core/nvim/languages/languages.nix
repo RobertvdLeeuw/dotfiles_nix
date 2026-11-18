@@ -110,7 +110,7 @@
       pkgs.markdownlint-cli # Markdown linter
       pkgs.yamllint # YAML linter
     ]
-    ++ lib.optionals (!config.my.noAI) [
+    ++ lib.optionals config.my.AI-tools [
       # pkgs.vectorcode
     ];
   };
