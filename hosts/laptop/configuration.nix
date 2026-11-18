@@ -8,8 +8,6 @@
   imports = [
     ./hardware-configuration.nix
     ../common-config.nix
-
-    ../../modules/wm/sway/sway.nix
   ];
 
   boot.loader = {

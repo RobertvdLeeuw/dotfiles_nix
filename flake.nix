@@ -119,6 +119,8 @@
       shellEnv =
         { hostType }:
         {
+          lib.facts = import ./hosts/facts.nix;
+
           imports = [
             nvf.homeManagerModules.default
 

@@ -35,19 +35,23 @@
     ssh = {
       enable = true;
 
-      settings = {
-        "homelab" = {
-          hostname = "192.168.2.111";
-          port = 8022;
-          user = "robert";
-        };
+      settings =
+        let
+          facts = ../facts.nix;
+        in
+        {
+          "homelab" = {
+            hostname = facts.hosts.server.lan;
+            port = facts.hosts.server.sshPort;
+            user = "robert";
+          };
 
-        "rpi" = {
-          hostname = "192.168.2.59";
-          port = 22;
-          user = "root";
+          "rpi" = {
+            hostname = facts.hosts.rpi.lan;
+            port = facts.hosts.rpi.sshPort;
+            user = "root";
+          };
         };
-      };
     };
 
   };

@@ -6,7 +6,12 @@
   ...
 }:
 {
-  imports = [ inputs.sops-nix.nixosModules.sops ];
+  imports = [
+    inputs.sops-nix.nixosModules.sops
+
+    ../modules/wm/sway/sway.nix
+    ../modules/wm/kde.nix
+  ];
   sops =
     let
       secretPaths = [
@@ -87,26 +92,9 @@
   };
 
   nixpkgs = {
-    overlays = [
-      (final: prev: {
-        openldap = prev.openldap.overrideAttrs (_: {
-          doCheck = false;
-        });
-      })
-      (final: prev: {
-        pythonPackagesExtensions = prev.pythonPackagesExtensions ++ [
-          (pyFinal: pyPrev: {
-            diff-cover = pyPrev.diff-cover.overridePythonAttrs { doCheck = false; };
-          })
-        ];
-      })
-    ];
     config = {
       allowUnsupportedSystem = true;
       allowUnfree = true;
-      permittedInsecurePackages = [
-        "qtwebengine-5.15.19"
-      ];
     };
   };
 
@@ -185,11 +173,11 @@
       settings = {
         gui.user = "robert";
 
-        devices = {
-          "server".id = "J2TMKWI-DQJY6VG-LJQD4QP-D4XKLPB-CKD4KMJ-7J5E5TO-EEGS5UW-E6C2BAH";
-          "desktop".id = "24PKA7Z-UWYQM46-UORQCZS-TKM3Z3F-YP2CL7Z-A5PTLI5-6EH5OKX-HZLMQAV";
-          "laptop".id = "J267XXP-JPQEOP7-D23EIG5-QU25QS2-Y2KLCBT-NSLSG4A-UWDAU5X-54S4UAV";
-        };
+        devices =
+          let
+            facts = import ./facts.nix;
+          in
+          lib.mapAttrs (_: id: { inherit id; }) facts.syncthing.devices;
       };
     };
   };

@@ -76,7 +76,7 @@ in
             "${mod}+Shift+c" = "reload";
             "${mod}+b" = "exec brave --password-store=basic";
             "${mod}+s" = "exec spotify";
-            "${mod}+e" = "exec dolphin";
+            "${mod}+e" = "exec thunar";
             "${mod}+Return" = "exec kitty";
             "${mod}+Tab" = "exec wofi run --show drun";
 
