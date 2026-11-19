@@ -5,6 +5,10 @@
   inputs,
   ...
 }:
+
+let
+  facts = ../facts.nix;
+in
 {
   imports = [
     ../../modules/core
@@ -35,24 +39,19 @@
     ssh = {
       enable = true;
 
-      settings =
-        let
-          facts = ../facts.nix;
-        in
-        {
-          "homelab" = {
-            hostname = facts.hosts.server.lan;
-            port = facts.hosts.server.ssh-port;
-            user = "robert";
-          };
-
-          "rpi" = {
-            hostname = facts.hosts.rpi.lan;
-            port = facts.hosts.rpi.ssh-port;
-            user = "root";
-          };
+      settings = {
+        "homelab" = {
+          hostname = facts.hosts.server.name;
+          port = facts.hosts.server.ssh-port;
+          user = "robert";
         };
-    };
 
+        "rpi" = {
+          hostname = facts.hosts.rpi.name;
+          port = facts.hosts.rpi.ssh-port;
+          user = "robert";
+        };
+      };
+    };
   };
 }

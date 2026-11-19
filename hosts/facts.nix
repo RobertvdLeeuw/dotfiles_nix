@@ -10,12 +10,12 @@
 
   hosts = {
     server = {
-      lan = "192.168.2.111";
+      name = "nixos-homelab";
       tailscale = "100.79.157.102";
       ssh-port = 8022;
     };
     rpi = {
-      lan = "192.168.2.59";
+      name = "nixos-rpi";
       ssh-port = 8022;
     };
   };
