@@ -7,30 +7,6 @@
 {
   settings.vim = {
     keymaps = [
-      # TODO: fix
-      # {
-      #   key = "<CR>";
-      #   mode = "c";
-      #   lua = true;
-      #   action = /* lua */ ''
-      #     function()
-      #       local t = vim.fn.getcmdtype()
-      #
-      #       if t == "/" or t == "?" then
-      #         local pat = vim.fn.getcmdline()
-      #         local sc = vim.fn.searchcount({ pattern = pat, maxcount = 1, timeout = 100 })
-      #         if pat ~= "" and (sc.total or 0) == 0 then
-      #           return "<C-c>" -- abort the search, no E486
-      #         end
-      #       end
-      #
-      #       return "<CR>"
-      #     end
-      #   '';
-      #   silent = true;
-      #   desc = "Intercept search to supress E486";
-      # }
-
       # LSP navigation via glance
       {
         key = "gD";

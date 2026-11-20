@@ -23,7 +23,7 @@
           lsp_doc_border = false;
         };
 
-        messages.enabled = false;
+        messages.enabled = true;
         notify.enabled = false;
 
         lsp = {
@@ -39,17 +39,43 @@
         };
 
         routes = [
-          # TODO: fix
-          # {
-          #   # Pattern not found error
-          #   filter = {
-          #     event = "msg_show";
-          #     find = "E486";
-          #   };
-          #   opts = {
-          #     skip = true;
-          #   };
-          # }
+          {
+            # Pattern not found error
+            filter = {
+              event = "msg_show";
+              find = "E486";
+            };
+            opts.skip = true;
+          }
+
+          {
+            filter = {
+              event = "msg_show";
+              cond = lib.generators.mkLuaInline /* lua */ ''
+                function(message)
+                  local kind = message.kind or ""
+                  -- Never swallow prompts, or nvim waits on input you can't see.
+                  if kind == "confirm" or kind == "confirm_sub" or kind == "number_prompt" then
+                    return false
+                  end
+
+                  if StatusMsg then
+                    StatusMsg.push(message:content(), kind)
+                  end
+                  return true
+                end
+              '';
+            };
+            opts.skip = true;
+          }
+          {
+            filter.event = [
+              "msg_showmode"
+              "msg_showcmd"
+              "msg_ruler"
+            ];
+            opts.skip = true;
+          }
         ];
       };
     };

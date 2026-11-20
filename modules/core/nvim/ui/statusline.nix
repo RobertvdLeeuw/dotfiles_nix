@@ -29,17 +29,19 @@
         sections = {
           lualine_a = [
             {
-              "@1" = "mode";
+              "@1" = "branch";
               icons_enabled = true;
               color = {
                 gui = "bold";
+                bg = "#b4befe";
+                gg = "#111111";
               };
               separator.right = "";
             }
           ];
           lualine_b = [
             {
-              "@1" = "branch";
+              "@1" = "filename";
               color = {
                 bg = "#111111";
                 fg = "#b4befe";
@@ -55,14 +57,14 @@
             }
           ];
           lualine_c = [
-            {
-              "@1" = "filename";
-              color.bg = "#111111";
-              symbols = {
-                modified = " ";
-                readonly = " ";
-              };
-            }
+            (lib.mkLuaInline /* lua */ ''
+              {
+                function() return StatusMsg.render() end,
+                cond = function() return StatusMsg ~= nil and StatusMsg.active() end,
+                color = function() return StatusMsg.color() end,
+                padding = { left = 1, right = 1 },
+              }
+            '')
           ];
 
           lualine_x = [
@@ -372,6 +374,92 @@
         desc = "Disable searchcount in lualine upon new command";
       }
     ];
+
+    luaConfigPre = /* lua */ ''
+      -- Message store for the lualine message component
+      local ttl_ms = 10000
+      local state = { text = "", kind = "", lines = 0, last = 0 }
+      local timer = vim.uv.new_timer()
+      local show_kinds = {
+      	emsg = true,
+      	echoerr = true,
+      	lua_error = true,
+      	rpc_error = true,
+      	shell_err = true,
+      	wmsg = true,
+      	echo = true,
+      	echomsg = true,
+      	lua_print = true,
+      	shell_out = true,
+      }
+      local error_kinds = { emsg = true, echoerr = true, lua_error = true, rpc_error = true, shell_err = true }
+      local accumulate = { shell_out = true, shell_err = true }
+
+      local function refresh()
+      	vim.schedule(function()
+      		local ok, lualine = pcall(require, "lualine")
+      		if ok then
+      			lualine.refresh()
+      		end
+      	end)
+      end
+
+      StatusMsg = {}
+
+      function StatusMsg.push(text, kind)
+      	kind = kind or ""
+      	text = vim.trim(text or "")
+      	-- E486 is already covered by the searchcount "Not found" text
+      	if text == "" or not show_kinds[kind] or text:find("^E486") then
+      		return
+      	end
+
+      	local now = vim.uv.now()
+      	-- :!cmd output arrives in chunks, so glue chunks together
+      	if accumulate[kind] and state.kind == kind and state.text ~= "" and now - state.last < 300 then
+      		text = state.text .. "\n" .. text
+      	end
+      	state.text, state.kind, state.last = text, kind, now
+      	state.lines = select(2, text:gsub("\n", "\n")) + 1
+
+      	timer:stop()
+      	timer:start(ttl_ms, 0, function()
+      		state.text = ""
+      		refresh()
+      	end)
+      	refresh()
+      end
+
+      function StatusMsg.active()
+      	return state.text ~= ""
+      end
+
+      function StatusMsg.render()
+      	local first = (state.text:match("[^\n]+") or ""):gsub("%s+", " ")
+      	local extra = state.lines > 1 and (" (+" .. (state.lines - 1) .. ")") or ""
+      	local max = math.floor(vim.o.columns * 0.5)
+      	if vim.fn.strdisplaywidth(first .. extra) > max then
+      		first = vim.fn.strcharpart(first, 0, max - #extra - 1) .. "…"
+      	end
+      	return first .. extra
+      end
+
+      function StatusMsg.color()
+      	if error_kinds[state.kind] then
+      		return { bg = "#111111", fg = "red" }
+      	end
+      	if state.kind == "wmsg" then
+      		return { bg = "#111111", fg = "yellow" }
+      	end
+      	return { bg = "#111111", fg = "white" }
+      end
+
+      -- Route vim.notify (LSP showMessage, plugins) into the same slot
+      vim.notify = function(msg, level)
+      	local L = vim.log.levels
+      	StatusMsg.push(tostring(msg), level == L.ERROR and "emsg" or level == L.WARN and "wmsg" or "echo")
+      end
+    '';
 
     # Async container status checker and shortmess setting
     luaConfigPost = /* lua */ ''

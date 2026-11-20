@@ -15,11 +15,9 @@
       - Give high level notes
   - Agent stuff
     - CodeCompanion
+  - https://gist.github.com/swarn/fb37d9eefe1bc616c2a7e476c0bc0316
 
-  - https://github.com/jbyuki/nabla.nvim (render-markdown.setup(o attach/initial/render))
-  - https://github.com/mluders/comfy-line-numbers.nvim
   - otter.nvim if I ever need LSPs for embedded languages.
-  - Linters for embedded langs
   - Change file formatting rules
   - Borders
     - gl, gk
