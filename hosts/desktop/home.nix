@@ -7,7 +7,7 @@
 }:
 
 let
-  facts = ../facts.nix;
+  facts = import ../facts.nix;
 in
 {
   imports = [

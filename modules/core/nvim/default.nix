@@ -52,6 +52,7 @@ let
     (import ./tools/terminal.nix { inherit pkgs lib; })
     (import ./tools/devcontainers.nix { inherit pkgs lib; })
     (import ./extra/notes.nix { inherit pkgs lib; })
+    (import ./extra/sops.nix { inherit pkgs lib; })
     (import ./extra/unsorted.nix { inherit pkgs lib; })
   ]
   ++ lib.optionals config.my.AI-tools [
